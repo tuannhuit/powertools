@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33205.214
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PowerTools", "PowerTools\PowerTools.csproj", "{14110174-7CDD-4747-B94C-90F0ABDAA8FC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PowerTools.Core", "PowerTools.Core\PowerTools.Core.csproj", "{E8CA988A-B479-411A-8162-742A63FCFA4D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{14110174-7CDD-4747-B94C-90F0ABDAA8FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{14110174-7CDD-4747-B94C-90F0ABDAA8FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{14110174-7CDD-4747-B94C-90F0ABDAA8FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{14110174-7CDD-4747-B94C-90F0ABDAA8FC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E8CA988A-B479-411A-8162-742A63FCFA4D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E8CA988A-B479-411A-8162-742A63FCFA4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E8CA988A-B479-411A-8162-742A63FCFA4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E8CA988A-B479-411A-8162-742A63FCFA4D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {601CE96F-E384-40A4-AEF0-AC6ECE49C26E}
+	EndGlobalSection
+EndGlobal

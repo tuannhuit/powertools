@@ -1,0 +1,10 @@
+﻿<UserControl x:Class="PowerTools.Views.UserControls.VersionInstaller"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <StackPanel Orientation="Horizontal">
+        <TextBlock Style="{StaticResource TextBlock.Content}" Text="Version" VerticalAlignment="Center" FontWeight="SemiBold" Margin="0"/>
+        <ComboBox Style="{StaticResource ComboBox.Flat}" ItemsSource="{Binding Path=SelectedModule.AllVersions}" SelectedItem="{Binding Path=SelectedModule.Version, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Width="150" Margin="5"/>
+        <Button Style="{StaticResource Button.Normal}" Content="Install" Command="{Binding Path=CmdInstallModule, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding Path=SelectedModule.IsDownloaded, Converter={StaticResource  BooleanReversalConverter}}" VerticalAlignment="Center" Margin="0" Padding="0"/>
+        <Button Style="{StaticResource Button.Icon}" Content="&#xE102;" Command="{Binding Path=CmdExecuteModule, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding Path=SelectedModule.IsDownloaded}" Margin="5" Foreground="DarkGreen"/>
+</StackPanel>
+</UserControl>

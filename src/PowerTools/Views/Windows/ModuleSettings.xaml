@@ -1,0 +1,22 @@
+﻿<Window x:Class="PowerTools.Views.Windows.ModuleSettings"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:prism="http://prismlibrary.com/"
+        prism:ViewModelLocator.AutoWireViewModel="True"
+        WindowStyle="ToolWindow"
+        Background="WhiteSmoke"
+        Title="Settings" Height="200" Width="600" WindowStartupLocation="CenterScreen">
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <StackPanel>
+            <TextBlock Style="{StaticResource TextBlock.Header}" Text="Module Settings"/>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Style="{StaticResource TextBlock.Content}" VerticalAlignment="Center" Text="Repository path"/>
+                <TextBox Grid.Column="1" Style="{StaticResource TextBox.Content}" Text="{Binding RepositoryPath}" HorizontalAlignment="Stretch"/>
+            </Grid>
+        </StackPanel>
+    </ScrollViewer>
+</Window>
