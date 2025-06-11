@@ -26,7 +26,7 @@ namespace PowerTools.Core.Configurations
 
         private ModuleGlobalSettings()
         {
-            RepositoryRemote = "\\\\hsnicx-fg01\\icxteamcitybucket\\Teams\\Delta\\Tools\\PowerTool\\modules";
+            RepositoryRemote = string.Empty;
         }
 
         public string RepositoryRemote { get; set; }
