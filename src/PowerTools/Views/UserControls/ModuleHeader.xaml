@@ -1,0 +1,18 @@
+﻿<UserControl x:Class="PowerTools.Views.UserControls.ModuleHeader"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:prism="http://prismlibrary.com/"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:configurations="clr-namespace:PowerTools.Core.Configurations;assembly=PowerTools.Core"
+             prism:ViewModelLocator.AutoWireViewModel="True">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <TextBlock Grid.Column="0" Text="{Binding Source={x:Static configurations:ModuleGlobalSettings.Instance}, Path=CurrentModule.Name, Converter={StaticResource ModuleHeaderNameConverter}}" Style="{StaticResource TextBlock.Content}" FontWeight="Bold"/>
+        <StackPanel Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Top" Orientation="Horizontal">
+            <Button Style="{StaticResource Button.Icon}" Content="&#xE115;" Command="{Binding CmdOpenModuleSettings}" Margin="0" />
+            <Button Style="{StaticResource Button.Icon}" Content="&#xE10F;" Command="{Binding CmdMoveBack}" Margin="0" ToolTip="Move back to the module list"/>
+        </StackPanel>
+    </Grid>
+</UserControl>

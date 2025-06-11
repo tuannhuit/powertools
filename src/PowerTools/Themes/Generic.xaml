@@ -1,0 +1,10 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:converters="clr-namespace:PowerTools.Converters">
+    
+    <converters:BooleanReversalConverter x:Key="BooleanReversalConverter"/>
+    <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+    <converters:ModuleHeaderNameConverter x:Key="ModuleHeaderNameConverter"/>
+    <converters:ToolModuleVersionConverter x:Key="ToolModuleVersionConverter"/>
+
+</ResourceDictionary>

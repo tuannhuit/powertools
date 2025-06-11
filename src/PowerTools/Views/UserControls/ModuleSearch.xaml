@@ -1,0 +1,26 @@
+﻿<UserControl x:Class="PowerTools.Views.ModuleSearch"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" d:DesignWidth="800"
+             VerticalAlignment="Top">
+    <Grid>
+        <Grid Margin="1" Background="WhiteSmoke">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0" Style="{StaticResource TextBlock.Content}" Margin="10 0" Text="Type and search in module list" Background="Transparent" FontWeight="SemiBold" VerticalAlignment="Center"/>
+            <TextBox Grid.Column="1" Style="{StaticResource TextBox.Content}" Text="{Binding SearchingText, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderBrush="Transparent" BorderThickness="0" Margin="0">
+                <TextBox.InputBindings>
+                    <KeyBinding Key="Enter" Command="{Binding CmdSearchModule}"/>
+                </TextBox.InputBindings>
+            </TextBox>
+            <Button Grid.Column="2" Style="{StaticResource Button.Icon}" Margin="0" Content="&#xE111;" Command="{Binding CmdSearchModule}"/>
+        </Grid>
+        <Rectangle Stroke="Black" StrokeThickness="0.25"/>
+
+    </Grid>
+</UserControl>

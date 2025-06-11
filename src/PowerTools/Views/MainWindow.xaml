@@ -1,0 +1,26 @@
+﻿<Window x:Class="PowerTools.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:prism="http://www.codeplex.com/prism"
+        xmlns:configs="clr-namespace:PowerTools.Core.Configurations;assembly=PowerTools.Core"
+        xmlns:sharedServices="clr-namespace:PowerTools.Core.SharedServices;assembly=PowerTools.Core"
+        prism:ViewModelLocator.AutoWireViewModel="True"
+        mc:Ignorable="d"
+        Title="Power Tools"
+        MinHeight="850" Height="850" MinWidth="1400" Width="1400"
+        WindowStartupLocation="CenterScreen">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <ContentControl prism:RegionManager.RegionName="{x:Static configs:Constants.MasterRegionName}"
+                        Focusable="False"
+                        Grid.Row="0"/>
+        <Grid Grid.Row="1" Background="SteelBlue">
+            <TextBlock Style="{StaticResource TextBlock.Content}" Text="{Binding Source={x:Static sharedServices:LoggingService.Instance}, Path=Message}" Margin="5" FontSize="12" VerticalAlignment="Center" Foreground="White" MaxHeight="20"/>
+        </Grid>
+    </Grid>
+</Window>
