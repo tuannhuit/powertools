@@ -10,6 +10,7 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using System;
 using PowerTools.Core.Configurations;
+using PowerTools.Core.SharedServices;
 
 namespace PowerTools
 {
@@ -77,8 +78,15 @@ namespace PowerTools
 
             ModuleGlobalSettings.Instance.CurrentModule = null;
             RepositoryLoader.Instance.Store();
+            ApplicationService.Instance.Dispose();
 
             Application.Current.Shutdown();
+        }
+
+        protected override void OnExit(ExitEventArgs e)
+        {
+            ApplicationService.Instance.Dispose();
+            base.OnExit(e);
         }
     }
 }

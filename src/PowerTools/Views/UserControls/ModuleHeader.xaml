@@ -9,9 +9,9 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
-        <TextBlock Grid.Column="0" Text="{Binding Source={x:Static configurations:ModuleGlobalSettings.Instance}, Path=CurrentModule.Name, Converter={StaticResource ModuleHeaderNameConverter}}" Style="{StaticResource TextBlock.Content}" FontWeight="Bold"/>
+        <TextBlock Style="{StaticResource TextBlock.Content}" Grid.Column="0" Text="{Binding Source={x:Static configurations:ModuleGlobalSettings.Instance}, Path=CurrentModule.Name, Converter={StaticResource ModuleHeaderNameConverter}}" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5 0"/>
         <StackPanel Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Top" Orientation="Horizontal">
-            <Button Style="{StaticResource Button.Icon}" Content="&#xE115;" Command="{Binding CmdOpenModuleSettings}" Margin="0" />
+            <Button Style="{StaticResource Button.Icon}" Content="&#xE115;" Tag="Module Settings" Command="{Binding CmdOpenModuleSettings}" Margin="0" />
             <Button Style="{StaticResource Button.Icon}" Content="&#xE10F;" Command="{Binding CmdMoveBack}" Margin="0" ToolTip="Move back to the module list"/>
         </StackPanel>
     </Grid>
