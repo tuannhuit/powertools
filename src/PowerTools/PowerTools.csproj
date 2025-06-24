@@ -43,4 +43,8 @@
     <ProjectReference Include="..\PowerTools.Core\PowerTools.Core.csproj" />
   </ItemGroup>
 
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="xcopy /Y /I &quot;$(ProjectDir)repository.json&quot; &quot;$(TargetDir)modules&quot;" />
+  </Target>
+
 </Project>
