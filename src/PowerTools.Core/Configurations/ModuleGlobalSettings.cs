@@ -50,6 +50,11 @@ namespace PowerTools.Core.Configurations
         }
 
 
+        public string GetOrCreateDataStoreLocal()
+        {
+            return GetOrCreateDataStoreLocal(Instance.CurrentModule);
+        }
+
         public string GetOrCreateDataStoreLocal(ToolModule module)
         {
             if (module == null)
