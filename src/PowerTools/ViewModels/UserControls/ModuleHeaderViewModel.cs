@@ -33,6 +33,7 @@ namespace PowerTools.ViewModels.UserControls
             ModuleGlobalSettings.Instance.CurrentModule = null;
             RepositoryLoader.Instance.Store();
             LoggingService.Instance.Info("Ready");
+            ApplicationService.Instance.Dispose();
         }
 
         private void OnCmdOpenModuleSettings()

@@ -22,7 +22,7 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <TextBox Style="{StaticResource TextBox.ContentSmall}" Grid.Row="0" Text="{Binding ModuleSettings, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" VerticalContentAlignment="Top" HorizontalContentAlignment="Left"/>
+        <TextBox Style="{StaticResource TextBox.ContentSmall}" Grid.Row="0" Text="{Binding ModuleSettings, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" BorderBrush="Transparent" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" VerticalContentAlignment="Top" HorizontalContentAlignment="Left"/>
         <Button Style="{StaticResource Button.Normal}" Grid.Row="1" Command="{Binding CmdSaveSettings}" Content="Save" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="5 0 5 5"/>
     </Grid>
 </UserControl>
