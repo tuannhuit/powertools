@@ -12,6 +12,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Properties\**" />
+    <EmbeddedResource Remove="Properties\**" />
+    <None Remove="Properties\**" />
+    <Page Remove="Properties\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="icon.ico" />
   </ItemGroup>
 
@@ -32,12 +39,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Properties\" />
+    <ProjectReference Include="..\PowerTools.Core\PowerTools.Core.csproj" />
+    <ProjectReference Include="..\PowerTools.Core\PowerTools.Core.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\PowerTools.Core\PowerTools.Core.csproj" />
-    <ProjectReference Include="..\PowerTools.Core\PowerTools.Core.csproj" />
-  </ItemGroup>
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="xcopy /Y /I &quot;$(ProjectDir)repository.json&quot; &quot;$(TargetDir)modules&quot;" />
+  </Target>
 
 </Project>

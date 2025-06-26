@@ -4,19 +4,19 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:prism="http://www.codeplex.com/prism"
-        xmlns:configs="clr-namespace:PowerTools.Core.Configurations;assembly=PowerTools.Core"
+        xmlns:configurations="clr-namespace:PowerTools.Core.Configurations;assembly=PowerTools.Core"
         xmlns:sharedServices="clr-namespace:PowerTools.Core.SharedServices;assembly=PowerTools.Core"
         prism:ViewModelLocator.AutoWireViewModel="True"
         mc:Ignorable="d"
-        Title="Power Tools"
-        MinHeight="850" Height="850" MinWidth="1400" Width="1400"
+        d:DesignHeight="450" d:DesignWidth="800"
+        Title="{Binding Source={x:Static configurations:ModuleGlobalSettings.Instance}, Path=CurrentModule, Converter={StaticResource ModuleHeaderNameConverter}}"
         WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <ContentControl prism:RegionManager.RegionName="{x:Static configs:Constants.MasterRegionName}"
+        <ContentControl prism:RegionManager.RegionName="{x:Static configurations:Constants.MasterRegionName}"
                         Focusable="False"
                         Grid.Row="0"/>
         <Grid Grid.Row="1" Background="SteelBlue">

@@ -1,12 +1,16 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Windows;
+using System.Windows.Documents;
 
 namespace PowerTools.Core.SharedServices
 {
     public class ApplicationService
     {
         private static ApplicationService _instance;
+        private static List<Action> _disposedActions = new List<Action>();
 
         public static ApplicationService Instance
         {
@@ -31,6 +35,19 @@ namespace PowerTools.Core.SharedServices
 
             Process.Start(applicationFullPath);
             Application.Current.Shutdown();
+        }
+
+        public void RegisterDisposableAction(Action disposableAction)
+        {
+            _disposedActions.Add(disposableAction);
+        }
+
+        public void Dispose()
+        {
+            foreach (var action in _disposedActions)
+            {
+                action.Invoke();
+            }
         }
     }
 }

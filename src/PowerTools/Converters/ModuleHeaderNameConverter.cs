@@ -9,8 +9,15 @@ namespace PowerTools.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var moduleName = value as string;
-            return $"Module: {moduleName}";
+            var module = value as ToolModule;
+            if (!string.IsNullOrEmpty(module?.Name))
+            {
+                return $"PowerTools - {module.Name}";
+            }
+            else
+            {
+                return "PowerTools";
+            }
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

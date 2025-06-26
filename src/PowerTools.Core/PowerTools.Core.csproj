@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net8.0-windows7.0</TargetFramework>
@@ -12,10 +12,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Themes\Generic.xaml">
+    <Page Update="Themes\Generic.xaml">
       <SubType>Designer</SubType>
       <Generator></Generator>
-    </Resource>
+    </Page>
   </ItemGroup>
 
 </Project>
