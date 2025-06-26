@@ -7,7 +7,7 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <TextBlock Grid.Row="0" Style="{StaticResource TextBlock.Content}" FontWeight="SemiBold" Text="Module List" Margin="0"/>
-        <ListView Style="{DynamicResource ListView.ModuleLoader}" Grid.Row="1" ItemsSource="{Binding Modules}" SelectedItem="{Binding Path=SelectedModule, UpdateSourceTrigger=PropertyChanged}" ItemContainerStyle="{StaticResource ListViewItem.ModuleLoader}" HorizontalContentAlignment="Stretch" Margin="0 10" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+        <ListView Style="{StaticResource ListView.Normal}" Grid.Row="1" ItemsSource="{Binding Modules}" SelectedItem="{Binding Path=SelectedModule, UpdateSourceTrigger=PropertyChanged}" ItemContainerStyle="{StaticResource ListViewItem.Normal}" HorizontalContentAlignment="Stretch" Margin="0 10" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <Grid>

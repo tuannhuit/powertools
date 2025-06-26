@@ -415,7 +415,7 @@
     </Style>
 
     <SolidColorBrush x:Key="ListBox.Disabled.Background" Color="#FFFFFFFF"/>
-    <Style x:Key="ListView.ModuleLoader" TargetType="{x:Type ListView}">
+    <Style x:Key="ListView.Normal" TargetType="{x:Type ListView}">
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="BorderBrush" Value="Transparent"/>
         <Setter Property="BorderThickness" Value="0"/>
@@ -454,7 +454,7 @@
     <SolidColorBrush x:Key="Item.MouseOver.Background" Color="#1F26A0DA"/>
     <SolidColorBrush x:Key="Item.SelectedActive.Background" Color="#3D26A0DA"/>
     <SolidColorBrush x:Key="Item.SelectedInactive.Background" Color="#3DDADADA"/>
-    <Style x:Key="ListViewItem.ModuleLoader" TargetType="{x:Type ListViewItem}">
+    <Style x:Key="ListViewItem.Normal" TargetType="{x:Type ListViewItem}">
         <Setter Property="SnapsToDevicePixels" Value="True"/>
         <Setter Property="Padding" Value="0"/>
         <Setter Property="HorizontalContentAlignment" Value="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
