@@ -4,7 +4,10 @@
                     xmlns:converters="clr-namespace:PowerTools.Core.Converters">
     
     <converters:ValueToVisibilityConverter x:Key="ValueToVisibilityConverter"/>
-
+    
+    <SolidColorBrush x:Key="TextBox.Background.Black" Color="#0C0C0C"/>
+    <SolidColorBrush x:Key="TextBox.Foreground.Grey" Color="#CCCCCC"/>
+    
     <Style x:Key="FocusVisual">
         <Setter Property="Control.Template">
             <Setter.Value>

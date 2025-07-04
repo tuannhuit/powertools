@@ -76,9 +76,9 @@ namespace PowerTools
             // Let the user decide if the app should die or not (if applicable).
             MessageBox.Show(messageBoxMessage, messageBoxTitle, messageBoxButtons);
 
+            ApplicationService.Instance.Dispose();
             ModuleGlobalSettings.Instance.CurrentModule = null;
             RepositoryLoader.Instance.Store();
-            ApplicationService.Instance.Dispose();
 
             Application.Current.Shutdown();
         }
