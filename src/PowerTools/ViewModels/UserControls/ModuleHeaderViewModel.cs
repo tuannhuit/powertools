@@ -30,6 +30,7 @@ namespace PowerTools.ViewModels.UserControls
         private void OnCmdMoveBack()
         {
             ViewNavigator.Instance.NavigateToModuleLoaderView(_container);
+            ApplicationService.Instance.Dispose();
             ModuleGlobalSettings.Instance.CurrentModule = null;
             RepositoryLoader.Instance.Store();
             LoggingService.Instance.Info("Ready");

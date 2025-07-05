@@ -4,23 +4,34 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:prism="http://www.codeplex.com/prism"
-        xmlns:configs="clr-namespace:PowerTools.Core.Configurations;assembly=PowerTools.Core"
+        xmlns:configurations="clr-namespace:PowerTools.Core.Configurations;assembly=PowerTools.Core"
         xmlns:sharedServices="clr-namespace:PowerTools.Core.SharedServices;assembly=PowerTools.Core"
         prism:ViewModelLocator.AutoWireViewModel="True"
         mc:Ignorable="d"
-        Title="Power Tools"
-        MinHeight="850" Height="850" MinWidth="1400" Width="1400"
+        d:DesignHeight="850" d:DesignWidth="1000"
+        Title="{Binding Source={x:Static configurations:ModuleGlobalSettings.Instance}, Path=CurrentModule, Converter={StaticResource ModuleHeaderNameConverter}}"
         WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="2"/>
+            <RowDefinition Height="{Binding ViewLogGridLength, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MaxHeight="500"/>
+            <RowDefinition Height="22"/>
         </Grid.RowDefinitions>
-        <ContentControl prism:RegionManager.RegionName="{x:Static configs:Constants.MasterRegionName}"
+        <ContentControl prism:RegionManager.RegionName="{x:Static configurations:Constants.MasterRegionName}"
                         Focusable="False"
                         Grid.Row="0"/>
-        <Grid Grid.Row="1" Background="SteelBlue">
-            <TextBlock Style="{StaticResource TextBlock.Content}" Text="{Binding Source={x:Static sharedServices:LoggingService.Instance}, Path=Message}" Margin="5" FontSize="12" VerticalAlignment="Center" Foreground="White" MaxHeight="20"/>
+        <GridSplitter Grid.Row="1" HorizontalAlignment="Stretch" Background="LightGray" Margin="0" />
+        <ScrollViewer Grid.Row="2" ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+            <Grid Background="{StaticResource TextBox.Background.Black}">
+                <TextBox Text="{Binding Source={x:Static sharedServices:LoggingService.Instance}, Path=Message, Mode=OneWay}" Foreground="{StaticResource TextBox.Foreground.Grey}" BorderBrush="Transparent" Background="Transparent" BorderThickness="0" FontSize="12" FontFamily="Consolas" IsReadOnly="True" TextWrapping="Wrap" Padding="2 5"/>
+            </Grid>
+        </ScrollViewer>
+        <Grid Grid.Row="3" Background="SteelBlue">
+            <TextBlock Style="{StaticResource TextBlock.Content}" Text="{Binding Source={x:Static sharedServices:LoggingService.Instance}, Path=Status, Mode=OneWay}" Margin="5 3" VerticalAlignment="Center" Foreground="White" MaxHeight="20"/>
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5 0">
+                <Button Style="{StaticResource Button.Icon}" Command="{Binding CmdShowLog}" Content="&#xE13E;" ToolTip="Click to view logs" Margin="0" Height="20" Foreground="White"/>
+            </StackPanel>
         </Grid>
     </Grid>
 </Window>

@@ -1,5 +1,6 @@
 ﻿using Prism.Mvvm;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.ObjectModel;
 using System.Windows;
 
@@ -7,16 +8,20 @@ namespace PowerTools.Core.SharedServices
 {
     public class LoggingService : BindableBase
     {
-        private static LoggingService _instance;
+        private static readonly object _lock = new object();
 
+        private static LoggingService _instance;
         public static LoggingService Instance
         {
             get
             {
-                if (_instance == null)
-                    _instance = new LoggingService();
+                lock (_lock)
+                {
+                    if (_instance == null)
+                        _instance = new LoggingService();
 
-                return _instance;
+                    return _instance;
+                }
             }
         }
 
@@ -31,6 +36,17 @@ namespace PowerTools.Core.SharedServices
             }
         }
 
+        private string _status;
+        public string Status
+        {
+            get => _status;
+            private set
+            {
+                _status = value;
+                RaisePropertyChanged("Status");
+            }
+        }
+
         private ObservableCollection<string> _messageList;
         public ObservableCollection<string> MessageList
         {
@@ -42,11 +58,16 @@ namespace PowerTools.Core.SharedServices
             }
         }
 
+        public Action<bool> DoShowLogCallback;
+
         private LoggingService()
         {
-            MessageList = new ObservableCollection<string>();
+            _messageList = new ObservableCollection<string>();
+            _message = string.Empty;
+            _status = string.Empty;
 
             WriteLog("Ready");
+            SetStatus("Ready");
         }
 
         public void Info(string message)
@@ -57,33 +78,56 @@ namespace PowerTools.Core.SharedServices
         public void Clear()
         {
             WriteLog("Ready");
+            SetStatus("Ready");
         }
 
-        private void WriteLog(string message)
+        public void ShowLogs(bool doShowLogs)
+        {
+            DoShowLogCallback?.Invoke(doShowLogs);
+        }
+
+        private void SetStatus(string status)
         {
             var d = Application.Current.Dispatcher;
             if (d.CheckAccess())
             {
-                Message = message;
-                AddMessageIntoList(message);
+                Status = status;
             }
             else
             {
                 d.Invoke((Action)delegate
                 {
-                    Message = message;
-                    AddMessageIntoList(message);
+                    Status = status;
+                });
+            }
+        }
+
+        private void WriteLog(string message)
+        {
+            var d = Application.Current.Dispatcher;
+
+            if (d.CheckAccess())
+            {
+                _message += System.Environment.NewLine + $"> {DateTime.Now} " + message;
+                RaisePropertyChanged("Message");
+            }
+            else
+            {
+                d.Invoke(() =>
+                {
+                    _message += System.Environment.NewLine + $"> {DateTime.Now} " + message;
+                    RaisePropertyChanged("Message");
                 });
             }
         }
 
         private void AddMessageIntoList(string message)
         {
-            MessageList.Insert(0, message);
+            MessageList.Add(message);
 
-            if(MessageList.Count > 1000)
-                MessageList.RemoveAt(999);
-            
+            if (MessageList.Count > 2000)
+                MessageList.RemoveAt(0);
+
             RaisePropertyChanged("MessageList");
         }
     }

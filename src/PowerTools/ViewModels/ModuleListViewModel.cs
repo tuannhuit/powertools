@@ -207,52 +207,54 @@ namespace PowerTools.ViewModels
 
         private void ExecuteModule(ToolModule module)
         {
-            ModuleGlobalSettings.Instance.CurrentModule = module;
-
             try
             {
-                // Check if the module is loaded successfully
-                // If the module is not initialized, just load it
-
-                var regionManager = _container.Resolve<IRegionManager>();
-                var moduleName = ModuleGlobalSettings.Instance.CurrentModule.Name;
-                var regionName = Constants.ModuleRegionName;
-
-                //if (regionManager.Regions.ContainsRegionWithName(regionName))
-                //{
-                //    var selectedTypeView = ModuleViewSelectionHelper.GetView(moduleName);
-                //    if (selectedTypeView == null)
-                //    {
-                //        ModuleLoader.Instance.LoadModule(_container, ModuleGlobalSettings.Instance.CurrentModule);
-                //        selectedTypeView = ModuleViewSelectionHelper.GetView(moduleName);
-                //    }
-
-                //    if (selectedTypeView != null)
-                //    {
-                //        var view = regionManager.Regions[Constants.ModuleRegionName].Views
-                //            .FirstOrDefault(p => p.GetType().FullName == selectedTypeView.FullName);
-
-                //        regionManager.Regions[Constants.ModuleRegionName].Activate(view);
-                //    }
-                //    else
-                //    {
-                //        regionManager.Regions[Constants.ModuleRegionName].Activate(null);
-                //    }
-                //}
-                //else
-                //{
-                //    ModuleLoader.Instance.LoadModule(_container, ModuleGlobalSettings.Instance.CurrentModule);
-                //}
-
-                //ViewNavigator.Instance.NavigateToModuleView(_container);
-                RepositoryLoader.Instance.Store();
-                //LoggingService.Instance.Clear();
-
-                var actionResult = MessageBox.Show("The tool will be restarted to activate the module", "Information",
+                var actionResult = MessageBox.Show(
+                    "The tool will be restarted to activate the module", 
+                    "Information",
                     MessageBoxButton.YesNo);
 
                 if (actionResult == MessageBoxResult.Yes)
                 {
+                    ModuleGlobalSettings.Instance.CurrentModule = module;
+
+                    // Check if the module is loaded successfully
+                    // If the module is not initialized, just load it
+
+                    var regionManager = _container.Resolve<IRegionManager>();
+                    var moduleName = ModuleGlobalSettings.Instance.CurrentModule.Name;
+                    var regionName = Constants.ModuleRegionName;
+
+                    //if (regionManager.Regions.ContainsRegionWithName(regionName))
+                    //{
+                    //    var selectedTypeView = ModuleViewSelectionHelper.GetView(moduleName);
+                    //    if (selectedTypeView == null)
+                    //    {
+                    //        ModuleLoader.Instance.LoadModule(_container, ModuleGlobalSettings.Instance.CurrentModule);
+                    //        selectedTypeView = ModuleViewSelectionHelper.GetView(moduleName);
+                    //    }
+
+                    //    if (selectedTypeView != null)
+                    //    {
+                    //        var view = regionManager.Regions[Constants.ModuleRegionName].Views
+                    //            .FirstOrDefault(p => p.GetType().FullName == selectedTypeView.FullName);
+
+                    //        regionManager.Regions[Constants.ModuleRegionName].Activate(view);
+                    //    }
+                    //    else
+                    //    {
+                    //        regionManager.Regions[Constants.ModuleRegionName].Activate(null);
+                    //    }
+                    //}
+                    //else
+                    //{
+                    //    ModuleLoader.Instance.LoadModule(_container, ModuleGlobalSettings.Instance.CurrentModule);
+                    //}
+
+                    //ViewNavigator.Instance.NavigateToModuleView(_container);
+                    //RepositoryLoader.Instance.Store();
+                    //LoggingService.Instance.Clear();
+
                     RepositoryLoader.Instance.Store();
                     ApplicationService.Instance.Restart();
                 }
