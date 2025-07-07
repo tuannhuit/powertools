@@ -327,6 +327,8 @@
         <Setter Property="MinWidth" Value="200"/>
         <Setter Property="MinHeight" Value="30"/>
         <Setter Property="Margin" Value="5"/>
+        <Setter Property="BorderBrush" Value="WhiteSmoke"/>
+        <Setter Property="BorderThickness" Value="1"/>
     </Style>
     <Style x:Key="TextBox.ContentSmall" TargetType="{x:Type TextBox}">
         <Setter Property="HorizontalAlignment" Value="Left"/>
@@ -336,6 +338,8 @@
         <Setter Property="MinHeight" Value="28"/>
         <Setter Property="Margin" Value="5"/>
         <Setter Property="FontSize" Value="12"/>
+        <Setter Property="BorderBrush" Value="WhiteSmoke"/>
+        <Setter Property="BorderThickness" Value="1"/>
     </Style>
 
     <SolidColorBrush x:Key="Button.Background" Color="#FFBEE6FD"/>
@@ -377,6 +381,7 @@
                         <Trigger Property="IsEnabled" Value="false">
                             <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Disabled.Background}"/>
                             <Setter Property="Foreground" TargetName="textblock" Value="{StaticResource Button.Disabled.Foreground}"/>
+                            <Setter Property="Foreground" TargetName="textblockText" Value="{StaticResource Button.Disabled.Foreground}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

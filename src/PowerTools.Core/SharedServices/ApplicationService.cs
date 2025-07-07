@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Windows;
-using System.Windows.Documents;
 
 namespace PowerTools.Core.SharedServices
 {
@@ -37,6 +36,23 @@ namespace PowerTools.Core.SharedServices
             Application.Current.Shutdown();
         }
 
+        public void InvokeUIAction(Action action)
+        {
+            if(action == null)
+            {
+                return;
+            }
+            var d = Application.Current.Dispatcher;
+            if (d.CheckAccess())
+            {
+                action.Invoke();
+            }
+            else
+            {
+                d.Invoke(action);
+            }
+        }
+
         public void RegisterDisposableAction(Action disposableAction)
         {
             _disposedActions.Add(disposableAction);
@@ -46,7 +62,14 @@ namespace PowerTools.Core.SharedServices
         {
             foreach (var action in _disposedActions)
             {
-                action.Invoke();
+                try
+                {
+                    action.Invoke();
+                }
+                catch(Exception e)
+                {
+                    LoggingService.Instance.Error("Dispose", e);
+                }
             }
         }
     }

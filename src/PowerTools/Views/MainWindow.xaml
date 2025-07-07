@@ -22,12 +22,10 @@
                         Focusable="False"
                         Grid.Row="0"/>
         <GridSplitter Grid.Row="1" HorizontalAlignment="Stretch" Background="LightGray" Margin="0" />
-        <ScrollViewer Grid.Row="2" ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-            <Grid Background="{StaticResource TextBox.Background.Black}">
-                <TextBox Text="{Binding Source={x:Static sharedServices:LoggingService.Instance}, Path=Message, Mode=OneWay}" Foreground="{StaticResource TextBox.Foreground.Grey}" BorderBrush="Transparent" Background="Transparent" BorderThickness="0" FontSize="12" FontFamily="Consolas" IsReadOnly="True" TextWrapping="Wrap" Padding="2 5"/>
+             <Grid Grid.Row="2" Background="{StaticResource TextBox.Background.Black}">
+                <TextBox x:Name="txbLogs" Text="{Binding Source={x:Static sharedServices:LoggingService.Instance}, Path=Message, Mode=OneWay}" Foreground="{StaticResource TextBox.Foreground.Grey}" BorderBrush="Transparent" Background="Transparent" BorderThickness="0" FontSize="12" FontFamily="Consolas" IsReadOnly="True" TextWrapping="Wrap" Padding="2 5" TextChanged="txbLogs_TextChanged"/>
             </Grid>
-        </ScrollViewer>
-        <Grid Grid.Row="3" Background="SteelBlue">
+         <Grid Grid.Row="3" Background="SteelBlue">
             <TextBlock Style="{StaticResource TextBlock.Content}" Text="{Binding Source={x:Static sharedServices:LoggingService.Instance}, Path=Status, Mode=OneWay}" Margin="5 3" VerticalAlignment="Center" Foreground="White" MaxHeight="20"/>
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5 0">
                 <Button Style="{StaticResource Button.Icon}" Command="{Binding CmdShowLog}" Content="&#xE13E;" ToolTip="Click to view logs" Margin="0" Height="20" Foreground="White"/>

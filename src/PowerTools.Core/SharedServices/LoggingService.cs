@@ -1,8 +1,6 @@
 ﻿using Prism.Mvvm;
 using System;
-using System.Collections.Concurrent;
 using System.Collections.ObjectModel;
-using System.Windows;
 
 namespace PowerTools.Core.SharedServices
 {
@@ -63,7 +61,7 @@ namespace PowerTools.Core.SharedServices
         private LoggingService()
         {
             _messageList = new ObservableCollection<string>();
-            _message = string.Empty;
+            _message = "Logging started";
             _status = string.Empty;
 
             WriteLog("Ready");
@@ -73,6 +71,12 @@ namespace PowerTools.Core.SharedServices
         public void Info(string message)
         {
             WriteLog(message);
+        }
+
+        public void Error(string message, Exception e)
+        {
+            var log = $"{message}{System.Environment.NewLine}Exception: {e.StackTrace}";
+            WriteLog(log);
         }
 
         public void Clear()
@@ -88,37 +92,19 @@ namespace PowerTools.Core.SharedServices
 
         private void SetStatus(string status)
         {
-            var d = Application.Current.Dispatcher;
-            if (d.CheckAccess())
+            ApplicationService.Instance.InvokeUIAction(() =>
             {
                 Status = status;
-            }
-            else
-            {
-                d.Invoke((Action)delegate
-                {
-                    Status = status;
-                });
-            }
+            });
         }
 
         private void WriteLog(string message)
         {
-            var d = Application.Current.Dispatcher;
-
-            if (d.CheckAccess())
+            ApplicationService.Instance.InvokeUIAction(() =>
             {
                 _message += System.Environment.NewLine + $"> {DateTime.Now} " + message;
                 RaisePropertyChanged("Message");
-            }
-            else
-            {
-                d.Invoke(() =>
-                {
-                    _message += System.Environment.NewLine + $"> {DateTime.Now} " + message;
-                    RaisePropertyChanged("Message");
-                });
-            }
+            });
         }
 
         private void AddMessageIntoList(string message)
