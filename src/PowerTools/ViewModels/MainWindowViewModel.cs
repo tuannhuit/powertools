@@ -56,9 +56,9 @@ namespace PowerTools.ViewModels
         {
             if (doShowLogs)
             {
-                if(ViewLogGridLength.Value < 50)
+                if(ViewLogGridLength.Value < 25)
                 {
-                    ViewLogGridLength = new GridLength(100);
+                    ViewLogGridLength = new GridLength(25);
                 }
             }
             else
@@ -75,7 +75,7 @@ namespace PowerTools.ViewModels
             }
             else
             {
-                ViewLogGridLength = new GridLength(100);
+                ViewLogGridLength = new GridLength(25);
             }
         }
     }
