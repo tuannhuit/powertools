@@ -26,6 +26,20 @@ namespace PowerTools.ViewModels
                 RaisePropertyChanged();
             }
         }
+        public bool IsFree => !_isBusy;
+
+        private bool _isBusy;
+        public bool IsBusy
+        {
+            get => _isBusy;
+            set
+            {
+                _isBusy = value;
+                RaisePropertyChanged();
+                RaisePropertyChanged("IsFree");
+            }
+        }
+
         public ICommand CmdShowLog { get; set; }
 
         public MainWindowViewModel(IContainerProvider container, IRegionManager regionManager)
@@ -34,6 +48,9 @@ namespace PowerTools.ViewModels
             _regionManager = regionManager;
 
             LoggingService.Instance.DoShowLogCallback = DoShowLogCallback;
+            ApplicationService.Instance.DoBusy = DoBusy;
+            ApplicationService.Instance.DoShowMessageBox = DoShowMessageBox;
+
             ViewLogGridLength = new GridLength(0);
 
             CmdShowLog = new DelegateCommand(OnCmdShowLog);
@@ -52,11 +69,21 @@ namespace PowerTools.ViewModels
             }
         }
 
+        private void DoShowMessageBox(string message)
+        {
+            MessageBox.Show(Application.Current.MainWindow, message);
+        }
+
+        private void DoBusy(bool doBusy)
+        {
+            IsBusy = doBusy;
+        }
+
         private void DoShowLogCallback(bool doShowLogs)
         {
             if (doShowLogs)
             {
-                if(ViewLogGridLength.Value < 25)
+                if (ViewLogGridLength.Value < 25)
                 {
                     ViewLogGridLength = new GridLength(25);
                 }

@@ -11,6 +11,9 @@ namespace PowerTools.Core.SharedServices
         private static ApplicationService _instance;
         private static List<Action> _disposedActions = new List<Action>();
 
+        public Action<bool> DoBusy;
+        public Action<string> DoShowMessageBox;
+
         public static ApplicationService Instance
         {
             get
@@ -51,6 +54,21 @@ namespace PowerTools.Core.SharedServices
             {
                 d.Invoke(action);
             }
+        }
+
+        public void Busy()
+        {
+            DoBusy?.Invoke(true);
+        }
+
+        public void Free()
+        {
+            DoBusy?.Invoke(false);
+        }
+
+        public void MessageBox(string message)
+        {
+            DoShowMessageBox?.Invoke(message);
         }
 
         public void RegisterDisposableAction(Action disposableAction)
