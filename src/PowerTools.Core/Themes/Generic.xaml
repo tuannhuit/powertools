@@ -351,6 +351,15 @@
         <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="Background" Value="Transparent"/>
     </Style>
+    <Style x:Key="TextBox.Grid.Normal" TargetType="{x:Type TextBox}">
+        <Setter Property="Margin" Value="0"/>
+        <Setter Property="Padding" Value="0 2"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Background" Value="Transparent"/>
+    </Style>
 
     <SolidColorBrush x:Key="Button.Background" Color="#FFBEE6FD"/>
     <SolidColorBrush x:Key="Button.MouseOver.Background" Color="#FFD1EEFF"/>
@@ -532,6 +541,8 @@
         <Setter Property="BorderBrush" Value="WhiteSmoke" />
         <Setter Property="HorizontalGridLinesBrush" Value="WhiteSmoke" />
         <Setter Property="VerticalGridLinesBrush" Value="WhiteSmoke" />
+        <Setter Property="AutoGenerateColumns" Value="False" />
+        <Setter Property="CanUserAddRows" Value="False" />
 
         <Setter Property="RowStyle">
             <Setter.Value>
