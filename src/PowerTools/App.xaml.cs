@@ -46,19 +46,19 @@ namespace PowerTools
                 ShowUnhandledException(args.ExceptionObject as Exception, "AppDomain.CurrentDomain.UnhandledException", false);
 
             // Catch exceptions from each AppDomain that uses a task scheduler for async operations.
-            //TaskScheduler.UnobservedTaskException += (sender, args) =>
-            //    ShowUnhandledException(args.Exception, "TaskScheduler.UnobservedTaskException", false);
+            TaskScheduler.UnobservedTaskException += (sender, args) =>
+                ShowUnhandledException(args.Exception, "TaskScheduler.UnobservedTaskException", false);
 
             // Catch exceptions from a single specific UI dispatcher thread.
-            //Dispatcher.UnhandledException += (sender, args) =>
-            //{
-            //    // If we are debugging, let Visual Studio handle the exception and take us to the code that threw it.
-            //    if (!Debugger.IsAttached)
-            //    {
-            //        args.Handled = true;
-            //        ShowUnhandledException(args.Exception, "Dispatcher.UnhandledException", true);
-            //    }
-            //};
+            Dispatcher.UnhandledException += (sender, args) =>
+            {
+                // If we are debugging, let Visual Studio handle the exception and take us to the code that threw it.
+                if (!Debugger.IsAttached)
+                {
+                    args.Handled = true;
+                    ShowUnhandledException(args.Exception, "Dispatcher.UnhandledException", true);
+                }
+            };
         }
 
         private void ShowUnhandledException(Exception e, string unhandledExceptionType, bool promptUserForShutdown)

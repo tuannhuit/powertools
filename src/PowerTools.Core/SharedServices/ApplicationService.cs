@@ -45,10 +45,15 @@ namespace PowerTools.Core.SharedServices
             {
                 return;
             }
-            var d = Application.Current.Dispatcher;
+            var d = Application.Current?.Dispatcher;
 
             try
             {
+                if (d == null)
+                {
+                    return;
+                }
+
                 if (d.CheckAccess())
                 {
                     action.Invoke();

@@ -33,8 +33,10 @@
             <TextBox x:Name="txbLogs" Text="{Binding Source={x:Static sharedServices:LoggingService.Instance}, Path=Message, Mode=OneWay}" BorderBrush="Transparent" Background="Transparent" BorderThickness="0" FontSize="12" FontFamily="Consolas" IsReadOnly="True" TextWrapping="Wrap" Padding="2 5" TextChanged="txbLogs_TextChanged"/>
         </Grid>
         <Grid Grid.Row="3" Background="SteelBlue">
-            <TextBlock Style="{StaticResource TextBlock.Content}" Text="{Binding Source={x:Static sharedServices:LoggingService.Instance}, Path=Status, Mode=OneWay}" Margin="5 3" VerticalAlignment="Center" Foreground="White" MaxHeight="20"/>
+            <TextBlock Style="{StaticResource TextBlock.Content}" Text="{Binding Source={x:Static sharedServices:LoggingService.Instance}, Path=Status, Mode=OneWay}" Margin="5 3" Foreground="White" MaxHeight="20"/>
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5 0">
+                <Button Style="{StaticResource Button.Icon}" Content="&#x1F6C8;" Tag="New version available" ToolTip="Click to update version" Margin="0 0 20 0" Height="20" Foreground="DarkRed" Background="White" FontWeight="SemiBold"/>
+                <Button Style="{StaticResource Button.Icon}" Content="&#x1F6C8;" Tag="New module version available" ToolTip="Click to update version" Margin="0 0 20 0" Height="20" Foreground="DarkRed" Background="White" FontWeight="SemiBold"/>
                 <Button Style="{StaticResource Button.Icon}" Command="{Binding CmdShowLog}" Content="&#xE13E;" ToolTip="Click to view logs" Margin="0" Height="20" Foreground="White"/>
             </StackPanel>
         </Grid>
