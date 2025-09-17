@@ -716,7 +716,6 @@
     <!--End TabControl.Normal-->
 
     <!--TabItem.Normal-->
-    <SolidColorBrush x:Key="TabItem.MouseOver.Background" Color="#006CBE"/>
     <SolidColorBrush x:Key="TabItem.Static.Background" Color="#E2E2E2"/>
     <SolidColorBrush x:Key="TabItem.Selected.Background" Color="#006CBE"/>
     <SolidColorBrush x:Key="TabItem.Disabled.Background" Color="#F0F0F0"/>

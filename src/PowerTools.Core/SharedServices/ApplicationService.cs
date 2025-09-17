@@ -46,13 +46,21 @@ namespace PowerTools.Core.SharedServices
                 return;
             }
             var d = Application.Current.Dispatcher;
-            if (d.CheckAccess())
+
+            try
             {
-                action.Invoke();
+                if (d.CheckAccess())
+                {
+                    action.Invoke();
+                }
+                else
+                {
+                    d.Invoke(action);
+                }
             }
-            else
+            catch (Exception e)
             {
-                d.Invoke(action);
+                LoggingService.Instance.Error("Occured error during invoking UI action",e);
             }
         }
 

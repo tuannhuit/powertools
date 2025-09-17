@@ -26,7 +26,14 @@ namespace PowerTools.Core.SharedServices
 
         public void RunAsync(Action action)
         {
-            Task.Run(action);
+            try
+            {
+                Task.Run(action);
+            }
+            catch (Exception e)
+            {
+                LoggingService.Instance.Error("Occured error during running action async", e);
+            }
         }
     }
 }
