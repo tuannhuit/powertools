@@ -100,11 +100,14 @@ namespace PowerTools.Core.SharedServices
 
         private void WriteLog(string message)
         {
-            ApplicationService.Instance.InvokeUIAction(() =>
+            lock (_lock)
             {
-                _message += System.Environment.NewLine + $"> {DateTime.Now} " + message;
-                RaisePropertyChanged("Message");
-            });
+                ApplicationService.Instance.InvokeUIAction(() =>
+                {
+                    _message += System.Environment.NewLine + $"> {DateTime.Now} " + message;
+                    RaisePropertyChanged("Message");
+                });
+            }
         }
 
         private void AddMessageIntoList(string message)

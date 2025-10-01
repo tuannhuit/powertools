@@ -35,7 +35,7 @@
         <Grid Grid.Row="3" Background="SteelBlue">
             <TextBlock Style="{StaticResource TextBlock.Content}" Text="{Binding Source={x:Static sharedServices:LoggingService.Instance}, Path=Status, Mode=OneWay}" Margin="5 3" Foreground="White" MaxHeight="20"/>
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5 0">
-                <Button Style="{StaticResource Button.Icon}" Content="&#x1F6C8;" Tag="New version available" ToolTip="Click to update version" Margin="0 0 20 0" Height="20" Foreground="DarkRed" Background="White" FontWeight="SemiBold"/>
+                <Button Style="{StaticResource Button.Icon}" Content="&#x1F6C8;" Tag="New PowerTools version available" ToolTip="Click to update version" Margin="0 0 20 0" Height="20" Foreground="DarkRed" Background="White" FontWeight="SemiBold"/>
                 <Button Style="{StaticResource Button.Icon}" Content="&#x1F6C8;" Tag="New module version available" ToolTip="Click to update version" Margin="0 0 20 0" Height="20" Foreground="DarkRed" Background="White" FontWeight="SemiBold"/>
                 <Button Style="{StaticResource Button.Icon}" Command="{Binding CmdShowLog}" Content="&#xE13E;" ToolTip="Click to view logs" Margin="0" Height="20" Foreground="White"/>
             </StackPanel>

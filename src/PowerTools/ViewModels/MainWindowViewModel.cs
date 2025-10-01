@@ -67,6 +67,13 @@ namespace PowerTools.ViewModels
             {
                 ViewNavigator.Instance.NavigateToModuleLoaderView(_container);
             }
+
+            DownloadPowerToolVersions();
+        }
+
+        private void DownloadPowerToolVersions()
+        {
+
         }
 
         private void DoShowMessageBox(string message)
