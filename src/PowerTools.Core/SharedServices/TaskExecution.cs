@@ -1,5 +1,7 @@
 ﻿using Prism.Mvvm;
 using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
 
@@ -8,10 +10,11 @@ namespace PowerTools.Core.SharedServices
     public class TaskExecution : BindableBase
     {
         public static readonly string APP_CMD = "C:\\Windows\\system32\\cmd.exe";
+        private static readonly object _lock = new object();
 
         private Process _process;
 
-
+        private ConcurrentDictionary<string, bool> _taskStatuses = new ConcurrentDictionary<string, bool>();
 
         #region Instance
 
@@ -30,7 +33,7 @@ namespace PowerTools.Core.SharedServices
         private TaskExecution()
         {
 
-        } 
+        }
 
         #endregion
 
@@ -45,6 +48,43 @@ namespace PowerTools.Core.SharedServices
                 catch (Exception e)
                 {
                     LoggingService.Instance.Error("Occured error during running action async", e);
+                }
+            });
+        }
+
+        public void RunOnceAsync(string taskName, Action action)
+        {
+            lock (_lock)
+            {
+                if (!_taskStatuses.ContainsKey(taskName))
+                {
+                    _taskStatuses.TryAdd(taskName, false);
+                }
+
+                var isTaskRunning = _taskStatuses[taskName];
+                if (isTaskRunning)
+                {
+                    return;
+                }
+                else
+                {
+                    _taskStatuses[taskName] = true;
+                }
+            }
+
+            Task.Run(() =>
+            {
+                LoggingService.Instance.Info($"Calling {taskName}");
+                try
+                {
+                    action.Invoke();
+                    LoggingService.Instance.Info($"Done! {taskName}");
+
+                    _taskStatuses[taskName] = false;
+                }
+                catch (Exception e)
+                {
+                    LoggingService.Instance.Error($"Error calling {taskName}", e);
                 }
             });
         }

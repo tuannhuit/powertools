@@ -1,6 +1,7 @@
 ﻿using Prism.Mvvm;
 using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace PowerTools.Core.SharedServices
 {
@@ -31,6 +32,25 @@ namespace PowerTools.Core.SharedServices
             {
                 _message = value;
                 RaisePropertyChanged("Message");
+            }
+        }
+
+        private bool _doShowLog;
+        public bool DoShowLog
+        {
+            get => _doShowLog;
+            set
+            {
+                _doShowLog = value;
+                if (DoShowLog)
+                {
+                    Status = string.Empty;
+                }
+                else
+                {
+                    Status = MessageList.Last();
+                }
+                RaisePropertyChanged("DoShowLog");
             }
         }
 
@@ -65,7 +85,6 @@ namespace PowerTools.Core.SharedServices
             _status = string.Empty;
 
             WriteLog("Ready");
-            SetStatus("Ready");
         }
 
         public void Info(string message)
@@ -82,20 +101,11 @@ namespace PowerTools.Core.SharedServices
         public void Clear()
         {
             WriteLog("Ready");
-            SetStatus("Ready");
         }
 
         public void ShowLogs(bool doShowLogs)
         {
             DoShowLogCallback?.Invoke(doShowLogs);
-        }
-
-        private void SetStatus(string status)
-        {
-            ApplicationService.Instance.InvokeUIAction(() =>
-            {
-                Status = status;
-            });
         }
 
         private void WriteLog(string message)
@@ -104,8 +114,14 @@ namespace PowerTools.Core.SharedServices
             {
                 ApplicationService.Instance.InvokeUIAction(() =>
                 {
-                    _message += System.Environment.NewLine + $"> {DateTime.Now} " + message;
-                    RaisePropertyChanged("Message");
+                    var newMessage = $"> {DateTime.Now} " + message;
+                    AddMessageIntoList(newMessage);
+                    Message = string.Join(Environment.NewLine, MessageList);
+
+                    if (!DoShowLog)
+                    {
+                        Status = newMessage;
+                    }
                 });
             }
         }

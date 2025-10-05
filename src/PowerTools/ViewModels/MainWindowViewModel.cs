@@ -23,6 +23,7 @@ namespace PowerTools.ViewModels
             set
             {
                 _viewLogGridLength = value;
+                LoggingService.Instance.DoShowLog = ViewLogGridLength.Value >= 10;
                 RaisePropertyChanged();
             }
         }
@@ -92,12 +93,14 @@ namespace PowerTools.ViewModels
             {
                 if (ViewLogGridLength.Value < 25)
                 {
+                    LoggingService.Instance.DoShowLog = true;
                     ViewLogGridLength = new GridLength(25);
                 }
             }
             else
             {
                 ViewLogGridLength = new GridLength(0);
+                LoggingService.Instance.DoShowLog = false;
             }
         }
 
@@ -105,10 +108,12 @@ namespace PowerTools.ViewModels
         {
             if (ViewLogGridLength.Value > 0)
             {
+                LoggingService.Instance.DoShowLog = false;
                 ViewLogGridLength = new GridLength(0);
             }
             else
             {
+                LoggingService.Instance.DoShowLog = true;
                 ViewLogGridLength = new GridLength(25);
             }
         }
