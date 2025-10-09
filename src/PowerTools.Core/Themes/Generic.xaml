@@ -442,7 +442,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
-                    <Border x:Name="border" Background="{StaticResource Button.Background}" BorderBrush="{StaticResource Button.Background}" BorderThickness="0.5" SnapsToDevicePixels="true" CornerRadius="3">
+                    <Border x:Name="border" Background="{StaticResource Button.Background}" BorderBrush="{StaticResource Button.Background}" BorderThickness="0.5" SnapsToDevicePixels="true" CornerRadius="2">
                         <TextBlock x:Name="textblock" FontFamily="Segoe UI" Foreground="{TemplateBinding Foreground}" FontSize="{TemplateBinding FontSize}" Text="{TemplateBinding Content}" Margin="{TemplateBinding Padding}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                     </Border>
                     <ControlTemplate.Triggers>
@@ -661,6 +661,7 @@
                         </ScrollViewer>
                         <Rectangle x:Name="rectHeaderFull" Grid.Column="0" Grid.Row="1" Stroke="Gray" StrokeThickness="0.5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
                         <Rectangle x:Name="rectHeader" Grid.Column="0" Grid.Row="1" Stroke="{StaticResource TabItem.Selected.Border}" StrokeThickness="2" VerticalAlignment="Top" HorizontalAlignment="Stretch"/>
+                        <TextBlock Style="{StaticResource TextBlock.Header}" Grid.Column="0" Grid.Row="1" FontFamily="Segoe UI Symbol" Text="&#xE154;" FontSize="40" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="LightGray"/>
                         <Border x:Name="contentPanel" Grid.Column="0" Grid.Row="1" Background="{TemplateBinding Background}" Margin="{TemplateBinding Padding}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}"  KeyboardNavigation.DirectionalNavigation="Contained"  KeyboardNavigation.TabIndex="2" KeyboardNavigation.TabNavigation="Local">
                             <ContentPresenter x:Name="PART_SelectedContentHost" ContentSource="SelectedContent" Margin="0" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
                         </Border>
@@ -1034,12 +1035,17 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Expander}">
-                    <Border Background="{TemplateBinding Background}" BorderBrush="LightGray" BorderThickness="0 0 0 1" SnapsToDevicePixels="true">
-                        <DockPanel>
+                    <Grid Background="{TemplateBinding Background}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="0.5"/>
+                        </Grid.RowDefinitions>
+                        <DockPanel Grid.Row="0">
                             <ToggleButton x:Name="HeaderSite" ContentTemplate="{TemplateBinding HeaderTemplate}" Content="{TemplateBinding Header}" ContentTemplateSelector="{TemplateBinding HeaderTemplateSelector}" DockPanel.Dock="Top" FontStretch="{TemplateBinding FontStretch}" Foreground="{TemplateBinding Foreground}" FocusVisualStyle="{StaticResource ExpanderHeaderFocusVisual}" FontStyle="{TemplateBinding FontStyle}" FontFamily="{TemplateBinding FontFamily}" FontWeight="{TemplateBinding FontWeight}" FontSize="11" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" IsChecked="{Binding IsExpanded, Mode=TwoWay, RelativeSource={RelativeSource Mode=TemplatedParent}}" Margin="1" MinWidth="0" MinHeight="0" Padding="{TemplateBinding Padding}" Style="{StaticResource ExpanderDownHeaderStyle}" VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>
                             <ContentPresenter x:Name="ExpandSite" DockPanel.Dock="Bottom" Focusable="false" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" Visibility="Collapsed"/>
                         </DockPanel>
-                    </Border>
+                        <Rectangle x:Name="rectHeaderFull" Grid.Row="1" Stroke="Gray" StrokeThickness="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
+                    </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsExpanded" Value="true">
                             <Setter Property="Visibility" TargetName="ExpandSite" Value="Visible"/>
