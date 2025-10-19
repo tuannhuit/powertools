@@ -625,7 +625,7 @@
 
     <Style x:Key="CheckBox.Normal" TargetType="{x:Type CheckBox}">
         <Setter Property="Margin" Value="5 5 5 0"/>
-        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="FontSize" Value="11"/>
     </Style>
 
     <Style x:Key="RadioButton.Normal" TargetType="{x:Type RadioButton}">
