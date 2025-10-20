@@ -12,7 +12,7 @@ namespace PowerTools.Core.SharedServices
         private static List<Action> _disposedActions = new List<Action>();
 
         public Action<bool> DoBusy;
-        public Action<string> DoShowMessageBox;
+        public Func<string, string, MessageBoxButton, MessageBoxResult> DoShowMessageBox;
 
         public static ApplicationService Instance
         {
@@ -79,9 +79,16 @@ namespace PowerTools.Core.SharedServices
             DoBusy?.Invoke(false);
         }
 
-        public void MessageBox(string message)
+        public MessageBoxResult MessageBox(string message, string caption = "", MessageBoxButton button = MessageBoxButton.OK)
         {
-            DoShowMessageBox?.Invoke(message);
+            if (DoShowMessageBox == null)
+            {
+                return MessageBoxResult.OK;
+            }
+            else
+            {
+                return DoShowMessageBox.Invoke(message, caption, button);
+            }
         }
 
         public void RegisterDisposableAction(Action disposableAction)

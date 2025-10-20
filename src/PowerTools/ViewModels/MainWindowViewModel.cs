@@ -77,9 +77,9 @@ namespace PowerTools.ViewModels
 
         }
 
-        private void DoShowMessageBox(string message)
+        private MessageBoxResult DoShowMessageBox(string message, string caption, MessageBoxButton button)
         {
-            MessageBox.Show(Application.Current.MainWindow, message);
+            return MessageBox.Show(Application.Current.MainWindow, message, caption, button);
         }
 
         private void DoBusy(bool doBusy)
@@ -91,10 +91,10 @@ namespace PowerTools.ViewModels
         {
             if (doShowLogs)
             {
-                if (ViewLogGridLength.Value < 25)
+                if (ViewLogGridLength.Value < 100)
                 {
                     LoggingService.Instance.DoShowLog = true;
-                    ViewLogGridLength = new GridLength(25);
+                    ViewLogGridLength = new GridLength(100);
                 }
             }
             else
@@ -114,7 +114,7 @@ namespace PowerTools.ViewModels
             else
             {
                 LoggingService.Instance.DoShowLog = true;
-                ViewLogGridLength = new GridLength(25);
+                ViewLogGridLength = new GridLength(100);
             }
         }
     }

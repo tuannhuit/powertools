@@ -94,7 +94,7 @@ namespace PowerTools.Core.SharedServices
 
         public void Error(string message, Exception e)
         {
-            var log = $"{message}{System.Environment.NewLine}Exception: {e.StackTrace}";
+            var log = $"{message}{System.Environment.NewLine}Exception: {e.Message}\n{e.StackTrace}";
             WriteLog(log);
         }
 
