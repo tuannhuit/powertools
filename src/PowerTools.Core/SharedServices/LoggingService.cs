@@ -114,7 +114,8 @@ namespace PowerTools.Core.SharedServices
             {
                 ApplicationService.Instance.InvokeUIAction(() =>
                 {
-                    var newMessage = $"> {DateTime.Now} " + message;
+                    var indexOfNewLine = message.IndexOf("\n");
+                    var newMessage = $"> {DateTime.Now} " + ((indexOfNewLine == -1) ? message : message.Substring(0, indexOfNewLine + 1));
                     AddMessageIntoList(newMessage);
                     Message = string.Join(Environment.NewLine, MessageList);
 

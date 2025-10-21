@@ -22,7 +22,7 @@
                         Focusable="False"
                         IsEnabled="{Binding IsFree, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
         <Grid Visibility="{Binding IsBusy, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}">
-            <Rectangle Fill="WhiteSmoke" Opacity="0.5"/>
+            <Rectangle Fill="WhiteSmoke" Opacity="0.2"/>
             <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" >
                 <TextBlock Style="{StaticResource TextBlock.Icon}" Text="&#xE2FD;" VerticalAlignment="Center" HorizontalAlignment="Center"  FontWeight="SemiBold"/>
                 <TextBlock Style="{StaticResource TextBlock.ContentSmall}" Text="Please wait..." HorizontalAlignment="Center"/>
