@@ -1,7 +1,8 @@
 ﻿<UserControl x:Class="PowerTools.Core.Controls.TextPlaceHolder"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             x:Name="UserControl">
+             x:Name="UserControl"
+             FontWeight="Normal">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
