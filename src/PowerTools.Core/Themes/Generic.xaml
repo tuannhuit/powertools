@@ -693,7 +693,7 @@
                             </ScrollViewer>
                             <TextBlock Style="{StaticResource TextBlock.ContentSmall}" Grid.Row="1" HorizontalAlignment="Right" Margin="10 5">
                                 <TextBlock.Text>
-                                    <MultiBinding StringFormat="Total Items: {0}">
+                                    <MultiBinding StringFormat="1 of 1 pages ({0} items)">
                                         <Binding Path="Items.Count" RelativeSource="{RelativeSource TemplatedParent}"/>
                                     </MultiBinding>
                                 </TextBlock.Text>
