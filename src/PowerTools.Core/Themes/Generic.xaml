@@ -720,12 +720,12 @@
     <SolidColorBrush x:Key="TabControl.Background" Color="Transparent"/>
     <SolidColorBrush x:Key="TabItem.Selected.Border" Color="#006CBE"/>
     <Style x:Key="TabControl.Normal" TargetType="{x:Type TabControl}">
-        <Setter Property="Padding" Value="1 2 1 1"/>
+        <Setter Property="Padding" Value="0 2 0 0"/>
         <Setter Property="HorizontalContentAlignment" Value="Center"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="Background" Value="{StaticResource TabControl.Background}"/>
-        <Setter Property="BorderBrush" Value="{StaticResource TabItem.Selected.Border}"/>
-        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="BorderBrush" Value="LightGray"/>
+        <Setter Property="BorderThickness" Value="1 0 1 1"/>
         <Setter Property="Margin" Value="5"/>
         <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
         <Setter Property="Template">
@@ -743,7 +743,7 @@
                         <ScrollViewer x:Name="headerPanel" Grid.Column="0" Grid.Row="0" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
                             <TabPanel Background="Transparent" Grid.Column="0" IsItemsHost="true" Margin="0" Grid.Row="0" KeyboardNavigation.TabIndex="1" Panel.ZIndex="1"/>
                         </ScrollViewer>
-                        <Rectangle x:Name="rectHeaderFull" Grid.Column="0" Grid.Row="1" Stroke="Gray" StrokeThickness="0.5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
+                        <!--<Rectangle x:Name="rectHeaderFull" Grid.Column="0" Grid.Row="1" Stroke="Gray" StrokeThickness="0.5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>-->
                         <Rectangle x:Name="rectHeader" Grid.Column="0" Grid.Row="1" Stroke="{StaticResource TabItem.Selected.Border}" StrokeThickness="2" VerticalAlignment="Top" HorizontalAlignment="Stretch"/>
                         <TextBlock Style="{StaticResource TextBlock.Header}" Grid.Column="0" Grid.Row="1" FontFamily="Segoe UI Symbol" Text="&#xE154;" FontSize="40" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="LightGray"/>
                         <Border x:Name="contentPanel" Grid.Column="0" Grid.Row="1" Background="{TemplateBinding Background}" Margin="{TemplateBinding Padding}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}"  KeyboardNavigation.DirectionalNavigation="Contained"  KeyboardNavigation.TabIndex="2" KeyboardNavigation.TabNavigation="Local">
@@ -755,7 +755,7 @@
                             <Setter Property="Grid.Row" TargetName="headerPanel" Value="1"/>
                             <Setter Property="Grid.Row" TargetName="contentPanel" Value="0"/>
                             <Setter Property="Grid.Row" TargetName="rectHeader" Value="0"/>
-                            <Setter Property="Grid.Row" TargetName="rectHeaderFull" Value="0"/>
+                            <!--<Setter Property="Grid.Row" TargetName="rectHeaderFull" Value="0"/>-->
                             <Setter Property="Height" TargetName="RowDefinition0" Value="*"/>
                             <Setter Property="Height" TargetName="RowDefinition1" Value="Auto"/>
                             <Setter Property="Margin" TargetName="contentPanel" Value="1 1 1 2"/>
@@ -766,11 +766,11 @@
                             <Setter Property="Grid.Row" TargetName="headerPanel" Value="0"/>
                             <Setter Property="Grid.Row" TargetName="contentPanel" Value="0"/>
                             <Setter Property="Grid.Row" TargetName="rectHeader" Value="0"/>
-                            <Setter Property="Grid.Row" TargetName="rectHeaderFull" Value="0"/>
+                            <!--<Setter Property="Grid.Row" TargetName="rectHeaderFull" Value="0"/>-->
                             <Setter Property="Grid.Column" TargetName="headerPanel" Value="0"/>
                             <Setter Property="Grid.Column" TargetName="contentPanel" Value="1"/>
                             <Setter Property="Grid.Column" TargetName="rectHeader" Value="1"/>
-                            <Setter Property="Grid.Column" TargetName="rectHeaderFull" Value="1"/>
+                            <!--<Setter Property="Grid.Column" TargetName="rectHeaderFull" Value="1"/>-->
                             <Setter Property="Width" TargetName="ColumnDefinition0" Value="Auto"/>
                             <Setter Property="Width" TargetName="ColumnDefinition1" Value="*"/>
                             <Setter Property="Height" TargetName="RowDefinition0" Value="*"/>
@@ -783,7 +783,7 @@
                             <Setter Property="Grid.Row" TargetName="headerPanel" Value="0"/>
                             <Setter Property="Grid.Row" TargetName="contentPanel" Value="0"/>
                             <Setter Property="Grid.Row" TargetName="rectHeader" Value="0"/>
-                            <Setter Property="Grid.Row" TargetName="rectHeaderFull" Value="0"/>
+                            <!--<Setter Property="Grid.Row" TargetName="rectHeaderFull" Value="0"/>-->
                             <Setter Property="Grid.Column" TargetName="headerPanel" Value="1"/>
                             <Setter Property="Grid.Column" TargetName="contentPanel" Value="0"/>
                             <Setter Property="Width" TargetName="ColumnDefinition0" Value="*"/>
