@@ -4,6 +4,7 @@
                     xmlns:converters="clr-namespace:PowerTools.Core.Converters">
 
     <converters:ValueToVisibilityConverter x:Key="ValueToVisibilityConverter"/>
+    <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
     <converters:StringNullOrEmptyToVisibilityConverter x:Key="StringNullOrEmptyToVisibilityConverter"/>
     <converters:StringToBooleanConverter x:Key="StringToBooleanConverter"/>
     <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
@@ -379,6 +380,7 @@
         <Setter Property="BorderBrush" Value="Transparent"/>
         <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="FontWeight" Value="Normal"/>
     </Style>
     <Style x:Key="TextBox.Grid.Normal" TargetType="{x:Type TextBox}">
         <Setter Property="Margin" Value="0"/>
@@ -388,6 +390,7 @@
         <Setter Property="BorderBrush" Value="Transparent"/>
         <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="FontWeight" Value="Normal"/>
     </Style>
 
     <SolidColorBrush x:Key="Button.Background" Color="#FFBEE6FD"/>
@@ -407,6 +410,7 @@
         <Setter Property="Foreground" Value="#FF585858"/>
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="FontSize" Value="18"/>
+        <Setter Property="FontWeight" Value="Normal"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
@@ -446,7 +450,7 @@
         <Setter Property="HorizontalAlignment" Value="Left"/>
         <Setter Property="Foreground" Value="Black"/>
         <Setter Property="FontSize" Value="12"/>
-        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="FontWeight" Value="Normal"/>
         <Setter Property="Padding" Value="5"/>
         <Setter Property="Template">
             <Setter.Value>
@@ -483,6 +487,7 @@
         <Setter Property="ScrollViewer.PanningMode" Value="Both"/>
         <Setter Property="Stylus.IsFlicksEnabled" Value="False"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="FontWeight" Value="Normal"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ListView}">
@@ -523,6 +528,7 @@
         <Setter Property="Margin" Value="0 0 0 5"/>
         <Setter Property="Cursor" Value="Hand"/>
         <Setter Property="MinHeight" Value="30"/>
+        <Setter Property="FontWeight" Value="Normal"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ListViewItem}">
@@ -597,6 +603,7 @@
         <Setter Property="VerticalGridLinesBrush" Value="WhiteSmoke" />
         <Setter Property="AutoGenerateColumns" Value="False" />
         <Setter Property="CanUserAddRows" Value="False" />
+        <Setter Property="FontWeight" Value="Normal"/>
         <Setter Property="RowStyle">
             <Setter.Value>
                 <Style TargetType="DataGridRow">
@@ -714,6 +721,7 @@
 
     <Style x:Key="RadioButton.Normal" TargetType="{x:Type RadioButton}">
         <Setter Property="Margin" Value="5 5 5 0"/>
+        <Setter Property="FontWeight" Value="Normal"/>
     </Style>
 
     <!--TabControl.Normal-->
@@ -728,6 +736,7 @@
         <Setter Property="BorderThickness" Value="1 0 1 1"/>
         <Setter Property="Margin" Value="5"/>
         <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+        <Setter Property="FontWeight" Value="Normal"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type TabControl}">
@@ -741,11 +750,10 @@
                             <RowDefinition x:Name="RowDefinition1" Height="*"/>
                         </Grid.RowDefinitions>
                         <ScrollViewer x:Name="headerPanel" Grid.Column="0" Grid.Row="0" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
-                            <TabPanel Background="Transparent" Grid.Column="0" IsItemsHost="true" Margin="0" Grid.Row="0" KeyboardNavigation.TabIndex="1" Panel.ZIndex="1"/>
+                            <TabPanel Background="Transparent" IsItemsHost="true" Margin="0" KeyboardNavigation.TabIndex="1" Panel.ZIndex="1"/>
                         </ScrollViewer>
-                        <!--<Rectangle x:Name="rectHeaderFull" Grid.Column="0" Grid.Row="1" Stroke="Gray" StrokeThickness="0.5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>-->
                         <Rectangle x:Name="rectHeader" Grid.Column="0" Grid.Row="1" Stroke="{StaticResource TabItem.Selected.Border}" StrokeThickness="2" VerticalAlignment="Top" HorizontalAlignment="Stretch"/>
-                        <TextBlock Style="{StaticResource TextBlock.Header}" Grid.Column="0" Grid.Row="1" FontFamily="Segoe UI Symbol" Text="&#xE154;" FontSize="40" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="LightGray"/>
+                        <TextBlock x:Name="tblIcon" Style="{StaticResource TextBlock.Header}" Grid.Column="0" Grid.Row="1" FontFamily="Segoe UI Symbol" Text="&#xE154;" FontSize="40" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="LightGray" Visibility="{TemplateBinding SelectedContent, Converter={StaticResource NullToVisibilityConverter}}"/>
                         <Border x:Name="contentPanel" Grid.Column="0" Grid.Row="1" Background="{TemplateBinding Background}" Margin="{TemplateBinding Padding}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}"  KeyboardNavigation.DirectionalNavigation="Contained"  KeyboardNavigation.TabIndex="2" KeyboardNavigation.TabNavigation="Local">
                             <ContentPresenter x:Name="PART_SelectedContentHost" ContentSource="SelectedContent" Margin="0" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
                         </Border>
@@ -755,10 +763,11 @@
                             <Setter Property="Grid.Row" TargetName="headerPanel" Value="1"/>
                             <Setter Property="Grid.Row" TargetName="contentPanel" Value="0"/>
                             <Setter Property="Grid.Row" TargetName="rectHeader" Value="0"/>
-                            <!--<Setter Property="Grid.Row" TargetName="rectHeaderFull" Value="0"/>-->
+                            <Setter Property="Grid.Row" TargetName="tblIcon" Value="0"/>
                             <Setter Property="Height" TargetName="RowDefinition0" Value="*"/>
                             <Setter Property="Height" TargetName="RowDefinition1" Value="Auto"/>
-                            <Setter Property="Margin" TargetName="contentPanel" Value="1 1 1 2"/>
+                            <Setter Property="Margin" TargetName="contentPanel" Value="0 0 0 2"/>
+                            <Setter Property="BorderThickness" TargetName="contentPanel" Value="1 1 1 0"/>
                             <Setter Property="VerticalAlignment" TargetName="rectHeader" Value="Bottom"/>
                             <Setter Property="HorizontalAlignment" TargetName="rectHeader" Value="Stretch"/>
                         </Trigger>
@@ -766,16 +775,17 @@
                             <Setter Property="Grid.Row" TargetName="headerPanel" Value="0"/>
                             <Setter Property="Grid.Row" TargetName="contentPanel" Value="0"/>
                             <Setter Property="Grid.Row" TargetName="rectHeader" Value="0"/>
-                            <!--<Setter Property="Grid.Row" TargetName="rectHeaderFull" Value="0"/>-->
+                            <Setter Property="Grid.Row" TargetName="tblIcon" Value="0"/>
                             <Setter Property="Grid.Column" TargetName="headerPanel" Value="0"/>
                             <Setter Property="Grid.Column" TargetName="contentPanel" Value="1"/>
+                            <Setter Property="Grid.Column" TargetName="tblIcon" Value="1"/>
                             <Setter Property="Grid.Column" TargetName="rectHeader" Value="1"/>
-                            <!--<Setter Property="Grid.Column" TargetName="rectHeaderFull" Value="1"/>-->
                             <Setter Property="Width" TargetName="ColumnDefinition0" Value="Auto"/>
                             <Setter Property="Width" TargetName="ColumnDefinition1" Value="*"/>
                             <Setter Property="Height" TargetName="RowDefinition0" Value="*"/>
                             <Setter Property="Height" TargetName="RowDefinition1" Value="0"/>
-                            <Setter Property="Margin" TargetName="contentPanel" Value="2 1 1 1"/>
+                            <Setter Property="Margin" TargetName="contentPanel" Value="2 0 0 0"/>
+                            <Setter Property="BorderThickness" TargetName="contentPanel" Value="0 1 1 1"/>
                             <Setter Property="VerticalAlignment" TargetName="rectHeader" Value="Stretch"/>
                             <Setter Property="HorizontalAlignment" TargetName="rectHeader" Value="Left"/>
                         </Trigger>
@@ -783,14 +793,16 @@
                             <Setter Property="Grid.Row" TargetName="headerPanel" Value="0"/>
                             <Setter Property="Grid.Row" TargetName="contentPanel" Value="0"/>
                             <Setter Property="Grid.Row" TargetName="rectHeader" Value="0"/>
-                            <!--<Setter Property="Grid.Row" TargetName="rectHeaderFull" Value="0"/>-->
+                            <Setter Property="Grid.Row" TargetName="tblIcon" Value="0"/>
                             <Setter Property="Grid.Column" TargetName="headerPanel" Value="1"/>
                             <Setter Property="Grid.Column" TargetName="contentPanel" Value="0"/>
+                            <Setter Property="Grid.Column" TargetName="tblIcon" Value="0"/>
                             <Setter Property="Width" TargetName="ColumnDefinition0" Value="*"/>
                             <Setter Property="Width" TargetName="ColumnDefinition1" Value="Auto"/>
                             <Setter Property="Height" TargetName="RowDefinition0" Value="*"/>
                             <Setter Property="Height" TargetName="RowDefinition1" Value="0"/>
-                            <Setter Property="Margin" TargetName="contentPanel" Value="1 1 2 1"/>
+                            <Setter Property="Margin" TargetName="contentPanel" Value="0 0 2 0"/>
+                            <Setter Property="BorderThickness" TargetName="contentPanel" Value="1 1 0 1"/>
                             <Setter Property="VerticalAlignment" TargetName="rectHeader" Value="Stretch"/>
                             <Setter Property="HorizontalAlignment" TargetName="rectHeader" Value="Right"/>
                         </Trigger>
@@ -816,6 +828,7 @@
         <Setter Property="Padding" Value="5 4 10 4"/>
         <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
         <Setter Property="VerticalContentAlignment" Value="Stretch"/>
+        <Setter Property="FontWeight" Value="Normal"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type TabItem}">

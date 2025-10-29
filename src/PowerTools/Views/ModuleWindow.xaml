@@ -17,5 +17,8 @@
         <views:ModuleHeader Grid.Row="0"/>
         <ContentControl Grid.Row="1" 
                         prism:RegionManager.RegionName="{x:Static configs:Constants.ModuleRegionName}"/>
+        <!--<TabControl Style="{StaticResource TabControl.Normal}" Grid.Row="1" TabStripPlacement="Top">
+            <TabItem Style="{StaticResource TabItem.Normal}" Header="abc"/>
+        </TabControl>-->
     </Grid>
 </UserControl>
