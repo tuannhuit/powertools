@@ -825,7 +825,7 @@
         <Setter Property="Foreground" Value="Black"/>
         <Setter Property="Background" Value="{StaticResource TabItem.Static.Background}"/>
         <Setter Property="Margin" Value="0"/>
-        <Setter Property="Padding" Value="5 4 10 4"/>
+        <Setter Property="Padding" Value="5 4 5 4"/>
         <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
         <Setter Property="VerticalContentAlignment" Value="Stretch"/>
         <Setter Property="FontWeight" Value="Normal"/>
