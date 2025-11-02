@@ -422,7 +422,48 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="true">
-                            <Setter Property="Background" TargetName="border" Value="{StaticResource Button.MouseOver.Background}"/>
+                            <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Background}"/>
+                            <Setter Property="Foreground" TargetName="textblock" Value="Black"/>
+                            <Setter Property="Foreground" TargetName="textblockText" Value="Black"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="true">
+                            <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Pressed.Background}"/>
+                            <Setter Property="Foreground" TargetName="textblock" Value="Black"/>
+                            <Setter Property="Foreground" TargetName="textblockText" Value="Black"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="false">
+                            <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Disabled.Background}"/>
+                            <Setter Property="Foreground" TargetName="textblock" Value="{StaticResource Button.Disabled.Foreground}"/>
+                            <Setter Property="Foreground" TargetName="textblockText" Value="{StaticResource Button.Disabled.Foreground}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="Button.IconActive" TargetType="{x:Type Button}">
+        <Setter Property="Margin" Value="10 10 0 0"/>
+        <Setter Property="MinWidth" Value="30"/>
+        <Setter Property="Height" Value="30"/>
+        <Setter Property="VerticalAlignment" Value="Top"/>
+        <Setter Property="HorizontalAlignment" Value="Left"/>
+        <Setter Property="Foreground" Value="#FF585858"/>
+        <Setter Property="Background" Value="{StaticResource Button.MouseOver.Background}"/>
+        <Setter Property="FontSize" Value="18"/>
+        <Setter Property="FontWeight" Value="Normal"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border x:Name="border" Background="{TemplateBinding Background}" BorderBrush="Transparent" BorderThickness="0" SnapsToDevicePixels="true">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="5 0 5 0">
+                            <TextBlock x:Name="textblock" FontFamily="Segoe UI Symbol" Foreground="{TemplateBinding Foreground}" FontSize="{TemplateBinding FontSize}" Text="{TemplateBinding Content}" VerticalAlignment="Center" Margin="0"/>
+                            <TextBlock x:Name="textblockText" FontFamily="Segoe UI" Foreground="{TemplateBinding Foreground}" FontSize="11" FontWeight="{TemplateBinding FontWeight}" Text="{TemplateBinding Tag}" Padding="5 0 5 0" Visibility="{TemplateBinding Tag, Converter={StaticResource ValueToVisibilityConverter}}" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="true">
+                            <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Background}"/>
                             <Setter Property="Foreground" TargetName="textblock" Value="Black"/>
                             <Setter Property="Foreground" TargetName="textblockText" Value="Black"/>
                         </Trigger>
@@ -449,18 +490,19 @@
         <Setter Property="VerticalAlignment" Value="Top"/>
         <Setter Property="HorizontalAlignment" Value="Left"/>
         <Setter Property="Foreground" Value="Black"/>
+        <Setter Property="Background" Value="{StaticResource Button.MouseOver.Background}"/>
         <Setter Property="FontSize" Value="12"/>
         <Setter Property="FontWeight" Value="Normal"/>
         <Setter Property="Padding" Value="5"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
-                    <Border x:Name="border" Background="{StaticResource Button.Background}" BorderBrush="{StaticResource Button.Background}" BorderThickness="0.5" SnapsToDevicePixels="true" CornerRadius="2">
+                    <Border x:Name="border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding Background}" BorderThickness="0.5" SnapsToDevicePixels="true" CornerRadius="2">
                         <TextBlock x:Name="textblock" FontFamily="Segoe UI" Foreground="{TemplateBinding Foreground}" FontSize="{TemplateBinding FontSize}" Text="{TemplateBinding Content}" Margin="{TemplateBinding Padding}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="true">
-                            <Setter Property="Background" TargetName="border" Value="{StaticResource Button.MouseOver.Background}"/>
+                            <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Background}"/>
                         </Trigger>
                         <Trigger Property="IsPressed" Value="true">
                             <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Pressed.Background}"/>

@@ -7,6 +7,7 @@ using Prism.Commands;
 using Prism.Ioc;
 using Prism.Mvvm;
 using Prism.Regions;
+using Prism.Services.Dialogs;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -17,6 +18,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using PowerTools.ViewModels.UserControls;
 using ModuleLoader = PowerTools.Helpers.ModuleLoader;
 
 namespace PowerTools.ViewModels
@@ -94,10 +96,12 @@ namespace PowerTools.ViewModels
         public ICommand CmdRefreshModules { get; set; }
         public ICommand CmdExecuteModule { get; set; }
         public ICommand CmdInstallModule { get; set; }
+        private IDialogService _dialogService;
 
-        public ModuleListViewModel(IContainerProvider container)
+        public ModuleListViewModel(IContainerProvider container, IDialogService dialogService)
         {
             this._container = container;
+            this._dialogService = dialogService;
 
             CmdSearchModule = new DelegateCommand(OnCmdSearchModule);
             CmdShowSettings = new DelegateCommand(OnCmdShowSettings);
@@ -339,11 +343,22 @@ namespace PowerTools.ViewModels
 
         private void OnCmdShowSettings()
         {
-            new ModuleSettings().ShowDialog();
+            var settings = ModuleGlobalSettings.Instance.LoadApplicationConfigurationsAsList();
+            var dialogParams = new DialogParameters();
+            dialogParams.Add("settings", settings);
 
-            Modules = new ObservableCollection<ToolModule>();
-            IsLoadedModules = false;
-            Task.Run(OnCmdRefreshModules);
+            _dialogService.ShowDialog("ModuleSettingsView", dialogParams, callback =>
+            {
+                if (callback.Result == ButtonResult.OK)
+                {
+                    var result = callback.Parameters.GetValue<ModuleSettingsViewModel>("ModuleSettingsViewModel");
+                    ModuleGlobalSettings.Instance.SaveModuleConfigurations(result.GetModuleSettingsAsDictionary(), true);
+
+                    Modules = new ObservableCollection<ToolModule>();
+                    IsLoadedModules = false;
+                    Task.Run(OnCmdRefreshModules);
+                }
+            });
         }
 
         private void OnCmdSearchModule()

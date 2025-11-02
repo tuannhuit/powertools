@@ -4,7 +4,7 @@
     <StackPanel Orientation="Horizontal">
         <TextBlock Style="{StaticResource TextBlock.Content}" Text="Version" VerticalAlignment="Center" FontWeight="SemiBold" Margin="0"/>
         <ComboBox Style="{StaticResource ComboBox.Flat}" ItemsSource="{Binding Path=SelectedModule.AllVersions}" SelectedItem="{Binding Path=SelectedModule.Version, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Width="150" Margin="5"/>
-        <Button Style="{StaticResource Button.Icon}" Content="&#xE118;" Tag="Download" Command="{Binding Path=CmdInstallModule, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding Path=SelectedModule.IsDownloaded, Converter={StaticResource  BooleanReversalConverter}}" VerticalAlignment="Center" Margin="0" Padding="0"/>
-        <Button Style="{StaticResource Button.Icon}" Content="&#xE2AB;" Tag="Start" Command="{Binding Path=CmdExecuteModule, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding Path=SelectedModule.IsDownloaded}" Margin="5" Foreground="DarkGreen"/>
+        <Button Style="{StaticResource Button.Icon}" Content="&#xE118;" Tag="Download" Command="{Binding Path=CmdInstallModule, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding Path=SelectedModule.IsDownloaded, Converter={StaticResource  BooleanReversalConverter}}" VerticalAlignment="Center" Margin="0" Padding="0" Width="100"/>
+        <Button Style="{StaticResource Button.Icon}" Content="&#xE2AB;" Tag="Start" Command="{Binding Path=CmdExecuteModule, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding Path=SelectedModule.IsDownloaded}" Margin="5" Foreground="DarkGreen"  Width="100"/>
 </StackPanel>
 </UserControl>
