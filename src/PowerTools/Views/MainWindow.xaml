@@ -42,9 +42,13 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <Rectangle Grid.Row="0" Stroke="Black" StrokeThickness="0.25"/>
-            <TextBlock Style="{StaticResource TextBlock.ContentSmall}" Grid.Row="1" Text="{Binding Source={x:Static sharedServices:LoggingService.Instance}, Path=Status, Mode=OneWay}" FontSize="12" FontFamily="Consolas"  Margin="5 3" MaxHeight="20"/>
-            <StackPanel Grid.Row="1" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5 0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Rectangle Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Stroke="Black" StrokeThickness="0.25"/>
+            <TextBlock Style="{StaticResource TextBlock.ContentSmall}" Grid.Row="1" Grid.Column="0" Text="{Binding Source={x:Static sharedServices:LoggingService.Instance}, Path=Status, Mode=OneWay}" FontSize="12" FontFamily="Consolas"  Margin="5 3" MaxHeight="20"/>
+            <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5 0">
                 <Button Style="{StaticResource Button.Icon}" Content="&#x1F6C8;" Tag="New PowerTools version available" ToolTip="Click to update version" Margin="0 0 20 0" Height="20" Foreground="DarkRed" BorderThickness="0" FontWeight="SemiBold"/>
                 <Button Style="{StaticResource Button.Icon}" Content="&#x1F6C8;" Tag="New module version available" ToolTip="Click to update version" Margin="0 0 20 0" Height="20" Foreground="DarkRed" BorderThickness="0" FontWeight="SemiBold"/>
                 <Button Style="{StaticResource Button.Icon}" Command="{Binding CmdShowLog}" Content="&#xE13E;" ToolTip="Click to view logs" Margin="0" Height="20"/>
