@@ -9,6 +9,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using System.Windows;
 
 namespace PowerTools.Core.Configurations
 {
@@ -30,7 +31,9 @@ namespace PowerTools.Core.Configurations
         private ModuleGlobalSettings()
         {
             RepositoryRemote = string.Empty;
+            ResetWindowSettings();
         }
+        public WindowSettings WindowSettings { get; set; }
 
         public string RepositoryRemote { get; set; }
 
@@ -53,6 +56,18 @@ namespace PowerTools.Core.Configurations
             }
         }
 
+        public void ResetWindowSettings()
+        {
+            WindowSettings = new WindowSettings
+            {
+                MinWidth = 0,
+                MinHeight = 0,
+                MaxWidth = Double.PositiveInfinity,
+                MaxHeight = Double.PositiveInfinity,
+                Width = 1200,
+                Height = 600,
+            };
+        }
 
         public string GetOrCreateDataStoreLocal()
         {

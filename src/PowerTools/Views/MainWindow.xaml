@@ -3,14 +3,21 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:prism="http://www.codeplex.com/prism"
+        xmlns:prism="http://prismlibrary.com/"
         xmlns:configurations="clr-namespace:PowerTools.Core.Configurations;assembly=PowerTools.Core"
         xmlns:sharedServices="clr-namespace:PowerTools.Core.SharedServices;assembly=PowerTools.Core"
         prism:ViewModelLocator.AutoWireViewModel="True"
         mc:Ignorable="d"
         d:DesignHeight="850" d:DesignWidth="1000"
+        Background="{StaticResource Background.WhiteSmoke}"
         Title="{Binding Source={x:Static configurations:ModuleGlobalSettings.Instance}, Path=CurrentModule, Converter={StaticResource ModuleHeaderNameConverter}}"
-        WindowStartupLocation="CenterScreen" Background="{StaticResource Background.WhiteSmoke}">
+        WindowStartupLocation="CenterScreen" 
+        MinWidth="{Binding Source={x:Static configurations:ModuleGlobalSettings.Instance}, Path=WindowSettings.MinWidth}"
+        MaxWidth="{Binding Source={x:Static configurations:ModuleGlobalSettings.Instance}, Path=WindowSettings.MaxWidth}"
+        Width="{Binding Source={x:Static configurations:ModuleGlobalSettings.Instance}, Path=WindowSettings.Width}"
+        MinHeight="{Binding Source={x:Static configurations:ModuleGlobalSettings.Instance}, Path=WindowSettings.MinHeight}"
+        MaxHeight="{Binding Source={x:Static configurations:ModuleGlobalSettings.Instance}, Path=WindowSettings.MaxHeight}"
+        Height="{Binding Source={x:Static configurations:ModuleGlobalSettings.Instance}, Path=WindowSettings.Height}">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>

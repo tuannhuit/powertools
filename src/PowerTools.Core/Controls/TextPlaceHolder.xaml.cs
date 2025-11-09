@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace PowerTools.Core.Controls
 {
@@ -20,8 +21,15 @@ namespace PowerTools.Core.Controls
             set { SetValue(TextProperty, value); }
         }
 
+        public ICommand CmdClearText
+        {
+            get { return (ICommand)GetValue(CmdClearTextProperty); }
+            set { SetValue(CmdClearTextProperty, value); }
+        }
+
         public static readonly DependencyProperty PlaceHolderProperty = DependencyProperty.Register("PlaceHolder", typeof(string), typeof(TextPlaceHolder), new PropertyMetadata(null));
         public static readonly DependencyProperty TextProperty = DependencyProperty.Register("Text", typeof(string), typeof(TextPlaceHolder), new PropertyMetadata(null));
+        public static readonly DependencyProperty CmdClearTextProperty = DependencyProperty.Register("CmdClearText", typeof(ICommand), typeof(TextPlaceHolder), new PropertyMetadata(null));
 
         public TextPlaceHolder()
         {
@@ -31,6 +39,7 @@ namespace PowerTools.Core.Controls
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {
             Text = string.Empty;
+            CmdClearText?.Execute(this);
         }
     }
 }

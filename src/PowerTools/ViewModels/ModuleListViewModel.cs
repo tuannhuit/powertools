@@ -2,7 +2,7 @@
 using PowerTools.Core.Models;
 using PowerTools.Core.SharedServices;
 using PowerTools.Helpers;
-using PowerTools.Views.Windows;
+using PowerTools.ViewModels.UserControls;
 using Prism.Commands;
 using Prism.Ioc;
 using Prism.Mvvm;
@@ -18,8 +18,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using PowerTools.ViewModels.UserControls;
-using ModuleLoader = PowerTools.Helpers.ModuleLoader;
 
 namespace PowerTools.ViewModels
 {
@@ -113,6 +111,8 @@ namespace PowerTools.ViewModels
             LoadingText2 = "Please check the configurations to make sure you're using the correct repository";
 
             OnLoadLocalModules();
+
+            ModuleGlobalSettings.Instance.ResetWindowSettings();
         }
 
         private void OnCmdInstallModule()
