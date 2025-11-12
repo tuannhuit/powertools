@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Prism.Mvvm;
 using System.Windows.Input;
-using Prism.Mvvm;
 
 namespace PowerTools.Core.Models
 {
-    public class DataGridAction : BindableBase
+    public class CustomAction : BindableBase
     {
         private string _name;
         public string Name

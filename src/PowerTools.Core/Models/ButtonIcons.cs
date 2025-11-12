@@ -8,6 +8,6 @@ namespace PowerTools.Core.Models
 {
     public static class ButtonIcons
     {
-        public static string Refresh = "&#xE117;";
+        public static string Refresh = "";
     }
 }

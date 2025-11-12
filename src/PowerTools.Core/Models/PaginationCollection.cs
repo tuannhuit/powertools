@@ -8,13 +8,13 @@ using Prism.Commands;
 
 namespace PowerTools.Core.Models
 {
-    public class DataGridModel<T> : BindableBase
+    public class PaginationCollection<T> : BindableBase
     {
         public static readonly int PAGE_SIZE = 1000;
 
-        private ObservableCollection<DataGridAction> _actions;
+        private ObservableCollection<CustomAction> _actions;
 
-        public ObservableCollection<DataGridAction> Actions
+        public ObservableCollection<CustomAction> Actions
         {
             get => _actions;
             set
@@ -24,30 +24,39 @@ namespace PowerTools.Core.Models
             }
         }
 
-        public DataGridAction Action1
+        public CustomAction Action1
         {
             get
             {
-                if (Actions == null || !Actions.Any()) return null;
-                return Actions[0];
+                if (Actions == null) return null;
+
+                var actions = Actions.Where(p => p is not PageAction);
+                if (!actions.Any()) return null;
+                return actions.ElementAt(0);
             }
         }
 
-        public DataGridAction Action2
+        public CustomAction Action2
         {
             get
             {
-                if (Actions == null || Actions.Count < 1) return null;
-                return Actions[1];
+                if (Actions == null) return null;
+
+                var actions = Actions.Where(p => p is not PageAction);
+                if (actions.Count() < 2) return null;
+                return actions.ElementAt(1);
             }
         }
 
-        public DataGridAction Action3
+        public CustomAction Action3
         {
             get
             {
-                if (Actions == null || Actions.Count < 2) return null;
-                return Actions[2];
+                if (Actions == null) return null;
+
+                var actions = Actions.Where(p => p is not PageAction);
+                if (actions.Count() < 3) return null;
+                return actions.ElementAt(2);
             }
         }
 
@@ -100,9 +109,12 @@ namespace PowerTools.Core.Models
             }
         }
 
+        public bool IsFirstPage => _itemSource.Any() ? _page == 1 : _page == 0;
+        public bool IsLastPage => _itemSource.Any() ? _page == _totalPage : _page == 0;
+
         public ICommand InvokeAction { get; set; }
 
-        public DataGridModel(IEnumerable<T> items)
+        public PaginationCollection(IEnumerable<T> items, IEnumerable<CustomAction> actions = null)
         {
             if (items == null)
             {
@@ -113,34 +125,21 @@ namespace PowerTools.Core.Models
 
             RecalculateItems();
 
-            Actions = new ObservableCollection<DataGridAction>
+            Actions = new ObservableCollection<CustomAction>
             {
-                new DataGridAction
+                new PageAction
                 {
                     Name = "MoveNextPage",
                     Command = new DelegateCommand(OnMoveNext)
                 },
-                new DataGridAction
+                new PageAction
                 {
                     Name = "MovePreviousPage",
-                    Command = new DelegateCommand(OnMoveNext)
+                    Command = new DelegateCommand(OnMovePrevious)
                 }
             };
+            Actions.AddRange(actions);
             InvokeAction = new DelegateCommand<string>(OnInvokeAction);
-        }
-
-        public DataGridModel(ObservableCollection<T> items)
-        {
-            if (items == null)
-            {
-                throw new Exception("The item source cannot be null");
-            }
-            _itemSource = items;
-            _page = 1;
-
-            RecalculateItems();
-
-            Actions = new ObservableCollection<DataGridAction>();
         }
 
         private void OnMoveNext()
@@ -163,12 +162,12 @@ namespace PowerTools.Core.Models
         {
             if (movePage < 1)
             {
-                Page = 1;
+                _page = 1;
             }
 
             if (movePage > TotalPage)
             {
-                Page = TotalPage;
+                _page = TotalPage;
             }
 
             RecalculateItems();
@@ -176,33 +175,33 @@ namespace PowerTools.Core.Models
 
         public void MoveNextPage()
         {
-            Page += 1;
+            _page += 1;
             MoveToPage(Page);
         }
 
         public void MovePreviousPage()
         {
-            Page -= 1;
+            _page -= 1;
             MoveToPage(Page);
         }
 
         private void RecalculateItems()
         {
-            _totalPage = _itemSource.Count() % PAGE_SIZE;
-            if (_itemSource.Count() > _totalPage % PAGE_SIZE)
+            _totalPage = _itemSource.Count() / PAGE_SIZE;
+            if (_itemSource.Count() > _totalPage * PAGE_SIZE)
             {
                 // Calculate total pages and Raise UI event
                 TotalPage += 1;
             }
 
-            if (Page < 1)
+            if (_page < 1)
             {
-                Page = 1;
+                _page = 1;
             }
 
-            if (Page > TotalPage)
+            if (_page > _totalPage)
             {
-                Page = TotalPage;
+                _page = _totalPage;
             }
 
             RaisePropertyChanged("Items");
@@ -210,6 +209,34 @@ namespace PowerTools.Core.Models
             RaisePropertyChanged("ItemStart");
             RaisePropertyChanged("ItemEnd");
             RaisePropertyChanged("PageInformation");
+            RaisePropertyChanged("IsFirstPage");
+            RaisePropertyChanged("IsLastPage");
+        }
+
+        public void AddItem(T newItem)
+        {
+            if (_itemSource == null)
+            {
+                _itemSource = new List<T>();
+            }
+            _itemSource.Append(newItem);
+
+            RecalculateItems();
+        }
+
+        public void AddRangeItems(IEnumerable<T> newItems)
+        {
+            if (_itemSource == null)
+            {
+                _itemSource = new List<T>();
+            }
+
+            foreach (var newItem in newItems)
+            {
+                _itemSource.Append(newItem);
+            }
+
+            RecalculateItems();
         }
     }
 }

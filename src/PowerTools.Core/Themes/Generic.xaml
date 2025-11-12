@@ -9,6 +9,7 @@
     <converters:StringNullOrEmptyToVisibilityConverter x:Key="StringNullOrEmptyToVisibilityConverter"/>
     <converters:StringToBooleanConverter x:Key="StringToBooleanConverter"/>
     <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+    <converters:BoolToReverseConverter x:Key="BoolToReverseConverter"/>
 
     <SolidColorBrush x:Key="Background.WhiteSmoke" Color="#F9F9FA"/>
 
@@ -648,6 +649,7 @@
         <Setter Property="AutoGenerateColumns" Value="False" />
         <Setter Property="CanUserAddRows" Value="False" />
         <Setter Property="FontWeight" Value="Normal"/>
+        <Setter Property="ItemsSource" Value="{Binding DataContext.Items, RelativeSource={RelativeSource Self}}"/>
         <Setter Property="RowStyle">
             <Setter.Value>
                 <Style TargetType="DataGridRow">
@@ -753,19 +755,19 @@
                                             Tag="{Binding DataContext.Action1.Name, RelativeSource={RelativeSource AncestorType=DataGrid}}"
                                             Command="{Binding DataContext.Action1.Command, RelativeSource={RelativeSource AncestorType=DataGrid}}"
                                             Visibility="{Binding DataContext.Action1, RelativeSource={RelativeSource AncestorType=DataGrid}, Converter={StaticResource ValueToVisibilityConverter}}" 
-                                            MinHeight="25" Height="25"/>
+                                            MinHeight="25" Height="25" FontSize="13"/>
                                     <Button Style="{StaticResource Button.Icon}" Margin="0 5 5 5" 
                                             Content="{Binding DataContext.Action2.Icon, RelativeSource={RelativeSource AncestorType=DataGrid}}"
                                             Tag="{Binding DataContext.Action2.Name, RelativeSource={RelativeSource AncestorType=DataGrid}}"
                                             Command="{Binding DataContext.Action2.Command, RelativeSource={RelativeSource AncestorType=DataGrid}}"
                                             Visibility="{Binding DataContext.Action2, RelativeSource={RelativeSource AncestorType=DataGrid}, Converter={StaticResource ValueToVisibilityConverter}}" 
-                                            MinHeight="25" Height="25"/>
+                                            MinHeight="25" Height="25" FontSize="13"/>
                                     <Button Style="{StaticResource Button.Icon}" Margin="0 5 5 5" 
                                             Content="{Binding DataContext.Action3.Icon, RelativeSource={RelativeSource AncestorType=DataGrid}}"
                                             Tag="{Binding DataContext.Action3.Name, RelativeSource={RelativeSource AncestorType=DataGrid}}"
                                             Command="{Binding DataContext.Action3.Command, RelativeSource={RelativeSource AncestorType=DataGrid}}"
                                             Visibility="{Binding DataContext.Action3, RelativeSource={RelativeSource AncestorType=DataGrid}, Converter={StaticResource ValueToVisibilityConverter}}" 
-                                            MinHeight="25" Height="25"/>
+                                            MinHeight="25" Height="25" FontSize="13"/>
                                 </StackPanel>
                                 <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
                                     <TextBlock Style="{StaticResource TextBlock.ContentSmall}" Text="{Binding DataContext.PageInformation, RelativeSource={RelativeSource AncestorType=DataGrid}}" HorizontalAlignment="Right" Margin="10 5"/>
@@ -776,8 +778,8 @@
                                             </MultiBinding>
                                         </TextBlock.Text>
                                     </TextBlock>
-                                    <Button Style="{StaticResource Button.Icon}" Content="&#x2BC7;" Command="{Binding DataContext.InvokeAction, RelativeSource={RelativeSource AncestorType=DataGrid}}" CommandParameter="MoveNextPage" FontSize="13" Margin="0" Padding="0" MinWidth="0" MinHeight="0" VerticalAlignment="Center"/>
-                                    <Button Style="{StaticResource Button.Icon}" Content="&#x2BC8;" Command="{Binding DataContext.InvokeAction, RelativeSource={RelativeSource AncestorType=DataGrid}}" CommandParameter="MovePreviousPage" FontSize="13" Margin="0 0 5 0" Padding="0" MinWidth="0" MinHeight="0" VerticalAlignment="Center"/>
+                                    <Button Style="{StaticResource Button.Icon}" Content="&#xE016;" Command="{Binding DataContext.InvokeAction, RelativeSource={RelativeSource AncestorType=DataGrid}}" CommandParameter="MovePreviousPage" IsEnabled="{Binding DataContext.IsFirstPage, RelativeSource={RelativeSource AncestorType=DataGrid}, Converter={StaticResource BoolToReverseConverter}}" FontSize="13" Margin="0" Padding="0" MinWidth="0" MinHeight="0" VerticalAlignment="Center"/>
+                                    <Button Style="{StaticResource Button.Icon}" Content="&#xE017;" Command="{Binding DataContext.InvokeAction, RelativeSource={RelativeSource AncestorType=DataGrid}}" CommandParameter="MoveNextPage" IsEnabled="{Binding DataContext.IsLastPage, RelativeSource={RelativeSource AncestorType=DataGrid}, Converter={StaticResource BoolToReverseConverter}}" FontSize="13" Margin="0 0 5 0" Padding="0" MinWidth="0" MinHeight="0" VerticalAlignment="Center"/>
                                 </StackPanel>
                             </Grid>
                         </Grid>
