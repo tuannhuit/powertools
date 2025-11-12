@@ -2,6 +2,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:theme="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero2"
                     xmlns:converters="clr-namespace:PowerTools.Core.Converters">
+    <converters:ValueToVisibilityConverter x:Key="ValueToVisibilityConverter1"/>
 
     <converters:ValueToVisibilityConverter x:Key="ValueToVisibilityConverter"/>
     <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
@@ -54,10 +55,10 @@
         <GradientStop Color="#FFF0F0F0" Offset="0.0"/>
         <GradientStop Color="#FFE5E5E5" Offset="1.0"/>
     </LinearGradientBrush>
-    <SolidColorBrush x:Key="ComboBox.Static.Border" Color="#FFACACAC"/>
+    <SolidColorBrush x:Key="ComboBox.Static.Border" Color="LightGray"/>
     <SolidColorBrush x:Key="ComboBox.Static.Glyph" Color="#FF606060"/>
     <SolidColorBrush x:Key="ComboBox.Static.Editable.Background" Color="#FFFFFFFF"/>
-    <SolidColorBrush x:Key="ComboBox.Static.Editable.Border" Color="#FFABADB3"/>
+    <SolidColorBrush x:Key="ComboBox.Static.Editable.Border" Color="LightGray"/>
     <SolidColorBrush x:Key="ComboBox.Static.Editable.Button.Background" Color="Transparent"/>
     <SolidColorBrush x:Key="ComboBox.Static.Editable.Button.Border" Color="Transparent"/>
     <LinearGradientBrush x:Key="ComboBox.MouseOver.Background" EndPoint="0,1" StartPoint="0,0">
@@ -293,7 +294,7 @@
         <Setter Property="Background" Value="{StaticResource ComboBox.Static.Background}"/>
         <Setter Property="BorderBrush" Value="{StaticResource ComboBox.Static.Border}"/>
         <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}"/>
-        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto"/>
         <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
         <Setter Property="Padding" Value="6 6  3 6"/>
@@ -355,7 +356,7 @@
         <Setter Property="MinWidth" Value="200"/>
         <Setter Property="MinHeight" Value="30"/>
         <Setter Property="Margin" Value="5"/>
-        <Setter Property="BorderBrush" Value="WhiteSmoke"/>
+        <Setter Property="BorderBrush" Value="LightGray"/>
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="FontWeight" Value="Normal"/>
     </Style>
@@ -740,13 +741,39 @@
                                 </ScrollViewer.Template>
                                 <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
                             </ScrollViewer>
-                            <TextBlock Style="{StaticResource TextBlock.ContentSmall}" Grid.Row="1" HorizontalAlignment="Right" Margin="10 5">
-                                <TextBlock.Text>
-                                    <MultiBinding StringFormat="1 of 1 pages ({0} items)">
-                                        <Binding Path="Items.Count" RelativeSource="{RelativeSource TemplatedParent}"/>
-                                    </MultiBinding>
-                                </TextBlock.Text>
-                            </TextBlock>
+                            <Grid Grid.Row="1">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0" Orientation="Horizontal">
+                                    <Button Style="{StaticResource Button.Icon}" Margin="5" 
+                                            Content="{Binding DataContext.Action1.Icon, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                            Tag="{Binding DataContext.Action1.Name, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                            Command="{Binding DataContext.Action1.Command, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                            Visibility="{Binding DataContext.Action1, RelativeSource={RelativeSource AncestorType=DataGrid}, Converter={StaticResource ValueToVisibilityConverter}}" 
+                                            MinHeight="25" Height="25"/>
+                                    <Button Style="{StaticResource Button.Icon}" Margin="0 5 5 5" 
+                                            Content="{Binding DataContext.Action2.Icon, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                            Tag="{Binding DataContext.Action2.Name, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                            Command="{Binding DataContext.Action2.Command, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                            Visibility="{Binding DataContext.Action2, RelativeSource={RelativeSource AncestorType=DataGrid}, Converter={StaticResource ValueToVisibilityConverter}}" 
+                                            MinHeight="25" Height="25"/>
+                                    <Button Style="{StaticResource Button.Icon}" Margin="0 5 5 5" 
+                                            Content="{Binding DataContext.Action3.Icon, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                            Tag="{Binding DataContext.Action3.Name, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                            Command="{Binding DataContext.Action3.Command, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                            Visibility="{Binding DataContext.Action3, RelativeSource={RelativeSource AncestorType=DataGrid}, Converter={StaticResource ValueToVisibilityConverter}}" 
+                                            MinHeight="25" Height="25"/>
+                                </StackPanel>
+                                <TextBlock Style="{StaticResource TextBlock.ContentSmall}" Grid.Column="1" HorizontalAlignment="Right" Margin="10 5">
+                                    <TextBlock.Text>
+                                        <MultiBinding StringFormat="1 of 1 pages ({0} items)">
+                                            <Binding Path="Items.Count" RelativeSource="{RelativeSource TemplatedParent}"/>
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
+                            </Grid>
                         </Grid>
                     </Border>
                 </ControlTemplate>

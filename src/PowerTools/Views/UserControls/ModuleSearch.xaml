@@ -12,7 +12,7 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <TextBlock Grid.Column="0" Style="{StaticResource TextBlock.Content}" Margin="10 0" Text="Type and search in module list" Background="Transparent" FontWeight="SemiBold" VerticalAlignment="Center"/>
+            <TextBlock Grid.Column="0" Style="{StaticResource TextBlock.Content}" Margin="10 0" Text="Type and search in module list" Background="Transparent" FontWeight="SemiBold"/>
             <TextBox Grid.Column="1" Style="{StaticResource TextBox.Content}" Text="{Binding SearchingText, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderBrush="Transparent" BorderThickness="0" Margin="0">
                 <TextBox.InputBindings>
                     <KeyBinding Key="Enter" Command="{Binding CmdSearchModule}"/>
@@ -20,7 +20,6 @@
             </TextBox>
             <Button Grid.Column="2" Style="{StaticResource Button.Icon}" Margin="0" Content="&#xE111;" Command="{Binding CmdSearchModule}"/>
         </Grid>
-        <Rectangle Stroke="Black" StrokeThickness="0.25"/>
-
+        <Rectangle Stroke="Gray" StrokeThickness="0.25"/>
     </Grid>
 </UserControl>
