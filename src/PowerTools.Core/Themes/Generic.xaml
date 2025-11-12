@@ -769,7 +769,7 @@
                                 </StackPanel>
                                 <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
                                     <TextBlock Style="{StaticResource TextBlock.ContentSmall}" Text="{Binding DataContext.PageInformation, RelativeSource={RelativeSource AncestorType=DataGrid}}" HorizontalAlignment="Right" Margin="10 5"/>
-                                    <TextBlock Style="{StaticResource TextBlock.ContentSmall}" HorizontalAlignment="Right" Margin="10 5" Visibility="{Binding DataContext, RelativeSource={RelativeSource AncestorType=DataGrid}, Converter={StaticResource NullToVisibilityConverter}}">
+                                    <TextBlock Style="{StaticResource TextBlock.ContentSmall}" HorizontalAlignment="Right" Margin="10 5" Visibility="{Binding DataContext.PageInformation, RelativeSource={RelativeSource AncestorType=DataGrid}, Converter={StaticResource NullToVisibilityConverter}}">
                                         <TextBlock.Text>
                                             <MultiBinding StringFormat="{}Total Items: {0}">
                                                 <Binding Path="Items.Count" RelativeSource="{RelativeSource AncestorType=DataGrid}"/>
