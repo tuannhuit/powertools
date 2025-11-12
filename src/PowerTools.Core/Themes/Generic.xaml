@@ -404,8 +404,9 @@
     <!--Example: &#xE10F;-->
     <Style x:Key="Button.Icon" TargetType="{x:Type Button}">
         <Setter Property="Margin" Value="10 10 0 0"/>
+        <Setter Property="Padding" Value="5 0 5 0"/>
         <Setter Property="MinWidth" Value="30"/>
-        <Setter Property="Height" Value="30"/>
+        <Setter Property="MinHeight" Value="30"/>
         <Setter Property="VerticalAlignment" Value="Top"/>
         <Setter Property="HorizontalAlignment" Value="Left"/>
         <Setter Property="Foreground" Value="#FF585858"/>
@@ -416,7 +417,7 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
                     <Border x:Name="border" Background="{TemplateBinding Background}" BorderBrush="Transparent" BorderThickness="0" SnapsToDevicePixels="true">
-                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="5 0 5 0">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="{TemplateBinding Padding}">
                             <TextBlock x:Name="textblock" FontFamily="Segoe UI Symbol" Foreground="{TemplateBinding Foreground}" FontSize="{TemplateBinding FontSize}" Text="{TemplateBinding Content}" VerticalAlignment="Center" Margin="0"/>
                             <TextBlock x:Name="textblockText" FontFamily="Segoe UI" Foreground="{TemplateBinding Foreground}" FontSize="11" FontWeight="{TemplateBinding FontWeight}" Text="{TemplateBinding Tag}" Padding="5 0 5 0" Visibility="{TemplateBinding Tag, Converter={StaticResource ValueToVisibilityConverter}}" VerticalAlignment="Center"/>
                         </StackPanel>
@@ -766,13 +767,18 @@
                                             Visibility="{Binding DataContext.Action3, RelativeSource={RelativeSource AncestorType=DataGrid}, Converter={StaticResource ValueToVisibilityConverter}}" 
                                             MinHeight="25" Height="25"/>
                                 </StackPanel>
-                                <TextBlock Style="{StaticResource TextBlock.ContentSmall}" Grid.Column="1" HorizontalAlignment="Right" Margin="10 5">
-                                    <TextBlock.Text>
-                                        <MultiBinding StringFormat="1 of 1 pages ({0} items)">
-                                            <Binding Path="Items.Count" RelativeSource="{RelativeSource TemplatedParent}"/>
-                                        </MultiBinding>
-                                    </TextBlock.Text>
-                                </TextBlock>
+                                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                                    <TextBlock Style="{StaticResource TextBlock.ContentSmall}" Text="{Binding DataContext.PageInformation, RelativeSource={RelativeSource AncestorType=DataGrid}}" HorizontalAlignment="Right" Margin="10 5"/>
+                                    <TextBlock Style="{StaticResource TextBlock.ContentSmall}" HorizontalAlignment="Right" Margin="10 5" Visibility="{Binding DataContext, RelativeSource={RelativeSource AncestorType=DataGrid}, Converter={StaticResource NullToVisibilityConverter}}">
+                                        <TextBlock.Text>
+                                            <MultiBinding StringFormat="{}Total Items: {0}">
+                                                <Binding Path="Items.Count" RelativeSource="{RelativeSource AncestorType=DataGrid}"/>
+                                            </MultiBinding>
+                                        </TextBlock.Text>
+                                    </TextBlock>
+                                    <Button Style="{StaticResource Button.Icon}" Content="&#x2BC7;" Command="{Binding DataContext.InvokeAction, RelativeSource={RelativeSource AncestorType=DataGrid}}" CommandParameter="MoveNextPage" FontSize="13" Margin="0" Padding="0" MinWidth="0" MinHeight="0" VerticalAlignment="Center"/>
+                                    <Button Style="{StaticResource Button.Icon}" Content="&#x2BC8;" Command="{Binding DataContext.InvokeAction, RelativeSource={RelativeSource AncestorType=DataGrid}}" CommandParameter="MovePreviousPage" FontSize="13" Margin="0 0 5 0" Padding="0" MinWidth="0" MinHeight="0" VerticalAlignment="Center"/>
+                                </StackPanel>
                             </Grid>
                         </Grid>
                     </Border>

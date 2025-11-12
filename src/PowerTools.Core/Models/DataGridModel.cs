@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows.Input;
+using Prism.Commands;
 
 namespace PowerTools.Core.Models
 {
@@ -71,6 +73,18 @@ namespace PowerTools.Core.Models
             get => _itemSource.Count();
         }
 
+        public int ItemStart
+        {
+            get => _itemSource.Any() ? PAGE_SIZE * (Page - 1) + 1 : 0;
+        }
+
+        public int ItemEnd
+        {
+            get => _itemSource.Any() ? ItemStart + Items.Count - 1 : 0;
+        }
+
+        public string PageInformation => $"{ItemStart}-{ItemEnd} of {TotalItems}";
+
         /// <summary>
         /// The index of current page
         /// </summary>
@@ -86,6 +100,8 @@ namespace PowerTools.Core.Models
             }
         }
 
+        public ICommand InvokeAction { get; set; }
+
         public DataGridModel(IEnumerable<T> items)
         {
             if (items == null)
@@ -97,7 +113,20 @@ namespace PowerTools.Core.Models
 
             RecalculateItems();
 
-            Actions = new ObservableCollection<DataGridAction>();
+            Actions = new ObservableCollection<DataGridAction>
+            {
+                new DataGridAction
+                {
+                    Name = "MoveNextPage",
+                    Command = new DelegateCommand(OnMoveNext)
+                },
+                new DataGridAction
+                {
+                    Name = "MovePreviousPage",
+                    Command = new DelegateCommand(OnMoveNext)
+                }
+            };
+            InvokeAction = new DelegateCommand<string>(OnInvokeAction);
         }
 
         public DataGridModel(ObservableCollection<T> items)
@@ -112,6 +141,22 @@ namespace PowerTools.Core.Models
             RecalculateItems();
 
             Actions = new ObservableCollection<DataGridAction>();
+        }
+
+        private void OnMoveNext()
+        {
+            MoveNextPage();
+        }
+
+        private void OnMovePrevious()
+        {
+            MovePreviousPage();
+        }
+
+        private void OnInvokeAction(string actionName)
+        {
+            var foundAction = Actions.FirstOrDefault(p => p.Name == actionName);
+            foundAction?.Command.Execute(null);
         }
 
         public void MoveToPage(int movePage)
@@ -162,6 +207,9 @@ namespace PowerTools.Core.Models
 
             RaisePropertyChanged("Items");
             RaisePropertyChanged("TotalItems");
+            RaisePropertyChanged("ItemStart");
+            RaisePropertyChanged("ItemEnd");
+            RaisePropertyChanged("PageInformation");
         }
     }
 }
