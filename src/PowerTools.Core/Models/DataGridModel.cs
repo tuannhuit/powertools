@@ -66,6 +66,11 @@ namespace PowerTools.Core.Models
             }
         }
 
+        public int TotalItems
+        {
+            get => _itemSource.Count();
+        }
+
         /// <summary>
         /// The index of current page
         /// </summary>
@@ -156,6 +161,7 @@ namespace PowerTools.Core.Models
             }
 
             RaisePropertyChanged("Items");
+            RaisePropertyChanged("TotalItems");
         }
     }
 }
