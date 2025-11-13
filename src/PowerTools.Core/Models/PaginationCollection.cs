@@ -224,12 +224,24 @@ namespace PowerTools.Core.Models
             RecalculateItems();
         }
 
-        public void AddRangeItems(IEnumerable<T> newItems)
+        public void AddItemRange(IEnumerable<T> newItems)
         {
             if (_itemSource == null)
             {
                 _itemSource = new List<T>();
             }
+
+            foreach (var newItem in newItems)
+            {
+                _itemSource.Append(newItem);
+            }
+
+            RecalculateItems();
+        }
+
+        public void SetItems(IEnumerable<T> newItems)
+        {
+            _itemSource = new List<T>();
 
             foreach (var newItem in newItems)
             {

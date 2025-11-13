@@ -9,7 +9,7 @@ namespace PowerTools.Core.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value == null)
+            if (value == null || value == DependencyProperty.UnsetValue)
             {
                 return Visibility.Visible;
             }

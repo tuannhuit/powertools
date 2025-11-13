@@ -10,6 +10,7 @@
     <converters:StringToBooleanConverter x:Key="StringToBooleanConverter"/>
     <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
     <converters:BoolToReverseConverter x:Key="BoolToReverseConverter"/>
+    <converters:MultiValueToVisibilityConverter x:Key="MultiValueToVisibilityConverter"/>
 
     <SolidColorBrush x:Key="Background.WhiteSmoke" Color="#F9F9FA"/>
 
@@ -689,20 +690,38 @@
                             Content="{Binding Tag.Action1.Icon, RelativeSource={RelativeSource AncestorType=DataGrid}}"
                             Tag="{Binding Tag.Action1.Name, RelativeSource={RelativeSource AncestorType=DataGrid}}"
                             Command="{Binding Tag.Action1.Command, RelativeSource={RelativeSource AncestorType=DataGrid}}"
-                            Visibility="{Binding Tag.Action1, RelativeSource={RelativeSource AncestorType=DataGrid}, Converter={StaticResource ValueToVisibilityConverter}}" 
-                            MinHeight="25" Height="25" FontSize="13"/>
+                            MinHeight="25" Height="25" FontSize="13">
+                            <Button.Visibility>
+                                <MultiBinding Converter="{StaticResource MultiValueToVisibilityConverter}">
+                                    <Binding Path="Tag" RelativeSource="{RelativeSource AncestorType=DataGrid}"/>
+                                    <Binding Path="Tag.Action1" RelativeSource="{RelativeSource AncestorType=DataGrid}"/>
+                                </MultiBinding>
+                            </Button.Visibility>
+                        </Button>
                         <Button Style="{StaticResource Button.Icon}" Margin="0 5 5 5" 
                             Content="{Binding Tag.Action2.Icon, RelativeSource={RelativeSource AncestorType=DataGrid}}"
                             Tag="{Binding Tag.Action2.Name, RelativeSource={RelativeSource AncestorType=DataGrid}}"
                             Command="{Binding Tag.Action2.Command, RelativeSource={RelativeSource AncestorType=DataGrid}}"
-                            Visibility="{Binding Tag.Action2, RelativeSource={RelativeSource AncestorType=DataGrid}, Converter={StaticResource ValueToVisibilityConverter}}" 
-                            MinHeight="25" Height="25" FontSize="13"/>
+                            MinHeight="25" Height="25" FontSize="13">
+                            <Button.Visibility>
+                                <MultiBinding Converter="{StaticResource MultiValueToVisibilityConverter}">
+                                    <Binding Path="Tag" RelativeSource="{RelativeSource AncestorType=DataGrid}"/>
+                                    <Binding Path="Tag.Action2" RelativeSource="{RelativeSource AncestorType=DataGrid}"/>
+                                </MultiBinding>
+                            </Button.Visibility>
+                        </Button>
                         <Button Style="{StaticResource Button.Icon}" Margin="0 5 5 5" 
                             Content="{Binding Tag.Action3.Icon, RelativeSource={RelativeSource AncestorType=DataGrid}}"
                             Tag="{Binding Tag.Action3.Name, RelativeSource={RelativeSource AncestorType=DataGrid}}"
                             Command="{Binding Tag.Action3.Command, RelativeSource={RelativeSource AncestorType=DataGrid}}"
-                            Visibility="{Binding Tag.Action3, RelativeSource={RelativeSource AncestorType=DataGrid}, Converter={StaticResource ValueToVisibilityConverter}}" 
-                            MinHeight="25" Height="25" FontSize="13"/>
+                            MinHeight="25" Height="25" FontSize="13">
+                            <Button.Visibility>
+                                <MultiBinding Converter="{StaticResource MultiValueToVisibilityConverter}">
+                                    <Binding Path="Tag" RelativeSource="{RelativeSource AncestorType=DataGrid}"/>
+                                    <Binding Path="Tag.Action3" RelativeSource="{RelativeSource AncestorType=DataGrid}"/>
+                                </MultiBinding>
+                            </Button.Visibility>
+                        </Button>
                     </StackPanel>
                     <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
                         <TextBlock Style="{StaticResource TextBlock.ContentSmall}" Text="{Binding Tag.PageInformation, RelativeSource={RelativeSource AncestorType=DataGrid}}" HorizontalAlignment="Right" Margin="10 5"/>
@@ -713,7 +732,8 @@
                                 </MultiBinding>
                             </TextBlock.Text>
                         </TextBlock>
-                        <Button Style="{StaticResource Button.Icon}" Content="&#xE016;" Command="{Binding Tag.InvokeAction, RelativeSource={RelativeSource AncestorType=DataGrid}}" CommandParameter="MovePreviousPage" IsEnabled="{Binding Tag.IsFirstPage, RelativeSource={RelativeSource AncestorType=DataGrid}, Converter={StaticResource BoolToReverseConverter}}" FontSize="13" Margin="0" Padding="0" MinWidth="0" MinHeight="0" VerticalAlignment="Center"/>
+                        <Button Style="{StaticResource Button.Icon}" Content="&#xE016;" Command="{Binding Tag.InvokeAction, RelativeSource={RelativeSource AncestorType=DataGrid}}" CommandParameter="MovePreviousPage" IsEnabled="{Binding Tag.IsFirstPage, RelativeSource={RelativeSource AncestorType=DataGrid}, Converter={StaticResource BoolToReverseConverter}}" FontSize="13" Margin="0" Padding="0" MinWidth="0" MinHeight="0" VerticalAlignment="Center">
+                        </Button>
                         <Button Style="{StaticResource Button.Icon}" Content="&#xE017;" Command="{Binding Tag.InvokeAction, RelativeSource={RelativeSource AncestorType=DataGrid}}" CommandParameter="MoveNextPage" IsEnabled="{Binding Tag.IsLastPage, RelativeSource={RelativeSource AncestorType=DataGrid}, Converter={StaticResource BoolToReverseConverter}}" FontSize="13" Margin="0 0 5 0" Padding="0" MinWidth="0" MinHeight="0" VerticalAlignment="Center"/>
                     </StackPanel>
                 </Grid>

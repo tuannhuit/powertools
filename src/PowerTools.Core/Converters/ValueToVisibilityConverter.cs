@@ -19,8 +19,7 @@ namespace PowerTools.Core.Converters
                 return Visibility.Visible;
             }
 
-            var valueStr = value.ToString();
-            return valueStr == parameter.ToString() ? Visibility.Visible : Visibility.Collapsed;
+            return value.ToString() == parameter.ToString() ? Visibility.Visible : Visibility.Collapsed;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
