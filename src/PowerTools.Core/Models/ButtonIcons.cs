@@ -9,5 +9,6 @@ namespace PowerTools.Core.Models
     public static class ButtonIcons
     {
         public static string Refresh = "";
+        public static string Delete = "\ue107";
     }
 }
