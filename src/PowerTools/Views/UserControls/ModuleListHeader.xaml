@@ -10,7 +10,7 @@
         <TextBlock Grid.Column="0" Style="{StaticResource TextBlock.Title}" Text="Module Management" VerticalAlignment="Center" Margin="10"/>
         <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top"  Margin="10 0 0 0">
             <Button Style="{StaticResource Button.Icon}" Content="&#xE117;" Command="{Binding CmdRefreshModules}" Margin="0" FontSize="13" ToolTip="Fetch the tool modules from repository"/>
-            <Button Style="{StaticResource Button.Icon}" Content="&#xE115;" Command="{Binding CmdShowSettings}" Margin="0" ToolTip="Open the settings for "/>
+            <Button Style="{StaticResource Button.Icon}" Content="&#xE115;" Tag="Settings" Command="{Binding CmdShowSettings}" Margin="0" ToolTip="Open the settings for "/>
         </StackPanel>
     </Grid>
 </UserControl>

@@ -1,22 +1,26 @@
 ﻿using Prism.Mvvm;
 using System;
 using System.Collections.ObjectModel;
-using System.Windows;
+using System.Linq;
 
 namespace PowerTools.Core.SharedServices
 {
     public class LoggingService : BindableBase
     {
-        private static LoggingService _instance;
+        private static readonly object _lock = new object();
 
+        private static LoggingService _instance;
         public static LoggingService Instance
         {
             get
             {
-                if (_instance == null)
-                    _instance = new LoggingService();
+                lock (_lock)
+                {
+                    if (_instance == null)
+                        _instance = new LoggingService();
 
-                return _instance;
+                    return _instance;
+                }
             }
         }
 
@@ -31,6 +35,36 @@ namespace PowerTools.Core.SharedServices
             }
         }
 
+        private bool _doShowLog;
+        public bool DoShowLog
+        {
+            get => _doShowLog;
+            set
+            {
+                _doShowLog = value;
+                if (DoShowLog)
+                {
+                    Status = string.Empty;
+                }
+                else
+                {
+                    Status = MessageList.Last();
+                }
+                RaisePropertyChanged("DoShowLog");
+            }
+        }
+
+        private string _status;
+        public string Status
+        {
+            get => _status;
+            private set
+            {
+                _status = value;
+                RaisePropertyChanged("Status");
+            }
+        }
+
         private ObservableCollection<string> _messageList;
         public ObservableCollection<string> MessageList
         {
@@ -42,9 +76,13 @@ namespace PowerTools.Core.SharedServices
             }
         }
 
+        public Action<bool> DoShowLogCallback;
+
         private LoggingService()
         {
-            MessageList = new ObservableCollection<string>();
+            _messageList = new ObservableCollection<string>();
+            _message = "Logging started";
+            _status = string.Empty;
 
             WriteLog("Ready");
         }
@@ -54,36 +92,48 @@ namespace PowerTools.Core.SharedServices
             WriteLog(message);
         }
 
+        public void Error(string message, Exception e)
+        {
+            var log = $"{message}{System.Environment.NewLine}Exception: {e.Message}\n{e.StackTrace}";
+            WriteLog(log);
+        }
+
         public void Clear()
         {
             WriteLog("Ready");
         }
 
+        public void ShowLogs(bool doShowLogs)
+        {
+            DoShowLogCallback?.Invoke(doShowLogs);
+        }
+
         private void WriteLog(string message)
         {
-            var d = Application.Current.Dispatcher;
-            if (d.CheckAccess())
+            lock (_lock)
             {
-                Message = message;
-                AddMessageIntoList(message);
-            }
-            else
-            {
-                d.Invoke((Action)delegate
+                ApplicationService.Instance.InvokeUIAction(() =>
                 {
-                    Message = message;
-                    AddMessageIntoList(message);
+                    var indexOfNewLine = message.IndexOf("\n");
+                    var newMessage = $"> {DateTime.Now} " + ((indexOfNewLine == -1) ? message : message.Substring(0, indexOfNewLine + 1));
+                    AddMessageIntoList(newMessage);
+                    Message = string.Join(Environment.NewLine, MessageList);
+
+                    if (!DoShowLog)
+                    {
+                        Status = newMessage;
+                    }
                 });
             }
         }
 
         private void AddMessageIntoList(string message)
         {
-            MessageList.Insert(0, message);
+            MessageList.Add(message);
 
-            if(MessageList.Count > 1000)
-                MessageList.RemoveAt(999);
-            
+            if (MessageList.Count > 2000)
+                MessageList.RemoveAt(0);
+
             RaisePropertyChanged("MessageList");
         }
     }

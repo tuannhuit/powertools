@@ -1,0 +1,74 @@
+﻿using Prism.Mvvm;
+using System.Windows;
+
+namespace PowerTools.Core.Models
+{
+    public class WindowSettings: BindableBase
+    {
+        private double _width;
+        public double Width
+        {
+            get => _width;
+            set
+            {
+                _width=value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private double _height;
+        public double Height
+        {
+            get => _height;
+            set
+            {
+                _height = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private double _minWidth;
+        public double MinWidth
+        {
+            get => _minWidth;
+            set
+            {
+                _minWidth = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private double _minHeight;
+        public double MinHeight
+        {
+            get => _minHeight;
+            set
+            {
+                _minHeight = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private double _maxWidth;
+        public double MaxWidth
+        {
+            get => _maxWidth;
+            set
+            {
+                _maxWidth = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private double _maxHeight;
+        public double MaxHeight
+        {
+            get => _maxHeight;
+            set
+            {
+                _maxHeight = value;
+                RaisePropertyChanged();
+            }
+        }
+    }
+}

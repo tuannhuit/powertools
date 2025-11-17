@@ -1,12 +1,19 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Windows;
+using PowerTools.Core.Models;
 
 namespace PowerTools.Core.SharedServices
 {
     public class ApplicationService
     {
         private static ApplicationService _instance;
+        private static List<Action> _disposedActions = new List<Action>();
+
+        public Action<bool> DoBusy;
+        public Func<string, string, MessageBoxButton, MessageBoxResult> DoShowMessageBox;
 
         public static ApplicationService Instance
         {
@@ -31,6 +38,78 @@ namespace PowerTools.Core.SharedServices
 
             Process.Start(applicationFullPath);
             Application.Current.Shutdown();
+        }
+
+        public void InvokeUIAction(Action action)
+        {
+            if(action == null)
+            {
+                return;
+            }
+            var d = Application.Current?.Dispatcher;
+
+            try
+            {
+                if (d == null)
+                {
+                    return;
+                }
+
+                if (d.CheckAccess())
+                {
+                    action.Invoke();
+                }
+                else
+                {
+                    d.BeginInvoke(action);
+                }
+            }
+            catch (Exception e)
+            {
+                LoggingService.Instance.Error("Occured error during invoking UI action",e);
+            }
+        }
+
+        public void Busy()
+        {
+            DoBusy?.Invoke(true);
+        }
+
+        public void Free()
+        {
+            DoBusy?.Invoke(false);
+        }
+
+        public MessageBoxResult MessageBox(string message, string caption = "", MessageBoxButton button = MessageBoxButton.OK)
+        {
+            if (DoShowMessageBox == null)
+            {
+                return MessageBoxResult.OK;
+            }
+            else
+            {
+                return DoShowMessageBox.Invoke(message, caption, button);
+            }
+        }
+
+        public void RegisterDisposableAction(Action disposableAction)
+        {
+            _disposedActions.Add(disposableAction);
+        }
+
+        public void Dispose()
+        {
+            foreach (var action in _disposedActions)
+            {
+                try
+                {
+                    action.Invoke();
+                }
+                catch(Exception e)
+                {
+                    LoggingService.Instance.Error("Dispose", e);
+                }
+            }
         }
     }
 }

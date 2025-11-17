@@ -1,0 +1,50 @@
+﻿{
+  "SelectedModule": null,
+  "ModuleList": [
+    {
+      "Name": "Kafka Client Tool",
+      "Description": "Kafka Client Tool is used for reading/creating/deleting topics and messages of a Kafka Server.",
+      "Version": "1.0.0.0",
+      "AllVersions": [
+        "1.0.0.0"
+      ],
+      "ExecutionName": "PowerTools.KafkaClientTool.dll"
+    },
+    {
+      "Name": "ICX Configuration Update",
+      "Description": "This tool is used for update configurations of ICX folder",
+      "Version": "1.0.0.0",
+      "AllVersions": [
+        "1.0.0.0"
+      ],
+      "ExecutionName": "PowerTool.ICXConfigurationUpdate.dll"
+    },
+    {
+      "Name": "Base64ToString Converter",
+      "Description": "A way to convert base64 string to Unicode string",
+      "Version": "1.0.0.0",
+      "AllVersions": [
+        "1.0.0.0"
+      ],
+      "ExecutionName": "PowerTool.Base64ToString.dll"
+    },
+    {
+      "Name": "Simple Server",
+      "Description": "",
+      "Version": "1.0.0.0",
+      "AllVersions": [
+        "1.0.0.0"
+      ],
+      "ExecutionName": "PowerTools.SimpleServer.dll"
+    },
+    {
+      "Name": "QAutomation Tool",
+      "Description": "",
+      "Version": "1.0.0.0",
+      "AllVersions": [
+        "1.0.0.0"
+      ],
+      "ExecutionName": "PowerTools.QAutomationTool.dll"
+    }
+  ]
+}

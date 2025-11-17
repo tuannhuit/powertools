@@ -10,6 +10,7 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using System;
 using PowerTools.Core.Configurations;
+using PowerTools.Core.SharedServices;
 
 namespace PowerTools
 {
@@ -45,19 +46,19 @@ namespace PowerTools
                 ShowUnhandledException(args.ExceptionObject as Exception, "AppDomain.CurrentDomain.UnhandledException", false);
 
             // Catch exceptions from each AppDomain that uses a task scheduler for async operations.
-            //TaskScheduler.UnobservedTaskException += (sender, args) =>
-            //    ShowUnhandledException(args.Exception, "TaskScheduler.UnobservedTaskException", false);
+            TaskScheduler.UnobservedTaskException += (sender, args) =>
+                ShowUnhandledException(args.Exception, "TaskScheduler.UnobservedTaskException", false);
 
             // Catch exceptions from a single specific UI dispatcher thread.
-            //Dispatcher.UnhandledException += (sender, args) =>
-            //{
-            //    // If we are debugging, let Visual Studio handle the exception and take us to the code that threw it.
-            //    if (!Debugger.IsAttached)
-            //    {
-            //        args.Handled = true;
-            //        ShowUnhandledException(args.Exception, "Dispatcher.UnhandledException", true);
-            //    }
-            //};
+            Dispatcher.UnhandledException += (sender, args) =>
+            {
+                // If we are debugging, let Visual Studio handle the exception and take us to the code that threw it.
+                if (!Debugger.IsAttached)
+                {
+                    args.Handled = true;
+                    ShowUnhandledException(args.Exception, "Dispatcher.UnhandledException", true);
+                }
+            };
         }
 
         private void ShowUnhandledException(Exception e, string unhandledExceptionType, bool promptUserForShutdown)
@@ -75,10 +76,17 @@ namespace PowerTools
             // Let the user decide if the app should die or not (if applicable).
             MessageBox.Show(messageBoxMessage, messageBoxTitle, messageBoxButtons);
 
+            ApplicationService.Instance.Dispose();
             ModuleGlobalSettings.Instance.CurrentModule = null;
             RepositoryLoader.Instance.Store();
 
             Application.Current.Shutdown();
+        }
+
+        protected override void OnExit(ExitEventArgs e)
+        {
+            ApplicationService.Instance.Dispose();
+            base.OnExit(e);
         }
     }
 }

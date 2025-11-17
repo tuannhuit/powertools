@@ -3,24 +3,63 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:prism="http://www.codeplex.com/prism"
-        xmlns:configs="clr-namespace:PowerTools.Core.Configurations;assembly=PowerTools.Core"
+        xmlns:prism="http://prismlibrary.com/"
+        xmlns:configurations="clr-namespace:PowerTools.Core.Configurations;assembly=PowerTools.Core"
         xmlns:sharedServices="clr-namespace:PowerTools.Core.SharedServices;assembly=PowerTools.Core"
         prism:ViewModelLocator.AutoWireViewModel="True"
         mc:Ignorable="d"
-        Title="Power Tools"
-        MinHeight="850" Height="850" MinWidth="1400" Width="1400"
-        WindowStartupLocation="CenterScreen">
+        d:DesignHeight="850" d:DesignWidth="1000"
+        Background="{StaticResource Background.WhiteSmoke}"
+        Title="{Binding Source={x:Static configurations:ModuleGlobalSettings.Instance}, Path=CurrentModule, Converter={StaticResource ModuleHeaderNameConverter}}"
+        WindowStartupLocation="CenterScreen" 
+        MinWidth="{Binding Source={x:Static configurations:ModuleGlobalSettings.Instance}, Path=WindowSettings.MinWidth}"
+        MaxWidth="{Binding Source={x:Static configurations:ModuleGlobalSettings.Instance}, Path=WindowSettings.MaxWidth}"
+        Width="{Binding Source={x:Static configurations:ModuleGlobalSettings.Instance}, Path=WindowSettings.Width}"
+        MinHeight="{Binding Source={x:Static configurations:ModuleGlobalSettings.Instance}, Path=WindowSettings.MinHeight}"
+        MaxHeight="{Binding Source={x:Static configurations:ModuleGlobalSettings.Instance}, Path=WindowSettings.MaxHeight}"
+        Height="{Binding Source={x:Static configurations:ModuleGlobalSettings.Instance}, Path=WindowSettings.Height}">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="2"/>
+            <RowDefinition Height="{Binding ViewLogGridLength, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MaxHeight="500"/>
+            <RowDefinition Height="22"/>
         </Grid.RowDefinitions>
-        <ContentControl prism:RegionManager.RegionName="{x:Static configs:Constants.MasterRegionName}"
+        <ContentControl prism:RegionManager.RegionName="{x:Static configurations:Constants.MasterRegionName}"
                         Focusable="False"
-                        Grid.Row="0"/>
-        <Grid Grid.Row="1" Background="SteelBlue">
-            <TextBlock Style="{StaticResource TextBlock.Content}" Text="{Binding Source={x:Static sharedServices:LoggingService.Instance}, Path=Message}" Margin="5" FontSize="12" VerticalAlignment="Center" Foreground="White" MaxHeight="20"/>
+                        IsEnabled="{Binding IsFree, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
+        <Grid Visibility="{Binding IsBusy, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <Rectangle Fill="WhiteSmoke" Opacity="0.2"/>
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" >
+                <TextBlock Style="{StaticResource TextBlock.Icon}" Text="&#xE2FD;" VerticalAlignment="Center" HorizontalAlignment="Center"  FontWeight="SemiBold"/>
+                <TextBlock Style="{StaticResource TextBlock.ContentSmall}" Text="Please wait..." HorizontalAlignment="Center"/>
+            </StackPanel>
+        </Grid>
+        <GridSplitter Style="{StaticResource GridSplitter.Normal}" Grid.Row="1" HorizontalAlignment="Stretch" Background="Transparent"/>
+        <Grid Grid.Row="2" Background="WhiteSmoke">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Rectangle Grid.Row="0" Stroke="Black" StrokeThickness="0.25"/>
+            <TextBox Grid.Row="1" Text="{Binding Source={x:Static sharedServices:LoggingService.Instance}, Path=Message, Mode=OneWay}" BorderBrush="Transparent" Background="Transparent" BorderThickness="0" FontSize="12" FontFamily="Consolas" IsReadOnly="True" TextWrapping="Wrap" Padding="2 5" TextChanged="txbLogs_TextChanged"/>
+        </Grid>
+        <Grid Grid.Row="3" Background="{StaticResource Background.WhiteSmoke}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Rectangle Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Stroke="Black" StrokeThickness="0.25"/>
+            <TextBlock Style="{StaticResource TextBlock.ContentSmall}" Grid.Row="1" Grid.Column="0" Text="{Binding Source={x:Static sharedServices:LoggingService.Instance}, Path=Status, Mode=OneWay}" FontSize="12" FontFamily="Consolas"  Margin="5 3" MaxHeight="20"/>
+            <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5 0">
+                <Button Style="{StaticResource Button.Icon}" Content="&#x1F6C8;" Tag="New PowerTools version available" ToolTip="Click to update version" Margin="0 0 20 0" Height="20" MinHeight="20" Foreground="DarkRed" BorderThickness="0" FontWeight="SemiBold"/>
+                <Button Style="{StaticResource Button.Icon}" Content="&#x1F6C8;" Tag="New module version available" ToolTip="Click to update version" Margin="0 0 20 0" Height="20" MinHeight="20" Foreground="DarkRed" BorderThickness="0" FontWeight="SemiBold"/>
+                <Button Style="{StaticResource Button.Icon}" Command="{Binding CmdShowLog}" Content="&#xE13E;" ToolTip="Click to view logs" Margin="0" Height="20" MinHeight="20" />
+            </StackPanel>
         </Grid>
     </Grid>
 </Window>

@@ -2,7 +2,6 @@
 using PowerTools.Core.Configurations;
 using PowerTools.Core.SharedServices;
 using PowerTools.Helpers;
-using PowerTools.Views.UserControls;
 using Prism.Ioc;
 using Prism.Mvvm;
 using Prism.Services.Dialogs;
@@ -30,6 +29,7 @@ namespace PowerTools.ViewModels.UserControls
         private void OnCmdMoveBack()
         {
             ViewNavigator.Instance.NavigateToModuleLoaderView(_container);
+            ApplicationService.Instance.Dispose();
             ModuleGlobalSettings.Instance.CurrentModule = null;
             RepositoryLoader.Instance.Store();
             LoggingService.Instance.Info("Ready");
@@ -37,12 +37,16 @@ namespace PowerTools.ViewModels.UserControls
 
         private void OnCmdOpenModuleSettings()
         {
-            _dialogService.ShowDialog("ModuleSettingsView", null, callback =>
+            var settings = ModuleGlobalSettings.Instance.LoadModuleConfigurationsAsList();
+            var dialogParams = new DialogParameters();
+            dialogParams.Add("settings", settings);
+
+            _dialogService.ShowDialog("ModuleSettingsView", dialogParams, callback =>
             {
                 if (callback.Result == ButtonResult.OK)
                 {
                     var result = callback.Parameters.GetValue<ModuleSettingsViewModel>("ModuleSettingsViewModel");
-                    ModuleGlobalSettings.Instance.SaveModuleConfigurations(result.ModuleSettings, true);
+                    ModuleGlobalSettings.Instance.SaveModuleConfigurations(result.GetModuleSettingsAsDictionary(), true);
                 }
             });
         }
