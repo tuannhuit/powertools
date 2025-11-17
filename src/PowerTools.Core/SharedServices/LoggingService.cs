@@ -7,6 +7,7 @@ namespace PowerTools.Core.SharedServices
 {
     public class LoggingService : BindableBase
     {
+        public static readonly int MAX_MESSAGES_COUNT = 2000;
         private static readonly object _lock = new object();
 
         private static LoggingService _instance;
@@ -31,7 +32,7 @@ namespace PowerTools.Core.SharedServices
             private set
             {
                 _message = value;
-                RaisePropertyChanged("Message");
+                RaisePropertyChanged();
             }
         }
 
@@ -50,7 +51,7 @@ namespace PowerTools.Core.SharedServices
                 {
                     Status = MessageList.Last();
                 }
-                RaisePropertyChanged("DoShowLog");
+                RaisePropertyChanged();
             }
         }
 
@@ -61,7 +62,7 @@ namespace PowerTools.Core.SharedServices
             private set
             {
                 _status = value;
-                RaisePropertyChanged("Status");
+                RaisePropertyChanged();
             }
         }
 
@@ -72,7 +73,7 @@ namespace PowerTools.Core.SharedServices
             private set
             {
                 _messageList = value;
-                RaisePropertyChanged("MessageList");
+                RaisePropertyChanged();
             }
         }
 
@@ -110,29 +111,32 @@ namespace PowerTools.Core.SharedServices
 
         private void WriteLog(string message)
         {
-            lock (_lock)
+            if (message == null)
             {
-                ApplicationService.Instance.InvokeUIAction(() =>
-                {
-                    var indexOfNewLine = message.IndexOf("\n");
-                    var newMessage = $"> {DateTime.Now} " + ((indexOfNewLine == -1) ? message : message.Substring(0, indexOfNewLine + 1));
-                    AddMessageIntoList(newMessage);
-                    Message = string.Join(Environment.NewLine, MessageList);
-
-                    if (!DoShowLog)
-                    {
-                        Status = newMessage;
-                    }
-                });
+                return;
             }
+
+            var indexOfNewLine = message.IndexOf("\n");
+            var newMessage = $"> {DateTime.Now} " + ((indexOfNewLine == -1) ? message : message.Substring(0, indexOfNewLine + 1));
+
+            ApplicationService.Instance.InvokeUIAction(() =>
+            {
+                AddMessageIntoList(newMessage);
+                Message = string.Join(Environment.NewLine, MessageList);
+
+                if (!DoShowLog)
+                {
+                    Status = newMessage;
+                }
+            });
         }
 
         private void AddMessageIntoList(string message)
         {
-            MessageList.Add(message);
+            _messageList.Add(message);
 
-            if (MessageList.Count > 2000)
-                MessageList.RemoveAt(0);
+            if (_messageList.Count > MAX_MESSAGES_COUNT)
+                _messageList.RemoveAt(0);
 
             RaisePropertyChanged("MessageList");
         }

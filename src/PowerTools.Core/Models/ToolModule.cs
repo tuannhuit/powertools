@@ -1,10 +1,10 @@
 ﻿using PowerTools.Core.Configurations;
+using Prism.Mvvm;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text.Json.Serialization;
-using Prism.Mvvm;
 
 namespace PowerTools.Core.Models
 {
@@ -30,7 +30,7 @@ namespace PowerTools.Core.Models
             set
             {
                 _version = value;
-                RaisePropertyChanged("Version");
+                RaisePropertyChanged();
                 RaisePropertyChanged("IsDownloaded");
             }
         }

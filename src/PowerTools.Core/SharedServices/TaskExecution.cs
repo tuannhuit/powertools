@@ -37,7 +37,7 @@ namespace PowerTools.Core.SharedServices
 
         #endregion
 
-        public void RunAsync(Action action)
+        public void RunAsync(Action action, Action errAction = null)
         {
             Task.Run(() =>
             {
@@ -52,7 +52,7 @@ namespace PowerTools.Core.SharedServices
             });
         }
 
-        public void RunOnceAsync(string taskName, Action action)
+        public void RunOnceAsync(string taskName, Action action, Action beginAction = null, Action endAction = null, Action errAction = null)
         {
             lock (_lock)
             {
@@ -77,14 +77,23 @@ namespace PowerTools.Core.SharedServices
                 LoggingService.Instance.Info($"Calling {taskName}");
                 try
                 {
-                    action.Invoke();
-                    LoggingService.Instance.Info($"Done! {taskName}");
+                    ApplicationService.Instance.Busy();
 
-                    _taskStatuses[taskName] = false;
+                    beginAction?.Invoke();
+                    action.Invoke();
+                    endAction?.Invoke();
+
+                    LoggingService.Instance.Info($"Done! {taskName}");
                 }
                 catch (Exception e)
                 {
+                    errAction?.Invoke();
                     LoggingService.Instance.Error($"Error calling {taskName}", e);
+                }
+                finally
+                {
+                    ApplicationService.Instance.Free();
+                    _taskStatuses[taskName] = false;
                 }
             });
         }

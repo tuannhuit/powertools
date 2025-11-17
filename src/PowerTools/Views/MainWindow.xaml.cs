@@ -1,5 +1,4 @@
 ﻿using System.Windows;
-using System.Windows.Controls;
 
 namespace PowerTools.Views
 {
@@ -11,12 +10,6 @@ namespace PowerTools.Views
         public MainWindow()
         {
             InitializeComponent();
-        }
-
-        private void txbLogs_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
-        {
-            var textBox = sender as TextBox;
-            textBox?.ScrollToEnd();
         }
     }
 }

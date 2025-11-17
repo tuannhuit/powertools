@@ -19,7 +19,7 @@ namespace PowerTools.Core.Configurations
             }
         }
 
-        public static Type? GetView(string moduleName)
+        public static Type GetView(string moduleName)
         {
             if (_moduleViews.ContainsKey(moduleName))
             {

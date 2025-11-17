@@ -27,9 +27,16 @@ namespace PowerTools.Core.Controls
             set { SetValue(CmdClearTextProperty, value); }
         }
 
+        public ICommand CmdEnterKeyPressed
+        {
+            get { return (ICommand)GetValue(CmdEnterKeyPressedProperty); }
+            set { SetValue(CmdEnterKeyPressedProperty, value); }
+        }
+
         public static readonly DependencyProperty PlaceHolderProperty = DependencyProperty.Register("PlaceHolder", typeof(string), typeof(TextPlaceHolder), new PropertyMetadata(null));
         public static readonly DependencyProperty TextProperty = DependencyProperty.Register("Text", typeof(string), typeof(TextPlaceHolder), new PropertyMetadata(null));
         public static readonly DependencyProperty CmdClearTextProperty = DependencyProperty.Register("CmdClearText", typeof(ICommand), typeof(TextPlaceHolder), new PropertyMetadata(null));
+        public static readonly DependencyProperty CmdEnterKeyPressedProperty = DependencyProperty.Register("CmdEnterKeyPressed", typeof(ICommand), typeof(TextPlaceHolder), new PropertyMetadata(null));
 
         public TextPlaceHolder()
         {

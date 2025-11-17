@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace PowerTools.Core.Models
+﻿namespace PowerTools.Core.Models
 {
     public static class ButtonIcons
     {
-        public static string Refresh = "";
+        public static string Refresh = "\ue117";
         public static string Delete = "\ue107";
+        public static string Setting = "\ue115";
+        public static string Module = "\ue14e";
+        public static string Loading = "\ue2FD";
+        public static string ShowLogs = "\ue13E";
+        public static string Information = "🛈";
     }
 }

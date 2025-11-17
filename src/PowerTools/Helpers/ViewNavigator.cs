@@ -4,6 +4,7 @@ using Prism.Ioc;
 using Prism.Regions;
 using System;
 using System.Linq;
+using PowerTools.Core.Models;
 
 namespace PowerTools.Helpers
 {
@@ -26,17 +27,20 @@ namespace PowerTools.Helpers
             }
         }
 
-        public void NavigateToModuleView(IContainerProvider container)
+        public void NavigateToModuleView(IContainerProvider container,  ToolModule module)
         {
             var region = container.Resolve<IRegionManager>();
             if (region == null) return;
 
-            if (!IsExistedNaviation(region,  Constants.MasterRegionName, typeof(ModuleWindow)))
+            ModuleGlobalSettings.Instance.CurrentModule = module;
+
+            var viewType = ModuleViewSelectionHelper.GetView(module.Name);
+            if (!IsExistedNaviation(region, Constants.ModuleRegionName, viewType))
             {
-                region.RegisterViewWithRegion(Constants.MasterRegionName, typeof(ModuleWindow));
+                region.RegisterViewWithRegion(Constants.ModuleRegionName, viewType);
             }
 
-            region.RequestNavigate(Constants.MasterRegionName, new Uri("ModuleWindow", UriKind.Relative));
+            region.RequestNavigate(Constants.ModuleRegionName, viewType.FullName);
 
         }
 
@@ -45,12 +49,12 @@ namespace PowerTools.Helpers
             var region = container.Resolve<IRegionManager>();
             if (region == null) return;
 
-            if (!IsExistedNaviation(region, Constants.MasterRegionName, typeof(ModuleList)))
+            if (!IsExistedNaviation(region, Constants.ModuleRegionName, typeof(ModuleList)))
             {
-                region.RegisterViewWithRegion(Constants.MasterRegionName, typeof(ModuleList));
+                region.RegisterViewWithRegion(Constants.ModuleRegionName, typeof(ModuleList));
             }
 
-            region.RequestNavigate(Constants.MasterRegionName, new Uri("ModuleList", UriKind.Relative));
+            region.RequestNavigate(Constants.ModuleRegionName, new Uri("ModuleList", UriKind.Relative));
         }
 
         private bool IsExistedNaviation(IRegionManager regionManager, string regionName, Type viewType)

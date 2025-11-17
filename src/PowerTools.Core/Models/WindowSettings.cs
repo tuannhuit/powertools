@@ -5,6 +5,9 @@ namespace PowerTools.Core.Models
 {
     public class WindowSettings: BindableBase
     {
+        public static readonly double MIN_WIDTH = 600;
+        public static readonly double MIN_HEIGHT = 400;
+
         private double _width;
         public double Width
         {
@@ -33,7 +36,7 @@ namespace PowerTools.Core.Models
             get => _minWidth;
             set
             {
-                _minWidth = value;
+                _minWidth = value < MIN_WIDTH ? MIN_WIDTH : value;
                 RaisePropertyChanged();
             }
         }
@@ -44,7 +47,7 @@ namespace PowerTools.Core.Models
             get => _minHeight;
             set
             {
-                _minHeight = value;
+                _minHeight = value < MIN_HEIGHT ? MIN_HEIGHT : value;
                 RaisePropertyChanged();
             }
         }

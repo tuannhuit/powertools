@@ -80,6 +80,11 @@ namespace PowerTools.Helpers
 
         private ModuleInfo CreateModuleInfo(Type type)
         {
+            if (type == null || type.Assembly == null)
+            {
+                throw new Exception("Failed to create a module from unknown type");
+            }
+
             var moduleName = type.Name;
             var moduleAttribute = CustomAttributeData.GetCustomAttributes(type)
                 .FirstOrDefault(p => p.Constructor.DeclaringType.FullName == typeof(ModuleAttribute).FullName);

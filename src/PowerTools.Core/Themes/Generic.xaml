@@ -12,7 +12,7 @@
     <converters:BoolToReverseConverter x:Key="BoolToReverseConverter"/>
     <converters:MultiValueToVisibilityConverter x:Key="MultiValueToVisibilityConverter"/>
 
-    <SolidColorBrush x:Key="Background.WhiteSmoke" Color="#F9F9FA"/>
+    <SolidColorBrush x:Key="Background.WhiteSmoke" Color="#F8F8F8"/>
 
     <SolidColorBrush x:Key="TextBox.Background.Black" Color="#0C0C0C"/>
     <SolidColorBrush x:Key="TextBox.Foreground.Grey" Color="#CCCCCC"/>

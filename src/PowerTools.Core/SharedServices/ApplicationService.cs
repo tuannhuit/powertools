@@ -72,12 +72,18 @@ namespace PowerTools.Core.SharedServices
 
         public void Busy()
         {
-            DoBusy?.Invoke(true);
+            InvokeUIAction(() =>
+            {
+                DoBusy?.Invoke(true);
+            });
         }
 
         public void Free()
         {
-            DoBusy?.Invoke(false);
+            InvokeUIAction(() =>
+            {
+                DoBusy?.Invoke(false);
+            });
         }
 
         public MessageBoxResult MessageBox(string message, string caption = "", MessageBoxButton button = MessageBoxButton.OK)

@@ -1,11 +1,14 @@
-﻿using PowerTools.Core.Configurations;
+﻿using System;
+using System.Linq;
+using PowerTools.Core.Configurations;
 using PowerTools.Core.SharedServices;
 using PowerTools.Helpers;
+using PowerTools.ViewModels.UserControls;
 using Prism.Commands;
 using Prism.Ioc;
 using Prism.Mvvm;
 using Prism.Regions;
-using System;
+using Prism.Services.Dialogs;
 using System.Windows;
 using System.Windows.Input;
 
@@ -14,7 +17,7 @@ namespace PowerTools.ViewModels
     public class MainWindowViewModel : BindableBase
     {
         private readonly IContainerProvider _container;
-        private readonly IRegionManager _regionManager;
+        private IDialogService _dialogService;
 
         private GridLength _viewLogGridLength;
         public GridLength ViewLogGridLength
@@ -41,12 +44,19 @@ namespace PowerTools.ViewModels
             }
         }
 
+        #region Commands
+        public ICommand CmdShowSettings { get; set; }
         public ICommand CmdShowLog { get; set; }
+        public ICommand CmdSelectModuleList { get; set; }
+        public ICommand CmdSelectModuleKafka { get; set; }
+        public ICommand CmdSelectModuleQAutomation { get; set; }
 
-        public MainWindowViewModel(IContainerProvider container, IRegionManager regionManager)
+        #endregion
+
+        public MainWindowViewModel(IContainerProvider container, IRegionManager regionManager, IDialogService dialogService)
         {
             _container = container;
-            _regionManager = regionManager;
+            _dialogService = dialogService;
 
             LoggingService.Instance.DoShowLogCallback = DoShowLogCallback;
             ApplicationService.Instance.DoBusy = DoBusy;
@@ -55,21 +65,30 @@ namespace PowerTools.ViewModels
             ViewLogGridLength = new GridLength(0);
 
             CmdShowLog = new DelegateCommand(OnCmdShowLog);
+            CmdShowSettings = new DelegateCommand(OnCmdShowSettings);
+            CmdSelectModuleList = new DelegateCommand(OnCmdSelectModuleList);
+            CmdSelectModuleKafka = new DelegateCommand(OnCmdSelectModuleKafka);
+            CmdSelectModuleQAutomation = new DelegateCommand(OnCmdSelectModuleQAutomation);
 
             RepositoryLoader.Instance.LoadLocalRepository();
 
-            if (RepositoryLoader.Instance.LocalRepository.SelectedModule != null)
+
+            foreach (var toolModule in RepositoryLoader.Instance.LocalRepository.ModuleList)
             {
-                ModuleGlobalSettings.Instance.CurrentModule = RepositoryLoader.Instance.LocalRepository.SelectedModule;
-                ModuleLoader.Instance.LoadModule(_container, ModuleGlobalSettings.Instance.CurrentModule);
-                ViewNavigator.Instance.NavigateToModuleView(_container);
-            }
-            else
-            {
-                ViewNavigator.Instance.NavigateToModuleLoaderView(_container);
+                try
+                {
+                    ModuleLoader.Instance.LoadModule(_container, toolModule);
+                }
+                catch (Exception e)
+                {
+
+                }
             }
 
+            ViewNavigator.Instance.NavigateToModuleLoaderView(_container);
+
             DownloadPowerToolVersions();
+            _dialogService = dialogService;
         }
 
         private void DownloadPowerToolVersions()
@@ -79,7 +98,14 @@ namespace PowerTools.ViewModels
 
         private MessageBoxResult DoShowMessageBox(string message, string caption, MessageBoxButton button)
         {
-            return MessageBox.Show(Application.Current.MainWindow, message, caption, button);
+            if (Application.Current?.MainWindow != null)
+            {
+                return MessageBox.Show(Application.Current.MainWindow, message, caption, button);
+            }
+            else
+            {
+                return MessageBox.Show(message, caption, button);
+            }
         }
 
         private void DoBusy(bool doBusy)
@@ -116,6 +142,43 @@ namespace PowerTools.ViewModels
                 LoggingService.Instance.DoShowLog = true;
                 ViewLogGridLength = new GridLength(100);
             }
+        }
+
+        private void OnCmdShowSettings()
+        {
+            var settings = ModuleGlobalSettings.Instance.LoadApplicationConfigurationsAsList();
+            var dialogParams = new DialogParameters
+            {
+                { "settings", settings }
+            };
+
+            _dialogService.ShowDialog("ModuleSettingsView", dialogParams, callback =>
+            {
+                if (callback.Result == ButtonResult.OK)
+                {
+                    var result = callback.Parameters.GetValue<ModuleSettingsViewModel>("ModuleSettingsViewModel");
+                    ModuleGlobalSettings.Instance.SaveModuleConfigurations(result.GetModuleSettingsAsDictionary(), true);
+                }
+            });
+        }
+
+        private void OnCmdSelectModuleList()
+        {
+            ViewNavigator.Instance.NavigateToModuleLoaderView(_container);
+        }
+
+        private void OnCmdSelectModuleKafka()
+        {
+            var module = RepositoryLoader.Instance.LocalRepository.ModuleList.First(p => p.Name == "Kafka Client Tool");
+
+            ViewNavigator.Instance.NavigateToModuleView(_container, module);
+        }
+
+        private void OnCmdSelectModuleQAutomation()
+        {
+            var module = RepositoryLoader.Instance.LocalRepository.ModuleList.First(p => p.Name == "QAutomation Tool");
+
+            ViewNavigator.Instance.NavigateToModuleView(_container, module);
         }
     }
 }
