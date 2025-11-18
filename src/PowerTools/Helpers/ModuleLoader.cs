@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Windows;
+using PowerTools.Core.SharedServices;
 
 namespace PowerTools.Helpers
 {
@@ -36,7 +37,7 @@ namespace PowerTools.Helpers
             if (module == null)
                 return;
 
-            var modulePath = module.LocalModulePath;
+            var modulePath = module.ExecutionLocation;
 
             if (string.IsNullOrEmpty(modulePath))
                 throw new Exception("Could not identify the module execution path!");
@@ -64,16 +65,10 @@ namespace PowerTools.Helpers
                 if (!moduleCatalog.Modules.ToList().Exists(p => p.ModuleName == moduleInfo.ModuleName))
                 {
                     moduleCatalog.AddModule(moduleInfo);
-
-                    var d = Application.Current.Dispatcher;
-                    if (d.CheckAccess())
+                    ApplicationService.Instance.InvokeUIAction(() =>
                     {
                         moduleManager.LoadModule(moduleInfo.ModuleName);
-                    }
-                    else
-                    {
-                        d.BeginInvoke((Action)delegate { moduleManager.LoadModule(moduleInfo.ModuleName); });
-                    }
+                    });
                 }
             }
         }

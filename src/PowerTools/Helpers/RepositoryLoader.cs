@@ -27,25 +27,27 @@ namespace PowerTools.Helpers
 
         private bool _isLoaded;
 
-        private Repository<ToolModule> _localRepository;
-        private Repository<RemoteToolModule> _remoteRepository;
+        public Repository<RemoteToolModule> RemoteRepository
+        {
+            get;
+            private set;
+        }
 
-        /// <summary>
-        /// Local repository
-        /// </summary>
-        public Repository<ToolModule> LocalRepository => _localRepository;
+        public Repository<ToolModule> LocalRepository
+        {
+            get;
+            private set;
+        }
 
         public string RepositoryLocalPath
         {
             get
             {
                 var localRepositoryPath = ModuleGlobalSettings.Instance.RepositoryLocal;
-                var repositoryFileName = ModuleGlobalSettings.Instance.RepositoryFileName;
-
                 if (!Directory.Exists(localRepositoryPath))
                     Directory.CreateDirectory(localRepositoryPath);
 
-                var moduleFilePath = Path.Combine(localRepositoryPath, repositoryFileName);
+                var moduleFilePath = Path.Combine(localRepositoryPath, ModuleGlobalSettings.Instance.RepositoryFileName);
 
                 if (!File.Exists(moduleFilePath))
                 {
@@ -57,11 +59,12 @@ namespace PowerTools.Helpers
             }
         }
 
-        public string RepositoryRemotePath => Path.Combine(ModuleGlobalSettings.Instance.RepositoryRemote, ModuleGlobalSettings.Instance.RepositoryFileName);
+        public string RepositoryRemotePath
+            => Path.Combine(ModuleGlobalSettings.Instance.RepositoryRemote, ModuleGlobalSettings.Instance.RepositoryFileName);
 
         private RepositoryLoader()
         {
-            _localRepository = new Repository<ToolModule>();
+            LocalRepository = new Repository<ToolModule>();
         }
 
         /// <summary>
@@ -75,14 +78,14 @@ namespace PowerTools.Helpers
             // Second, load remote repository information
             LoadRemoteRepository();
 
-            if (_remoteRepository.ModuleList.Any())
+            if (RemoteRepository.ModuleList.Any())
             {
-                foreach (var remoteModule in _remoteRepository.ModuleList)
+                foreach (var remoteModule in RemoteRepository.ModuleList)
                 {
-                    var localModule = _localRepository.ModuleList.FirstOrDefault(p => p.Name == remoteModule.Name);
+                    var localModule = LocalRepository.ModuleList.FirstOrDefault(p => p.Name == remoteModule.Name);
                     if (localModule == null)
                     {
-                        _localRepository.ModuleList.Add(new ToolModule
+                        LocalRepository.ModuleList.Add(new ToolModule
                         {
                             Name = remoteModule.Name,
                             Description = remoteModule.Description,
@@ -105,21 +108,17 @@ namespace PowerTools.Helpers
         /// </summary>
         public Repository<ToolModule> LoadLocalRepository()
         {
-            var localModulePath = RepositoryLocalPath;
-            var repo = new Repository<ToolModule>();
-
             try
             {
-                repo = LoadRepository<ToolModule>(localModulePath);
+                var localModulePath = RepositoryLocalPath;
+                LocalRepository = LoadRepository<ToolModule>(localModulePath);
             }
             catch (Exception e)
             {
                 LoggingService.Instance.Info(e.Message);
             }
 
-            _localRepository = repo;
-
-            return _localRepository;
+            return LocalRepository;
         }
 
         /// <summary>
@@ -127,21 +126,17 @@ namespace PowerTools.Helpers
         /// </summary>
         public Repository<RemoteToolModule> LoadRemoteRepository()
         {
-            var remoteRepoPath = RepositoryRemotePath;
-            var repo = new Repository<RemoteToolModule>();
-
             try
             {
-                repo = LoadRepository<RemoteToolModule>(remoteRepoPath);
+                var remoteRepoPath = RepositoryRemotePath;
+                RemoteRepository = LoadRepository<RemoteToolModule>(remoteRepoPath);
             }
             catch (Exception e)
             {
                 LoggingService.Instance.Info(e.Message);
             }
 
-            _remoteRepository = repo;
-
-            return _remoteRepository;
+            return RemoteRepository;
         }
 
         private Repository<T> LoadRepository<T>(string filePath)
@@ -160,10 +155,9 @@ namespace PowerTools.Helpers
         /// </summary>
         public void Store()
         {
-            var localModulePath = RepositoryLocalPath;
+            LocalRepository.SelectedModuleGuid = ModuleGlobalSettings.Instance.CurrentModule?.Guid;
 
-            _localRepository.SelectedModule = ModuleGlobalSettings.Instance.CurrentModule;
-            File.WriteAllText(localModulePath, JsonSerializer.Serialize(_localRepository));
+            File.WriteAllText(RepositoryLocalPath, JsonSerializer.Serialize(LocalRepository));
         }
     }
 }

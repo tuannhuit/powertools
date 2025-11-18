@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.Linq;
 using PowerTools.Core.Configurations;
 using PowerTools.Core.SharedServices;
@@ -11,6 +12,7 @@ using Prism.Regions;
 using Prism.Services.Dialogs;
 using System.Windows;
 using System.Windows.Input;
+using PowerTools.Core.Models;
 
 namespace PowerTools.ViewModels
 {
@@ -44,12 +46,14 @@ namespace PowerTools.ViewModels
             }
         }
 
+        public ObservableCollection<ToolModule> Modules =>
+            new ObservableCollection<ToolModule>(RepositoryLoader.Instance.LocalRepository.ModuleList);
+
         #region Commands
         public ICommand CmdShowSettings { get; set; }
         public ICommand CmdShowLog { get; set; }
         public ICommand CmdSelectModuleList { get; set; }
-        public ICommand CmdSelectModuleKafka { get; set; }
-        public ICommand CmdSelectModuleQAutomation { get; set; }
+        public ICommand CmdNavigateToModule { get; set; }
 
         #endregion
 
@@ -67,11 +71,10 @@ namespace PowerTools.ViewModels
             CmdShowLog = new DelegateCommand(OnCmdShowLog);
             CmdShowSettings = new DelegateCommand(OnCmdShowSettings);
             CmdSelectModuleList = new DelegateCommand(OnCmdSelectModuleList);
-            CmdSelectModuleKafka = new DelegateCommand(OnCmdSelectModuleKafka);
-            CmdSelectModuleQAutomation = new DelegateCommand(OnCmdSelectModuleQAutomation);
+            CmdNavigateToModule = new DelegateCommand<string>(OnCmdNavigateToModule);
 
             RepositoryLoader.Instance.LoadLocalRepository();
-
+            RaisePropertyChanged("Modules");
 
             foreach (var toolModule in RepositoryLoader.Instance.LocalRepository.ModuleList)
             {
@@ -167,18 +170,20 @@ namespace PowerTools.ViewModels
             ViewNavigator.Instance.NavigateToModuleLoaderView(_container);
         }
 
-        private void OnCmdSelectModuleKafka()
+        private void OnCmdNavigateToModule(string moduleName)
         {
-            var module = RepositoryLoader.Instance.LocalRepository.ModuleList.First(p => p.Name == "Kafka Client Tool");
-
-            ViewNavigator.Instance.NavigateToModuleView(_container, module);
-        }
-
-        private void OnCmdSelectModuleQAutomation()
-        {
-            var module = RepositoryLoader.Instance.LocalRepository.ModuleList.First(p => p.Name == "QAutomation Tool");
-
-            ViewNavigator.Instance.NavigateToModuleView(_container, module);
+            var module = RepositoryLoader.Instance.LocalRepository.ModuleList.First(p => p.Name == moduleName);
+            if (module != null)
+            {
+                try
+                {
+                    ViewNavigator.Instance.NavigateToModuleView(_container, module);
+                }
+                catch (Exception e)
+                {
+                    LoggingService.Instance.Error($"Error to load module {moduleName}", e);
+                }
+            }
         }
     }
 }

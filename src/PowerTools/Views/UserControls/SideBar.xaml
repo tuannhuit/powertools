@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:models="clr-namespace:PowerTools.Core.Models;assembly=PowerTools.Core"
              mc:Ignorable="d" 
+             x:Name="userControlSideBar"
              d:DesignHeight="450" d:DesignWidth="250"
              IsEnabled="{Binding IsFree, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
     <Border HorizontalAlignment="Left" BorderThickness="0 0 1 0" BorderBrush="LightGray" Background="{StaticResource Background.WhiteSmoke}">
@@ -14,12 +15,15 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <Button Style="{StaticResource Button.Icon}" Grid.Row="0" Content="{x:Static models:ButtonIcons.Module}" Command="{Binding CmdSelectModuleList}" FontSize="20" Width="35" Height="35" Margin="0" ToolTip="Module List"/>
-            <StackPanel Grid.Row="1">
-                <Button Style="{StaticResource Button.Icon}" Content="{x:Static models:ButtonIcons.Module}" Command="{Binding CmdSelectModuleKafka}" FontSize="20" Width="35" Height="35" Margin="0" ToolTip="Module List"/>
-                <Button Style="{StaticResource Button.Icon}" Content="{x:Static models:ButtonIcons.Module}" Command="{Binding CmdSelectModuleQAutomation}" FontSize="20" Width="35" Height="35" Margin="0" ToolTip="Module List"/>
-            </StackPanel>
-            <Button Style="{StaticResource Button.Icon}" Grid.Row="2" Content="{x:Static models:ButtonIcons.Setting}" Command="{Binding CmdShowSettings}" FontSize="20" Width="35" Height="35" Margin="0" ToolTip="Settings"/>
+            <Button Style="{StaticResource Button.Icon}" Grid.Row="0" Content="{x:Static models:ButtonIcons.Module}" Command="{Binding CmdSelectModuleList}" FontSize="24" Width="40" Height="40" Margin="0" ToolTip="Module List"/>
+            <ItemsControl Grid.Row="1" ItemsSource="{Binding Modules}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Button Style="{StaticResource Button.Icon}" Content="{x:Static models:ButtonIcons.Module}" FontSize="24" Width="40" Height="40" Margin="0" Command="{Binding DataContext.CmdNavigateToModule, ElementName=userControlSideBar}" CommandParameter="{Binding Name}" ToolTip="{Binding Name}"/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+            <Button Style="{StaticResource Button.Icon}" Grid.Row="2" Content="{x:Static models:ButtonIcons.Setting}" Command="{Binding CmdShowSettings}" FontSize="24" Width="40" Height="40" Margin="0" ToolTip="Settings"/>
         </Grid>
     </Border>
 </UserControl>

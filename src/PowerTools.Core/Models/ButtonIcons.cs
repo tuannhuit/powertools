@@ -9,5 +9,12 @@
         public static string Loading = "\ue2FD";
         public static string ShowLogs = "\ue13E";
         public static string Information = "🛈";
+        public static string UnknownModule = "\ue1D3";
+    }
+
+    public enum ModuleIconStyle
+    {
+        FontStyle,
+        ImageStyle
     }
 }

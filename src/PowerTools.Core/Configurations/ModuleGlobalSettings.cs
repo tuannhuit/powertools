@@ -9,7 +9,6 @@ using System.Linq;
 using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Nodes;
-using System.Windows;
 
 namespace PowerTools.Core.Configurations
 {
@@ -79,7 +78,7 @@ namespace PowerTools.Core.Configurations
             if (module == null)
                 throw new Exception("The module must be specified!");
 
-            var localDataStorePath = module.LocalDataStorePath;
+            var localDataStorePath = module.DataStoreLocation;
 
             Directory.CreateDirectory(localDataStorePath);
 

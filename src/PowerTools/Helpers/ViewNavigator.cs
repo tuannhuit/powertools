@@ -32,16 +32,15 @@ namespace PowerTools.Helpers
             var region = container.Resolve<IRegionManager>();
             if (region == null) return;
 
-            ModuleGlobalSettings.Instance.CurrentModule = module;
-
-            var viewType = ModuleViewSelectionHelper.GetView(module.Name);
-            if (!IsExistedNaviation(region, Constants.ModuleRegionName, viewType))
+            var viewType = ModuleViewSelectionHelper.GetView(module.Guid.ToString());
+            if (!IsExistedNavigation(region, Constants.ModuleRegionName, viewType))
             {
                 region.RegisterViewWithRegion(Constants.ModuleRegionName, viewType);
             }
 
             region.RequestNavigate(Constants.ModuleRegionName, viewType.FullName);
 
+            ModuleGlobalSettings.Instance.CurrentModule = module;
         }
 
         public void NavigateToModuleLoaderView(IContainerProvider container)
@@ -49,7 +48,7 @@ namespace PowerTools.Helpers
             var region = container.Resolve<IRegionManager>();
             if (region == null) return;
 
-            if (!IsExistedNaviation(region, Constants.ModuleRegionName, typeof(ModuleList)))
+            if (!IsExistedNavigation(region, Constants.ModuleRegionName, typeof(ModuleList)))
             {
                 region.RegisterViewWithRegion(Constants.ModuleRegionName, typeof(ModuleList));
             }
@@ -57,7 +56,7 @@ namespace PowerTools.Helpers
             region.RequestNavigate(Constants.ModuleRegionName, new Uri("ModuleList", UriKind.Relative));
         }
 
-        private bool IsExistedNaviation(IRegionManager regionManager, string regionName, Type viewType)
+        private bool IsExistedNavigation(IRegionManager regionManager, string regionName, Type viewType)
         {
             var selectedRegion = regionManager.Regions.FirstOrDefault(p => p.Name == regionName);
             if (selectedRegion == null) return false;

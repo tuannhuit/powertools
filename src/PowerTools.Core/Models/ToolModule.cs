@@ -1,5 +1,6 @@
 ﻿using PowerTools.Core.Configurations;
 using Prism.Mvvm;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -10,6 +11,8 @@ namespace PowerTools.Core.Models
 {
     public class ToolModule : BindableBase
     {
+        public Guid Guid { get; set; }
+
         /// <summary>
         /// Gets or sets tool name which is the tool identification
         /// </summary>
@@ -20,26 +23,16 @@ namespace PowerTools.Core.Models
         /// </summary>
         public string Description { get; set; }
 
-        private string _version;
         /// <summary>
         /// Gets or sets the tool version which is running
         /// </summary>
-        public string Version
-        {
-            get => _version;
-            set
-            {
-                _version = value;
-                RaisePropertyChanged();
-                RaisePropertyChanged("IsDownloaded");
-            }
-        }
+        public string Version { get; set; }
 
         /// <summary>
         /// Checks if the current running tool version is download
         /// </summary>
         [JsonIgnore]
-        public bool IsDownloaded => File.Exists(LocalModulePath);
+        public bool IsInstalled => File.Exists(ModuleLocation);
 
         /// <summary>
         /// Gets or sets the list of versions of the tool
@@ -65,16 +58,53 @@ namespace PowerTools.Core.Models
         /// </summary>
         public string ExecutionName { get; set; }
 
+        private string _icon;
+        public string Icon
+        {
+            get => _icon;
+            set
+            {
+                _icon = value;
+                if (string.IsNullOrEmpty(_icon) || string.IsNullOrWhiteSpace(_icon))
+                {
+                    _icon = ButtonIcons.UnknownModule;
+                }
+            }
+        }
+        public string IconImageRelativeLocation { get; set; }
+
+        [JsonIgnore]
+        public ModuleIconStyle IconStyle
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(IconImageRelativeLocation)
+                    || string.IsNullOrWhiteSpace(IconImageRelativeLocation)
+                    || !File.Exists(Path.Combine(ModuleLocation, IconImageRelativeLocation)))
+                {
+                    return ModuleIconStyle.FontStyle;
+                }
+
+                return ModuleIconStyle.ImageStyle;
+            }
+        }
+
         /// <summary>
         /// Gets the local module location
         /// </summary>
         [JsonIgnore]
-        public string LocalModulePath
+        public string ExecutionLocation => Path.Combine(ModuleLocation, $"{ExecutionName}");
+
+        /// <summary>
+        /// Gets the local module location
+        /// </summary>
+        [JsonIgnore]
+        public string ModuleLocation
         {
             get
             {
                 var assembly = Assembly.GetAssembly(typeof(ToolModule));
-                var modulePath = Path.Combine(Path.GetDirectoryName(assembly.Location), $"{ModuleGlobalSettings.Instance.RepositoryLocal}\\{Name}\\{Version}\\{ExecutionName}");
+                var modulePath = Path.Combine(Path.GetDirectoryName(assembly.Location), $"{ModuleGlobalSettings.Instance.RepositoryLocal}\\{Name}-{Version}");
 
                 return modulePath;
             }
@@ -84,7 +114,7 @@ namespace PowerTools.Core.Models
         /// Gets local data store location
         /// </summary>
         [JsonIgnore]
-        public string LocalDataStorePath
+        public string DataStoreLocation
         {
             get
             {
