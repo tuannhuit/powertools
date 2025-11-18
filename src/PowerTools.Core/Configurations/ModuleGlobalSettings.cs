@@ -51,6 +51,21 @@ namespace PowerTools.Core.Configurations
             set
             {
                 _currentModule = value;
+
+                if (_currentModule == null)
+                {
+                    RepositoryLoader.Instance.LocalRepository.ModuleList.ForEach(p => p.IsActive = false);
+                }
+                else
+                {
+                    _currentModule.IsActive = true;
+                    var remainingModules = RepositoryLoader.Instance.LocalRepository.ModuleList.Where(p => p != _currentModule);
+                    foreach (var remainingModule in remainingModules)
+                    {
+                        remainingModule.IsActive = false;
+                    }
+                }
+
                 RaisePropertyChanged();
             }
         }

@@ -15,11 +15,25 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <Button Style="{StaticResource Button.Icon}" Grid.Row="0" Content="{x:Static models:ButtonIcons.Module}" Command="{Binding CmdSelectModuleList}" FontSize="24" Width="40" Height="40" Margin="0" ToolTip="Module List"/>
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Rectangle Grid.Column="0" Fill="DarkCyan" Visibility="{Binding IsActiveModuleList, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                <Button Style="{StaticResource Button.Icon}" Grid.Column="1" Content="{x:Static models:ButtonIcons.Module}" Command="{Binding CmdSelectModuleList}" FontSize="24" Width="40" Height="40" Margin="0" ToolTip="Module List"/>
+            </Grid>
             <ItemsControl Grid.Row="1" ItemsSource="{Binding Modules}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Button Style="{StaticResource Button.Icon}" Content="{x:Static models:ButtonIcons.Module}" FontSize="24" Width="40" Height="40" Margin="0" Command="{Binding DataContext.CmdNavigateToModule, ElementName=userControlSideBar}" CommandParameter="{Binding Name}" ToolTip="{Binding Name}"/>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="2"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Rectangle Grid.Column="0" Fill="DarkCyan" Visibility="{Binding IsActive, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                            <Button Style="{StaticResource Button.Icon}" Grid.Column="1" Content="{x:Static models:ButtonIcons.Module}" FontSize="24" Width="40" Height="40" Margin="0" Command="{Binding DataContext.CmdNavigateToModule, ElementName=userControlSideBar}" CommandParameter="{Binding Name}" ToolTip="{Binding Name}" IsEnabled="{Binding IsLoadedProperly, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        </Grid>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>

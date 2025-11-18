@@ -32,15 +32,15 @@ namespace PowerTools.Helpers
             var region = container.Resolve<IRegionManager>();
             if (region == null) return;
 
-            var viewType = ModuleViewSelectionHelper.GetView(module.Guid.ToString());
+            ModuleGlobalSettings.Instance.CurrentModule = module;
+
+            var viewType = ModuleViewSelectionHelper.GetView(module.Name);
             if (!IsExistedNavigation(region, Constants.ModuleRegionName, viewType))
             {
                 region.RegisterViewWithRegion(Constants.ModuleRegionName, viewType);
             }
 
             region.RequestNavigate(Constants.ModuleRegionName, viewType.FullName);
-
-            ModuleGlobalSettings.Instance.CurrentModule = module;
         }
 
         public void NavigateToModuleLoaderView(IContainerProvider container)

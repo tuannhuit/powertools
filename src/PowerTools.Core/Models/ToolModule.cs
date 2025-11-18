@@ -11,12 +11,15 @@ namespace PowerTools.Core.Models
 {
     public class ToolModule : BindableBase
     {
-        public Guid Guid { get; set; }
-
         /// <summary>
-        /// Gets or sets tool name which is the tool identification
+        /// The name of module which is the module identifier name
         /// </summary>
         public string Name { get; set; }
+
+        /// <summary> 
+        /// The display name of module
+        /// </summary>
+        public string DisplayName { get; set; }
 
         /// <summary>
         /// Gets or sets description of the tool
@@ -122,6 +125,30 @@ namespace PowerTools.Core.Models
                 var modulePath = Path.Combine(Path.GetDirectoryName(assembly.Location), $"{ModuleGlobalSettings.Instance.DataStoreLocal}\\{Name}");
 
                 return modulePath;
+            }
+        }
+
+        [JsonIgnore]
+        private bool _isLoadedProperly;
+        public bool IsLoadedProperly
+        {
+            get => _isLoadedProperly;
+            set
+            {
+                _isLoadedProperly = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        [JsonIgnore]
+        private bool _isActive;
+        public bool IsActive
+        {
+            get => _isActive;
+            set
+            {
+                _isActive = value;
+                RaisePropertyChanged();
             }
         }
     }

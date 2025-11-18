@@ -1,55 +1,34 @@
 ﻿using PowerTools.Core.Models;
+using PowerTools.Core.SharedServices;
 using Prism.Ioc;
 using Prism.Modularity;
 using System;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Windows;
-using PowerTools.Core.SharedServices;
 
 namespace PowerTools.Helpers
 {
-    public class ModuleLoader
+    public static class ModuleLoader
     {
-        private static ModuleLoader _instance;
-
-        public static ModuleLoader Instance
+        public static void LoadModule(IContainerProvider container, ToolModule module)
         {
-            get
-            {
-                if (_instance == null)
-                {
-                    _instance = new ModuleLoader();
-                }
+            if (module == null) 
+                throw new Exception("Cannot handle empty module!");
 
-                return _instance;
-            }
-        }
+            var moduleLocation = module.ExecutionLocation;
 
-        private ModuleLoader()
-        {
-
-        }
-
-        public void LoadModule(IContainerProvider container, ToolModule module)
-        {
-            if (module == null)
-                return;
-
-            var modulePath = module.ExecutionLocation;
-
-            if (string.IsNullOrEmpty(modulePath))
+            if (string.IsNullOrEmpty(moduleLocation) || string.IsNullOrWhiteSpace(moduleLocation))
                 throw new Exception("Could not identify the module execution path!");
 
-            if (!File.Exists(modulePath))
-                throw new FileNotFoundException($"Could not find the execution module path! {modulePath}");
+            if (!File.Exists(moduleLocation))
+                throw new FileNotFoundException($"Could not find the execution module path! {moduleLocation}");
 
             var moduleAssembly = AppDomain.CurrentDomain.GetAssemblies()
                 .First(p => p.FullName == typeof(IModule).Assembly.FullName);
             var IModuleType = moduleAssembly.GetType(typeof(IModule).FullName);
 
-            var assembly = Assembly.LoadFile(modulePath);
+            var assembly = Assembly.LoadFile(moduleLocation);
 
             var moduleInfos = assembly.GetExportedTypes()
                 .Where(IModuleType.IsAssignableFrom)
@@ -71,9 +50,11 @@ namespace PowerTools.Helpers
                     });
                 }
             }
+
+            LoggingService.Instance.Info($"Loaded module {module.ExecutionLocation}");
         }
 
-        private ModuleInfo CreateModuleInfo(Type type)
+        private static ModuleInfo CreateModuleInfo(Type type)
         {
             if (type == null || type.Assembly == null)
             {

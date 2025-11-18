@@ -10,7 +10,7 @@
         mc:Ignorable="d"
         d:DesignHeight="450" d:DesignWidth="800"
         Background="{StaticResource Background.WhiteSmoke}"
-        Title="{Binding Source={x:Static configurations:ModuleGlobalSettings.Instance}, Path=CurrentModule, Converter={StaticResource ModuleHeaderNameConverter}}"
+        Title="PowerTools"
         WindowStartupLocation="CenterScreen" 
         MinWidth="{Binding Source={x:Static configurations:ModuleGlobalSettings.Instance}, Path=WindowSettings.MinWidth}"
         MaxWidth="{Binding Source={x:Static configurations:ModuleGlobalSettings.Instance}, Path=WindowSettings.MaxWidth}"

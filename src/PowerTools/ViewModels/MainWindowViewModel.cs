@@ -46,8 +46,18 @@ namespace PowerTools.ViewModels
             }
         }
 
-        public ObservableCollection<ToolModule> Modules =>
-            new ObservableCollection<ToolModule>(RepositoryLoader.Instance.LocalRepository.ModuleList);
+        private bool _isActiveModuleList;
+        public bool IsActiveModuleList
+        {
+            get => _isActiveModuleList;
+            set
+            {
+                _isActiveModuleList = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public ObservableCollection<ToolModule> Modules => new ObservableCollection<ToolModule>(RepositoryLoader.Instance.LocalRepository.ModuleList);
 
         #region Commands
         public ICommand CmdShowSettings { get; set; }
@@ -74,24 +84,23 @@ namespace PowerTools.ViewModels
             CmdNavigateToModule = new DelegateCommand<string>(OnCmdNavigateToModule);
 
             RepositoryLoader.Instance.LoadLocalRepository();
-            RaisePropertyChanged("Modules");
-
             foreach (var toolModule in RepositoryLoader.Instance.LocalRepository.ModuleList)
             {
                 try
                 {
-                    ModuleLoader.Instance.LoadModule(_container, toolModule);
+                    ModuleLoader.LoadModule(_container, toolModule);
+                    toolModule.IsLoadedProperly = true;
                 }
                 catch (Exception e)
                 {
-
+                    toolModule.IsLoadedProperly = false;
+                    LoggingService.Instance.Error($"Failed to load module {toolModule.Name}", e);
                 }
             }
 
             ViewNavigator.Instance.NavigateToModuleLoaderView(_container);
 
             DownloadPowerToolVersions();
-            _dialogService = dialogService;
         }
 
         private void DownloadPowerToolVersions()
@@ -167,11 +176,14 @@ namespace PowerTools.ViewModels
 
         private void OnCmdSelectModuleList()
         {
+            IsActiveModuleList=true;
             ViewNavigator.Instance.NavigateToModuleLoaderView(_container);
+            RepositoryLoader.Instance.LocalRepository.ModuleList.ForEach(p => p.IsActive = false);
         }
 
         private void OnCmdNavigateToModule(string moduleName)
         {
+            IsActiveModuleList = false;
             var module = RepositoryLoader.Instance.LocalRepository.ModuleList.First(p => p.Name == moduleName);
             if (module != null)
             {

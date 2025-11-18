@@ -116,12 +116,12 @@ namespace PowerTools.Core.SharedServices
                 return;
             }
 
-            var indexOfNewLine = message.IndexOf("\n");
-            var newMessage = $"> {DateTime.Now} " + ((indexOfNewLine == -1) ? message : message.Substring(0, indexOfNewLine + 1));
+            var indexOfNewLine = message.IndexOf(Environment.NewLine, StringComparison.Ordinal);
+            var newMessage = $"> {DateTime.Now} " + (indexOfNewLine == -1 ? message : message.Substring(0, indexOfNewLine + 1));
 
             ApplicationService.Instance.InvokeUIAction(() =>
             {
-                AddMessageIntoList(newMessage);
+                AddMessageIntoList($"> {DateTime.Now} " + message);
                 Message = string.Join(Environment.NewLine, MessageList);
 
                 if (!DoShowLog)

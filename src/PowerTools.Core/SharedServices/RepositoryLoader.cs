@@ -1,12 +1,11 @@
 ﻿using PowerTools.Core.Configurations;
 using PowerTools.Core.Models;
-using PowerTools.Core.SharedServices;
 using System;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
 
-namespace PowerTools.Helpers
+namespace PowerTools.Core.SharedServices
 {
     public class RepositoryLoader
     {
@@ -155,7 +154,7 @@ namespace PowerTools.Helpers
         /// </summary>
         public void Store()
         {
-            LocalRepository.SelectedModuleGuid = ModuleGlobalSettings.Instance.CurrentModule?.Guid;
+            LocalRepository.SelectedModuleName = ModuleGlobalSettings.Instance.CurrentModule?.Name;
 
             File.WriteAllText(RepositoryLocalPath, JsonSerializer.Serialize(LocalRepository));
         }

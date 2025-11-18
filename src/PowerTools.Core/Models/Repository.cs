@@ -5,7 +5,7 @@ namespace PowerTools.Core.Models
 {
     public class Repository<T>
     {
-        public Guid? SelectedModuleGuid { get; set; }
+        public string SelectedModuleName { get; set; }
 
         public List<T> ModuleList { get; set; }
 

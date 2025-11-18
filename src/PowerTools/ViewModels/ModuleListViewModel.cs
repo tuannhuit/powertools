@@ -313,7 +313,7 @@ namespace PowerTools.ViewModels
             {
                 LoggingService.Instance.Info("Loading module list from local repository!");
 
-                RepositoryLoader.Instance.LoadLocalRepository();
+                //RepositoryLoader.Instance.LoadLocalRepository();
                 SelectedModule = ModuleGlobalSettings.Instance.CurrentModule;
 
                 SetLoadModulesStatus(true, RepositoryLoader.Instance.LocalRepository.ModuleList);
