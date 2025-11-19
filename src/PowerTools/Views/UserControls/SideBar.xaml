@@ -32,7 +32,7 @@
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
                             <Rectangle Grid.Column="0" Fill="DarkCyan" Visibility="{Binding IsActive, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                            <Button Style="{StaticResource Button.Icon}" Grid.Column="1" Content="{x:Static models:ButtonIcons.Module}" FontSize="24" Width="40" Height="40" Margin="0" Command="{Binding DataContext.CmdNavigateToModule, ElementName=userControlSideBar}" CommandParameter="{Binding Name}" ToolTip="{Binding Name}" IsEnabled="{Binding IsLoadedProperly, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <Button Style="{StaticResource Button.Icon}" Grid.Column="1" Content="{Binding Icon}" FontSize="24" Width="40" Height="40" Margin="0" Command="{Binding DataContext.CmdNavigateToModule, ElementName=userControlSideBar}" CommandParameter="{Binding Name}" ToolTip="{Binding Name}" IsEnabled="{Binding IsLoadedProperly, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
                             <TextBlock Grid.Column="1" FontFamily="Segoe UI Symbol" Text="{x:Static models:ButtonIcons.None}" VerticalAlignment="Bottom" HorizontalAlignment="Right" Foreground="OrangeRed" FontWeight="Bold" FontSize="14" Margin="5" Visibility="{Binding IsLoadedFailed, Converter={StaticResource BoolToVisibilityConverter}}" ToolTip="{Binding Name}"/>
                         </Grid>
                     </DataTemplate>

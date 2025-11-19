@@ -64,14 +64,19 @@ namespace PowerTools.Core.Models
         private string _icon;
         public string Icon
         {
-            get => _icon;
+            get
+            {
+                if (string.IsNullOrEmpty(_icon) || string.IsNullOrWhiteSpace(_icon))
+                {
+                    return ButtonIcons.UnknownModule;
+                }
+
+                return _icon;
+            }
             set
             {
                 _icon = value;
-                if (string.IsNullOrEmpty(_icon) || string.IsNullOrWhiteSpace(_icon))
-                {
-                    _icon = ButtonIcons.UnknownModule;
-                }
+                RaisePropertyChanged();
             }
         }
         public string IconImageRelativeLocation { get; set; }
