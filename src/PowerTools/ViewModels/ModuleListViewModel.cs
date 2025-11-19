@@ -179,10 +179,7 @@ namespace PowerTools.ViewModels
             File.Copy(remoteModulePath, tempModuleFile);
 
             // Create package folder in local
-            var localModuleFolder = ModuleGlobalSettings.Instance.RepositoryLocal;
-            localModuleFolder = Path.Combine(localModuleFolder, module.Name);
-            localModuleFolder = Path.Combine(localModuleFolder, module.Version);
-
+            var localModuleFolder = Path.Combine(ModuleGlobalSettings.Instance.RepositoryLocal, $"{module.Name}-{module.Version}");
             Directory.CreateDirectory(localModuleFolder);
 
             try
