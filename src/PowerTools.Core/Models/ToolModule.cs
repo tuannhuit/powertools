@@ -137,8 +137,11 @@ namespace PowerTools.Core.Models
             {
                 _isLoadedProperly = value;
                 RaisePropertyChanged();
+                RaisePropertyChanged("IsLoadedFailed");
             }
         }
+
+        [JsonIgnore] public bool IsLoadedFailed => !IsLoadedProperly;
 
         [JsonIgnore]
         private bool _isActive;
