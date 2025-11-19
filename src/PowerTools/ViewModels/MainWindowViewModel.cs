@@ -98,8 +98,7 @@ namespace PowerTools.ViewModels
                 }
             }
 
-            ViewNavigator.Instance.NavigateToModuleLoaderView(_container);
-
+            OnCmdSelectModuleList();
             DownloadPowerToolVersions();
         }
 
