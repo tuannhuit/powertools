@@ -10,7 +10,7 @@
         public static string ShowLogs = "\ue13E";
         public static string Information = "🛈";
         public static string UnknownModule = "\ue1D3";
-        public static string None = "\u26d2";
+        public static string None = "\ud83d\udec7";
     }
 
     public enum ModuleIconStyle
