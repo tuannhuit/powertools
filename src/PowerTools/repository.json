@@ -2,13 +2,15 @@
   "SelectedModule": null,
   "ModuleList": [
     {
-      "Name": "Kafka Client Tool",
+      "Name": "kafka-client-tool",
+      "DisplayName":  "Kafka Client Tool",
       "Description": "Kafka Client Tool is used for reading/creating/deleting topics and messages of a Kafka Server.",
       "Version": "1.0.0.0",
       "AllVersions": [
         "1.0.0.0"
       ],
-      "ExecutionName": "PowerTools.KafkaClientTool.dll"
+      "ExecutionName": "PowerTools.KafkaClientTool.dll",
+      "Icon": "𝞙"
     },
     {
       "Name": "ICX Configuration Update",
@@ -44,7 +46,8 @@
       "AllVersions": [
         "1.0.0.0"
       ],
-      "ExecutionName": "PowerTools.QAutomationTool.dll"
+      "ExecutionName": "PowerTools.QAutomationTool.dll",
+      "Icon": "𝙌"
     }
   ]
 }

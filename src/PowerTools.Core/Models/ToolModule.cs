@@ -16,10 +16,27 @@ namespace PowerTools.Core.Models
         /// </summary>
         public string Name { get; set; }
 
+        private string _displayName;
         /// <summary> 
         /// The display name of module
         /// </summary>
-        public string DisplayName { get; set; }
+        public string DisplayName
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(_displayName) || string.IsNullOrEmpty(_displayName))
+                {
+                    return Name;
+                }
+
+                return _displayName;
+            }
+            set
+            {
+                _displayName = value;
+                RaisePropertyChanged();
+            }
+        }
 
         /// <summary>
         /// Gets or sets description of the tool

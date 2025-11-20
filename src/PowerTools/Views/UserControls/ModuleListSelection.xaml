@@ -20,7 +20,7 @@
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
-                        <TextBlock Grid.Column="0" Grid.Row="0" Text="{Binding Name}" Style="{StaticResource TextBlock.Header}"/>
+                        <TextBlock Grid.Column="0" Grid.Row="0" Text="{Binding DisplayName}" Style="{StaticResource TextBlock.Header}"/>
                         <TextBlock Grid.Column="0" Grid.Row="1" Text="{Binding Description}" Style="{StaticResource TextBlock.Content}" TextWrapping="Wrap"/>
                         <TextBlock Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="3" Text="{Binding Version}" Style="{StaticResource TextBlock.Content}" FontWeight="SemiBold"/>
                     </Grid>
