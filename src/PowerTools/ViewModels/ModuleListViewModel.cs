@@ -2,11 +2,9 @@
 using PowerTools.Core.Models;
 using PowerTools.Core.SharedServices;
 using PowerTools.Helpers;
-using PowerTools.ViewModels.UserControls;
 using Prism.Commands;
 using Prism.Ioc;
 using Prism.Mvvm;
-using Prism.Regions;
 using Prism.Services.Dialogs;
 using System;
 using System.Collections.Generic;
@@ -23,18 +21,9 @@ namespace PowerTools.ViewModels
 {
     public class ModuleListViewModel : BindableBase
     {
-        private ObservableCollection<ToolModule> _allModules;
-        private ObservableCollection<ToolModule> _modules;
-
-        public ObservableCollection<ToolModule> Modules
-        {
-            get => _modules;
-            set
-            {
-                _modules = value;
-                RaisePropertyChanged("Modules");
-            }
-        }
+        private List<ToolModule> _allModules => Repositories.RepositoryLocal.ModuleList;
+        public ObservableCollection<ToolModule> ModuleList => new(_allModules.Where(p => !p.IsInstalled && (string.IsNullOrEmpty(SearchingText) || p.Name.ToLower().Contains(SearchingText.ToLower()))));
+        public ObservableCollection<ToolModule> InstalledModuleList => new(_allModules.Where(p => p.IsInstalled && (string.IsNullOrEmpty(SearchingText) || p.Name.ToLower().Contains(SearchingText.ToLower()))));
 
         private ToolModule _selectedModule;
 
@@ -44,35 +33,7 @@ namespace PowerTools.ViewModels
             set
             {
                 _selectedModule = value;
-                RaisePropertyChanged("SelectedModule");
-            }
-        }
-
-        private string _loadingText1;
-        public string LoadingText1
-        {
-            get => IsLoadedModules ? string.Empty : _loadingText1;
-            set => _loadingText1 = value;
-        }
-
-        private string _loadingText2;
-        public string LoadingText2
-        {
-            get => IsLoadedModules ? string.Empty : _loadingText2;
-            set => _loadingText2 = value;
-        }
-
-        private bool _isLoadedModules;
-
-        public bool IsLoadedModules
-        {
-            get => _isLoadedModules;
-            set
-            {
-                _isLoadedModules = value;
-                RaisePropertyChanged("IsLoadedModules");
-                RaisePropertyChanged("LoadingText1");
-                RaisePropertyChanged("LoadingText2");
+                RaisePropertyChanged();
             }
         }
 
@@ -85,15 +46,24 @@ namespace PowerTools.ViewModels
             set
             {
                 _searchingText = value;
-                RaisePropertyChanged("SearchingText");
+                RaisePropertyChanged();
+                RaisePropertyChanged("ModuleList");
+                RaisePropertyChanged("InstalledModuleList");
+                RaisePropertyChanged("AdditionalInstalledInfo");
+                RaisePropertyChanged("AdditionalRecommendedInfo");
             }
         }
 
-        public ICommand CmdSearchModule { get; set; }
-        public ICommand CmdShowSettings { get; set; }
+        public string AdditionalInstalledInfo => $"({InstalledModuleList.Count})";
+        public string AdditionalRecommendedInfo => $"({ModuleList.Count})";
+
         public ICommand CmdRefreshModules { get; set; }
-        public ICommand CmdExecuteModule { get; set; }
         public ICommand CmdInstallModule { get; set; }
+        public ICommand CmdUninstallModule { get; set; }
+        public ICommand CmdNavigateRepoLink { get; set; }
+        public ICommand CmdDisableModule { get; set; }
+        public ICommand CmdEnableModule { get; set; }
+
         private IDialogService _dialogService;
 
         public ModuleListViewModel(IContainerProvider container, IDialogService dialogService)
@@ -101,18 +71,48 @@ namespace PowerTools.ViewModels
             this._container = container;
             this._dialogService = dialogService;
 
-            CmdSearchModule = new DelegateCommand(OnCmdSearchModule);
-            CmdShowSettings = new DelegateCommand(OnCmdShowSettings);
             CmdRefreshModules = new DelegateCommand(OnCmdRefreshModules);
-            CmdExecuteModule = new DelegateCommand(OnCmdExecuteModule);
             CmdInstallModule = new DelegateCommand(OnCmdInstallModule);
+            CmdUninstallModule = new DelegateCommand(OnCmdUninstallModule);
+            CmdNavigateRepoLink = new DelegateCommand<string>(OnCmdNavigateRepoLink);
+            CmdDisableModule = new DelegateCommand<string>(OnCmdDisableModule);
+            CmdEnableModule = new DelegateCommand<string>(OnCmdEnableModule);
 
-            LoadingText1 = "Loading modules...";
-            LoadingText2 = "Please check the configurations to make sure you're using the correct repository";
-
-            OnLoadLocalModules();
-
+            Repositories.RepositoryLocal.Load();
             ModuleGlobalSettings.Instance.ResetWindowSettings();
+        }
+
+        private void OnCmdEnableModule(string moduleName)
+        {
+            var module = _allModules.FirstOrDefault(p => p.Name == moduleName);
+            if (module != null)
+            {
+                module.IsActive = true;
+                ModuleLoader.EnableModule(moduleName);
+                Repositories.NotifyRepositoriesChanged();
+                Repositories.Store();
+            }
+        }
+
+        private void OnCmdDisableModule(string moduleName)
+        {
+            var module = _allModules.FirstOrDefault(p => p.Name == moduleName);
+            if (module != null)
+            {
+                module.IsActive = false;
+                ModuleLoader.DisableModule(moduleName);
+                Repositories.Store();
+            }
+        }
+
+        private void OnCmdNavigateRepoLink(string repoLink)
+        {
+            if (string.IsNullOrWhiteSpace(repoLink) || string.IsNullOrEmpty(repoLink))
+            {
+                return;
+            }
+
+            Process.Start(new ProcessStartInfo(repoLink) { UseShellExecute = true });
         }
 
         private void OnCmdInstallModule()
@@ -131,22 +131,46 @@ namespace PowerTools.ViewModels
 
             Task.Run(() =>
             {
-                LoggingService.Instance.Clear();
-
                 LoggingService.Instance.Info($"Installing module {SelectedModule.Name}...");
+
+                var moduleName = SelectedModule.Name;
                 DownloadModule(SelectedModule);
+
+                RaisePropertyChanged("ModuleList");
+                RaisePropertyChanged("InstalledModuleList");
+                RaisePropertyChanged("AdditionalInstalledInfo");
+                RaisePropertyChanged("AdditionalRecommendedInfo");
+
+                SelectedModule = InstalledModuleList.First(p => p.Name == moduleName);
             });
         }
 
-        private void OnCmdExecuteModule()
+        private void OnCmdUninstallModule()
         {
             if (SelectedModule == null)
             {
-                MessageBox.Show("Please select a module before installing!");
+                MessageBox.Show("Please select a module before uninstalling!");
                 return;
             }
 
-            ExecuteModule(SelectedModule);
+            if (string.IsNullOrWhiteSpace(SelectedModule.Version))
+            {
+                MessageBox.Show("Please select a version before uninstalling!");
+                return;
+            }
+
+            Task.Run(() =>
+            {
+                LoggingService.Instance.Info($"Uninstalling module {SelectedModule.Name}...");
+                ModuleLoader.DisableModule(SelectedModule.Name);
+                ModuleLoader.MarkModuleAsDeleted(SelectedModule.Name, SelectedModule.Version);
+
+                ApplicationService.Instance.InvokeUIAction(() =>
+                {
+                    ApplicationService.Instance.MessageBox("The application will be restarted to apply changes", "Notification");
+                    ApplicationService.Instance.Restart();
+                });
+            });
         }
 
         private void DownloadModule(ToolModule module)
@@ -157,210 +181,81 @@ namespace PowerTools.ViewModels
             if (!Directory.Exists(remoteRepositoryPath))
             {
                 MessageBox.Show($"Cannot find the remote repository path {remoteRepositoryPath}");
-                LoggingService.Instance.Clear();
                 return;
             }
 
-            var moduleName =
-                $"{module.Name}_v{module.Version}.{Constants.ModuleExtensionFileName}";
-            var remoteModulePath = Path.Combine(remoteRepositoryPath, moduleName);
+            var downloadModuleName =
+                $"{module.Name}-{module.Version}.{Constants.ModuleExtensionFileName}";
+            var remoteModulePath = Path.Combine(remoteRepositoryPath, downloadModuleName);
 
             if (!File.Exists(remoteModulePath))
             {
-                MessageBox.Show($"Cannot find the module from the remote repository within specific version {remoteModulePath}");
-                LoggingService.Instance.Clear();
+                MessageBox.Show(
+                    $"Cannot find the module from the remote repository within specific version {remoteModulePath}");
                 return;
             }
 
-            var tempFolder = GetOrCreateTempFolder();
-            var tempModuleFile = Path.Combine(tempFolder, moduleName);
-
-            // Copy the module to local
-            File.Copy(remoteModulePath, tempModuleFile);
+            module.IsDownloading = true;
+            var tempFolder = ApplicationService.Instance.GetOrCreateTempFolder();
+            var tempModuleFile = Path.Combine(tempFolder, downloadModuleName);
 
             // Create package folder in local
-            var localModuleFolder = Path.Combine(ModuleGlobalSettings.Instance.RepositoryLocal, $"{module.Name}-{module.Version}");
-            Directory.CreateDirectory(localModuleFolder);
+            var localModuleFolder = Path.Combine(ModuleGlobalSettings.Instance.RepositoryLocalName, $"{module.Name}-{module.Version}");
 
             try
             {
+                // Copy the module to local
+                File.Copy(remoteModulePath, tempModuleFile);
+                Directory.CreateDirectory(localModuleFolder);
                 ZipFile.ExtractToDirectory(tempModuleFile, localModuleFolder);
             }
             catch (Exception e)
             {
                 LoggingService.Instance.Info($"Cannot extract the module {tempModuleFile} to {localModuleFolder}");
+                module.IsDownloading = false;
                 return;
             }
 
-            //var tempVersion = module.Version;
-            //module.Version = string.Empty;
-            module.Version =  module.Version;
+            module.IsDownloading = false;
 
-            LoggingService.Instance.Info($"Done! Downloaded module {module.Name}");
-        }
+            var foundModule = Repositories.RepositoryLocal.ModuleList.First(p => p.Name == module.Name);
+            foundModule.Version = module.Version;
 
-        private string GetOrCreateTempFolder()
-        {
-            string tempDirectory = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
-            Directory.CreateDirectory(tempDirectory);
-            return tempDirectory;
-        }
-
-        private void ExecuteModule(ToolModule module)
-        {
             try
             {
-                var actionResult = MessageBox.Show(
-                    "The tool will be restarted to activate the module", 
-                    "Information",
-                    MessageBoxButton.YesNo);
-
-                if (actionResult == MessageBoxResult.Yes)
-                {
-                    ModuleGlobalSettings.Instance.CurrentModule = module;
-
-                    // Check if the module is loaded successfully
-                    // If the module is not initialized, just load it
-
-                    var regionManager = _container.Resolve<IRegionManager>();
-                    var moduleName = ModuleGlobalSettings.Instance.CurrentModule.Name;
-                    var regionName = Constants.ModuleRegionName;
-
-                    //if (regionManager.Regions.ContainsRegionWithName(regionName))
-                    //{
-                    //    var selectedTypeView = ModuleViewSelectionHelper.GetView(moduleName);
-                    //    if (selectedTypeView == null)
-                    //    {
-                    //        ModuleLoader.Instance.LoadModule(_container, ModuleGlobalSettings.Instance.CurrentModule);
-                    //        selectedTypeView = ModuleViewSelectionHelper.GetView(moduleName);
-                    //    }
-
-                    //    if (selectedTypeView != null)
-                    //    {
-                    //        var view = regionManager.Regions[Constants.ModuleRegionName].Views
-                    //            .FirstOrDefault(p => p.GetType().FullName == selectedTypeView.FullName);
-
-                    //        regionManager.Regions[Constants.ModuleRegionName].Activate(view);
-                    //    }
-                    //    else
-                    //    {
-                    //        regionManager.Regions[Constants.ModuleRegionName].Activate(null);
-                    //    }
-                    //}
-                    //else
-                    //{
-                    //    ModuleLoader.Instance.LoadModule(_container, ModuleGlobalSettings.Instance.CurrentModule);
-                    //}
-
-                    //ViewNavigator.Instance.NavigateToModuleView(_container);
-                    //RepositoryLoader.Instance.Store();
-                    //LoggingService.Instance.Clear();
-
-                    RepositoryLoader.Instance.Store();
-                    ApplicationService.Instance.Restart();
-                }
-
+                ModuleLoader.EnableModule(module.Name);
+                foundModule.IsActive = true;
+                foundModule.IsLoadedProperly = true;
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
-            }
-        }
+                foundModule.IsActive = false;
+                foundModule.IsLoadedProperly = false;
 
-        static void RestartApp(int pid)
-        {
-            // Wait for the process to terminate
-            Process process = null;
-            try
-            {
-                process = Process.GetProcessById(pid);
-                process.WaitForExit(1000);
+                LoggingService.Instance.Info($"Cannot extract the module {tempModuleFile} to {localModuleFolder}");
+            }
 
-                Process.GetCurrentProcess().Close();
-            }
-            catch (ArgumentException ex)
-            {
-                // ArgumentException to indicate that the 
-                // process doesn't exist?   LAME!!
-            }
+            RaisePropertyChanged("SelectedModule");
+            Repositories.NotifyRepositoriesChanged();
+            Repositories.Store();
+            LoggingService.Instance.Info($"Done! Downloaded module {module.Name}");
         }
 
         private void OnCmdRefreshModules()
         {
-            SetLoadModulesStatus(false);
-
-            Task.Run(() =>
+            TaskExecution.Instance.RunOnceAsync("Refresh Modules", () =>
             {
                 LoggingService.Instance.Info("Loading module list from remote repository!");
 
-                RepositoryLoader.Instance.Refresh();
-                RepositoryLoader.Instance.Store();
+                Repositories.Refresh();
+                Repositories.NotifyRepositoriesChanged();
+                Repositories.Store();
 
-                SetLoadModulesStatus(true, RepositoryLoader.Instance.LocalRepository.ModuleList);
-
-                LoggingService.Instance.Clear();
+                RaisePropertyChanged("ModuleList");
+                RaisePropertyChanged("InstalledModuleList");
+                RaisePropertyChanged("AdditionalInstalledInfo");
+                RaisePropertyChanged("AdditionalRecommendedInfo");
             });
-        }
-
-        private void OnLoadLocalModules()
-        {
-            SetLoadModulesStatus(false);
-
-            Task.Run(() =>
-            {
-                LoggingService.Instance.Info("Loading module list from local repository!");
-
-                //RepositoryLoader.Instance.LoadLocalRepository();
-                SelectedModule = ModuleGlobalSettings.Instance.CurrentModule;
-
-                SetLoadModulesStatus(true, RepositoryLoader.Instance.LocalRepository.ModuleList);
-
-                LoggingService.Instance.Clear();
-            });
-        }
-
-        private void SetLoadModulesStatus(bool isLoaded, IEnumerable<ToolModule> modules = null)
-        {
-            if (!isLoaded)
-            {
-                _allModules = new ObservableCollection<ToolModule>();
-                Modules = new ObservableCollection<ToolModule>(_allModules);
-                IsLoadedModules = false;
-            }
-            else
-            {
-                if (modules != null && modules.Any())
-                {
-                    _allModules = new ObservableCollection<ToolModule>(modules);
-                    Modules = new ObservableCollection<ToolModule>(_allModules);
-                    IsLoadedModules = true;
-                }
-            }
-        }
-
-        private void OnCmdShowSettings()
-        {
-            var settings = ModuleGlobalSettings.Instance.LoadApplicationConfigurationsAsList();
-            var dialogParams = new DialogParameters();
-            dialogParams.Add("settings", settings);
-
-            _dialogService.ShowDialog("ModuleSettingsView", dialogParams, callback =>
-            {
-                if (callback.Result == ButtonResult.OK)
-                {
-                    var result = callback.Parameters.GetValue<ModuleSettingsViewModel>("ModuleSettingsViewModel");
-                    ModuleGlobalSettings.Instance.SaveModuleConfigurations(result.GetModuleSettingsAsDictionary(), true);
-
-                    Modules = new ObservableCollection<ToolModule>();
-                    IsLoadedModules = false;
-                    Task.Run(OnCmdRefreshModules);
-                }
-            });
-        }
-
-        private void OnCmdSearchModule()
-        {
-            Modules = new ObservableCollection<ToolModule>(_allModules.Where(p => string.IsNullOrEmpty(SearchingText) || p.Name.ToLower().Contains(SearchingText.ToLower())));
         }
     }
 }

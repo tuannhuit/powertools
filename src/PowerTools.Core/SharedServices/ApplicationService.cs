@@ -36,8 +36,8 @@ namespace PowerTools.Core.SharedServices
             var executionLocation = Path.GetDirectoryName(Application.ResourceAssembly.Location);
             var applicationFullPath = Path.Combine(executionLocation, "PowerTools.exe");
 
-            Process.Start(applicationFullPath);
             Application.Current.Shutdown();
+            Process.Start(applicationFullPath);
         }
 
         public void InvokeUIAction(Action action)
@@ -96,6 +96,13 @@ namespace PowerTools.Core.SharedServices
             {
                 return DoShowMessageBox.Invoke(message, caption, button);
             }
+        }
+
+        public string GetOrCreateTempFolder()
+        {
+            string tempDirectory = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+            Directory.CreateDirectory(tempDirectory);
+            return tempDirectory;
         }
 
         public void RegisterDisposableAction(Action disposableAction)

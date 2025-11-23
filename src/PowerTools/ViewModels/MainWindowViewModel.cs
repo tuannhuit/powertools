@@ -57,7 +57,7 @@ namespace PowerTools.ViewModels
             }
         }
 
-        public ObservableCollection<ToolModule> Modules => new ObservableCollection<ToolModule>(RepositoryLoader.Instance.LocalRepository.ModuleList);
+        public ObservableCollection<ToolModule> ModuleList => new(Repositories.RepositoryLocal.ModuleList.Where(p => p.IsInstalled));
 
         #region Commands
         public ICommand CmdShowSettings { get; set; }
@@ -83,23 +83,49 @@ namespace PowerTools.ViewModels
             CmdSelectModuleList = new DelegateCommand(OnCmdSelectModuleList);
             CmdNavigateToModule = new DelegateCommand<string>(OnCmdNavigateToModule);
 
-            RepositoryLoader.Instance.LoadLocalRepository();
-            foreach (var toolModule in RepositoryLoader.Instance.LocalRepository.ModuleList)
+            Repositories.RepositoryLocal.Load(false);
+            ModuleLoader.Container = _container;
+            foreach (var toolModule in Repositories.RepositoryLocal.ModuleList)
             {
-                try
+                if (toolModule.IsActive)
                 {
-                    ModuleLoader.LoadModule(_container, toolModule);
-                    toolModule.IsLoadedProperly = true;
+                    try
+                    {
+                        ModuleLoader.LoadModule(toolModule);
+                        toolModule.IsLoadedProperly = true;
+                    }
+                    catch (Exception e)
+                    {
+                        toolModule.IsLoadedProperly = false;
+                        toolModule.IsActive = false;
+                        LoggingService.Instance.Error($"Failed to load module '{toolModule.Name}'", e);
+                    }
                 }
-                catch (Exception e)
+                else
                 {
-                    toolModule.IsLoadedProperly = false;
-                    LoggingService.Instance.Error($"Failed to load module {toolModule.Name}", e);
+                    toolModule.IsLoadedProperly = true;
                 }
             }
 
-            OnCmdSelectModuleList();
+            var activeModule = Repositories.RepositoryLocal.ModuleList.FirstOrDefault(p => p.IsSelected);
+            if (activeModule != null)
+            {
+                ModuleGlobalSettings.Instance.CurrentModule = activeModule;
+                OnCmdNavigateToModule(activeModule.Name);
+            }
+            else
+            {
+                OnCmdSelectModuleList();
+            }
+
+            Repositories.RepositoriesChanged += Repositories_RepositoriesChanged;
+
             DownloadPowerToolVersions();
+        }
+
+        private void Repositories_RepositoriesChanged()
+        {
+            RaisePropertyChanged("ModuleList");
         }
 
         private void DownloadPowerToolVersions()
@@ -175,15 +201,15 @@ namespace PowerTools.ViewModels
 
         private void OnCmdSelectModuleList()
         {
-            IsActiveModuleList=true;
+            IsActiveModuleList = true;
             ViewNavigator.Instance.NavigateToModuleLoaderView(_container);
-            RepositoryLoader.Instance.LocalRepository.ModuleList.ForEach(p => p.IsActive = false);
+            Repositories.RepositoryLocal.ModuleList.ForEach(p => p.IsSelected = false);
         }
 
         private void OnCmdNavigateToModule(string moduleName)
         {
             IsActiveModuleList = false;
-            var module = RepositoryLoader.Instance.LocalRepository.ModuleList.First(p => p.Name == moduleName);
+            var module = Repositories.RepositoryLocal.ModuleList.First(p => p.Name == moduleName);
             if (module != null)
             {
                 try

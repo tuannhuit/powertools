@@ -29,16 +29,22 @@ namespace PowerTools.Core.Configurations
 
         private ModuleGlobalSettings()
         {
-            RepositoryRemote = string.Empty;
             ResetWindowSettings();
         }
         public WindowSettings WindowSettings { get; set; }
 
-        public string RepositoryRemote { get; set; }
+        public string RepositoryRemote
+        {
+            get
+            {
+                var configs = LoadApplicationConfigurationsAsList();
+                return configs.First(p => p.Key == "RepositoryRemote").Value;
+            }
+        }
 
-        public string RepositoryLocal => "modules";
+        public string RepositoryLocalName => "modules";
 
-        public string DataStoreLocal => "data";
+        public string DataStoreLocalName => "data";
         public string RepositoryFileName => "repository.json";
 
         private JsonNode? _currentModuleConfigurations;
@@ -54,15 +60,15 @@ namespace PowerTools.Core.Configurations
 
                 if (_currentModule == null)
                 {
-                    RepositoryLoader.Instance.LocalRepository.ModuleList.ForEach(p => p.IsActive = false);
+                    Repositories.RepositoryLocal.ModuleList.ForEach(p => p.IsSelected = false);
                 }
                 else
                 {
-                    _currentModule.IsActive = true;
-                    var remainingModules = RepositoryLoader.Instance.LocalRepository.ModuleList.Where(p => p != _currentModule);
+                    _currentModule.IsSelected = true;
+                    var remainingModules = Repositories.RepositoryLocal.ModuleList.Where(p => p != _currentModule);
                     foreach (var remainingModule in remainingModules)
                     {
-                        remainingModule.IsActive = false;
+                        remainingModule.IsSelected = false;
                     }
                 }
 
@@ -85,7 +91,15 @@ namespace PowerTools.Core.Configurations
 
         public string GetOrCreateDataStoreLocal()
         {
-            return GetOrCreateDataStoreLocal(Instance.CurrentModule);
+            if (Instance.CurrentModule != null)
+            {
+                return GetOrCreateDataStoreLocal(Instance.CurrentModule);
+            }
+            else
+            {
+                var assembly = Assembly.GetAssembly(this.GetType());
+                return Path.GetDirectoryName(assembly.Location);
+            }
         }
 
         public string GetOrCreateDataStoreLocal(ToolModule module)
@@ -214,7 +228,16 @@ namespace PowerTools.Core.Configurations
             File.WriteAllText(appConfigPath, JsonSerializer.Serialize(settingObject));
 
             if (cache)
-                LoadModuleConfigurations(true);
+            {
+                if (CurrentModule != null)
+                {
+                    LoadModuleConfigurations(true);
+                }
+                else
+                {
+                    LoadApplicationConfigurations(true);
+                }
+            }
         }
 
         public void SaveApplicationConfigurations(Dictionary<string, string> configurations, bool cache = false)

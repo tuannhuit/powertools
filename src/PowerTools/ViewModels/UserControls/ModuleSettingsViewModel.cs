@@ -1,5 +1,4 @@
-﻿using PowerTools.Core.Configurations;
-using PowerTools.Models;
+﻿using PowerTools.Models;
 using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Services.Dialogs;
@@ -13,7 +12,7 @@ namespace PowerTools.ViewModels.UserControls
 {
     public class ModuleSettingsViewModel : BindableBase, IDialogAware
     {
-        public string Title => "Module Settings";
+        public string Title => "Settings";
         public event Action<IDialogResult> RequestClose;
 
         private ObservableCollection<SettingItem> _moduleSettings;

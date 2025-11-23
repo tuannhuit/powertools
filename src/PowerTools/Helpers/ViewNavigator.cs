@@ -35,6 +35,11 @@ namespace PowerTools.Helpers
             ModuleGlobalSettings.Instance.CurrentModule = module;
 
             var viewType = ModuleViewSelectionHelper.GetView(module.Name);
+            if (viewType == null)
+            {
+                return;
+            }
+
             if (!IsExistedNavigation(region, Constants.ModuleRegionName, viewType))
             {
                 region.RegisterViewWithRegion(Constants.ModuleRegionName, viewType);

@@ -15,7 +15,7 @@ namespace PowerTools.Core.Converters
                 return Visibility.Collapsed;
             }
 
-            if (values.All(p => p == null || p == DependencyProperty.UnsetValue))
+            if (values.Any(p => p == null || p == DependencyProperty.UnsetValue))
             {
                 return Visibility.Collapsed;
             }

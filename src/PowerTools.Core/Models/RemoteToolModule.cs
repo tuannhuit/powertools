@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json.Serialization;
 
@@ -17,6 +16,9 @@ namespace PowerTools.Core.Models
         /// </summary>
         public string DisplayName { get; set; }
 
+        public string PublisherDisplayName { get; set; }
+        public string RepoLink { get; set; }
+
         /// <summary>
         /// Gets or sets description of the tool
         /// </summary>
@@ -28,6 +30,8 @@ namespace PowerTools.Core.Models
         public string ExecutionName { get; set; }
 
         public string Icon { get; set; }
+
+        public string IconColor { get; set; }
 
         public string IconImageRelativeLocation { get; set; }
 

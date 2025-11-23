@@ -1,16 +1,45 @@
 ﻿{
-  "SelectedModule": null,
+  "Version": "2.0",
   "ModuleList": [
     {
       "Name": "kafka-client-tool",
-      "DisplayName":  "Kafka Client Tool",
-      "Description": "Kafka Client Tool is used for reading/creating/deleting topics and messages of a Kafka Server.",
+      "DisplayName": "Kafka Client",
+      "Description": "Kafka Client is used for read/create/delet topics and messages of a Kafka Server.",
       "Version": "1.0.0.0",
       "AllVersions": [
         "1.0.0.0"
       ],
       "ExecutionName": "PowerTools.KafkaClientTool.dll",
-      "Icon": "𝞙"
+      "Icon": "𝞙",
+      "IconColor": "DarkCyan",
+      "PublisherDisplayName": "Peter Nguyen",
+      "RepoLink": "https://github.com/hansen-technologies/ccb-i-pm-kafka-client-tool"
+    },
+    {
+      "Name": "elasicsearch-tool",
+      "DisplayName": "Elasticsearch Tool",
+      "Description": "Elasicsearch is used for read/delete indices",
+      "Version": "1.0.0.0",
+      "AllVersions": [
+        "1.0.0.0"
+      ],
+      "ExecutionName": "PowerTools.ElasticsearchTool.dll",
+      "Icon": "𝑬",
+      "PublisherDisplayName": "Peter Nguyen",
+      "RepoLink": ""
+    },
+    {
+      "Name": "event-viewer-tool",
+      "DisplayName": "Windows Event Viewer",
+      "Description": "Elasicsearch is used for read/delete indices",
+      "Version": "1.0.0.0",
+      "AllVersions": [
+        "1.0.0.0"
+      ],
+      "ExecutionName": "PowerTools.EventViewerTool.dll",
+      "Icon": "📚",
+      "PublisherDisplayName": "Peter Nguyen",
+      "RepoLink": ""
     },
     {
       "Name": "ICX Configuration Update",
@@ -31,23 +60,43 @@
       "ExecutionName": "PowerTool.Base64ToString.dll"
     },
     {
-      "Name": "Simple Server",
+      "Name": "simple-server",
+      "DisplayName": "Simple Server",
       "Description": "",
       "Version": "1.0.0.0",
       "AllVersions": [
         "1.0.0.0"
       ],
-      "ExecutionName": "PowerTools.SimpleServer.dll"
+      "ExecutionName": "PowerTools.SimpleServer.dll",
+      "PublisherDisplayName": "Peter Nguyen",
+      "RepoLink": "https://github.com/Peter-Nguyen_hansen/ccb-i-pm-simple-server"
+    },
+    {
+      "Name": "server-management-tool",
+      "DisplayName": "Server Management",
+      "Description": "",
+      "Version": "1.0.0.0",
+      "AllVersions": [
+        "1.0.0.0"
+      ],
+      "ExecutionName": "PowerTools.ServerManagementTool.dll",
+      "Icon": "\ue2E0",
+      "PublisherDisplayName": "Peter Nguyen",
+      "RepoLink": ""
     },
     {
       "Name": "QAutomation Tool",
+      "DisplayName": "QAutomation Tool",
       "Description": "",
       "Version": "1.0.0.0",
       "AllVersions": [
         "1.0.0.0"
       ],
       "ExecutionName": "PowerTools.QAutomationTool.dll",
-      "Icon": "𝙌"
+      "Icon": "𝙌",
+      "IconColor": "DarkRed",
+      "PublisherDisplayName": "Peter Nguyen",
+      "RepoLink": "https://github.com/Peter-Nguyen_hansen/ccb-i-pm-qautomation-tool"
     }
   ]
 }

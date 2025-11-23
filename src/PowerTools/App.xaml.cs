@@ -27,7 +27,7 @@ namespace PowerTools
             containerRegistry.RegisterDialog<ModuleSettingsView, ModuleSettingsViewModel>();
         }
 
-
+        public static Action RegisteredUserUnHandledException;
 
         protected override Window CreateShell()
         {
@@ -52,6 +52,8 @@ namespace PowerTools
             // Catch exceptions from a single specific UI dispatcher thread.
             Dispatcher.UnhandledException += (sender, args) =>
             {
+                RegisteredUserUnHandledException?.Invoke();
+
                 // If we are debugging, let Visual Studio handle the exception and take us to the code that threw it.
                 if (!Debugger.IsAttached)
                 {
@@ -78,13 +80,14 @@ namespace PowerTools
 
             ApplicationService.Instance.Dispose();
             ModuleGlobalSettings.Instance.CurrentModule = null;
-            RepositoryLoader.Instance.Store();
+            Repositories.Store();
 
             Application.Current.Shutdown();
         }
 
         protected override void OnExit(ExitEventArgs e)
         {
+            Repositories.Store();
             ApplicationService.Instance.Dispose();
             base.OnExit(e);
         }

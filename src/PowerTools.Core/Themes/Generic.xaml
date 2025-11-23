@@ -12,7 +12,9 @@
     <converters:BoolToReverseConverter x:Key="BoolToReverseConverter"/>
     <converters:MultiValueToVisibilityConverter x:Key="MultiValueToVisibilityConverter"/>
 
-    <SolidColorBrush x:Key="Background.WhiteSmoke" Color="#F8F8F8"/>
+    <SolidColorBrush x:Key="Background.LightGray" Color="#E5E5E5"/>
+    <SolidColorBrush x:Key="Background.WhiteSmoke" Color="#FFFFFF"/>
+    <SolidColorBrush x:Key="Background.Default" Color="#F8F8F8"/>
 
     <SolidColorBrush x:Key="TextBox.Background.Black" Color="#0C0C0C"/>
     <SolidColorBrush x:Key="TextBox.Foreground.Grey" Color="#CCCCCC"/>
@@ -322,7 +324,7 @@
     <Style x:Key="TextBlock.Header" TargetType="{x:Type TextBlock}">
         <Setter Property="Margin" Value="5 10 5 0"/>
         <Setter Property="HorizontalAlignment" Value="Left"/>
-        <Setter Property="FontSize" Value="18"/>
+        <Setter Property="FontSize" Value="28"/>
         <Setter Property="FontWeight" Value="Normal"/>
     </Style>
     <Style x:Key="TextBlock.Content" TargetType="{x:Type TextBlock}">
@@ -1050,7 +1052,7 @@
     </Style>
 
     <Style x:Key="GridSplitter.Normal" TargetType="{x:Type GridSplitter}">
-        <Setter Property="Background" Value="LightGray"/>
+        <Setter Property="Background" Value="{StaticResource Background.LightGray}"/>
         <Setter Property="Margin" Value="0"/>
         <Setter Property="PreviewStyle" Value="{StaticResource GridSplitterPreviewStyle}"/>
         <Setter Property="Template">
@@ -1074,7 +1076,7 @@
     <!--GroupBox.Normal-->
     <BorderGapMaskConverter x:Key="BorderGapMaskConverter"/>
     <Style x:Key="GroupBox.Normal" TargetType="{x:Type GroupBox}">
-        <Setter Property="BorderBrush" Value="LightGray"/>
+        <Setter Property="BorderBrush" Value="{StaticResource Background.LightGray}"/>
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="FontWeight" Value="Normal"/>
         <Setter Property="Margin" Value="5"/>

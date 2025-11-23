@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace PowerTools.Views.UserControls
 {
     /// <summary>
-    /// Interaction logic for ModuleInformation.xaml
+    /// Interaction logic for RemoteRepositoryView.xaml
     /// </summary>
-    public partial class ModuleInformation : UserControl
+    public partial class RemoteRepositoryView : UserControl
     {
-        public ModuleInformation()
+        public RemoteRepositoryView()
         {
             InitializeComponent();
         }

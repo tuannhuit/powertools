@@ -2,18 +2,28 @@
 using PowerTools.Core.SharedServices;
 using Prism.Ioc;
 using Prism.Modularity;
+using Prism.Regions;
 using System;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
+using PowerTools.Core.Configurations;
 
 namespace PowerTools.Helpers
 {
     public static class ModuleLoader
     {
-        public static void LoadModule(IContainerProvider container, ToolModule module)
+        public static IContainerProvider Container;
+        public static void LoadModule(ToolModule module)
         {
-            if (module == null) 
+            if (module.IsLoaded)
+            {
+                return;
+            }
+
+            if (module == null)
                 throw new Exception("Cannot handle empty module!");
 
             var moduleLocation = module.ExecutionLocation;
@@ -23,6 +33,12 @@ namespace PowerTools.Helpers
 
             if (!File.Exists(moduleLocation))
                 throw new FileNotFoundException($"Could not find the execution module path! {moduleLocation}");
+
+
+            if (Container == null)
+            {
+                throw new FileNotFoundException($"ModuleLoader.Container property must be setup!");
+            }
 
             var moduleAssembly = AppDomain.CurrentDomain.GetAssemblies()
                 .First(p => p.FullName == typeof(IModule).Assembly.FullName);
@@ -36,8 +52,8 @@ namespace PowerTools.Helpers
                 .Where(t => !t.IsAbstract)
                 .Select(t => CreateModuleInfo(t));
 
-            var moduleManager = container.Resolve<IModuleManager>();
-            var moduleCatalog = container.Resolve<IModuleCatalog>();
+            var moduleCatalog = Container.Resolve<IModuleCatalog>();
+            var moduleManager = Container.Resolve<IModuleManager>();
 
             foreach (var moduleInfo in moduleInfos)
             {
@@ -46,12 +62,90 @@ namespace PowerTools.Helpers
                     moduleCatalog.AddModule(moduleInfo);
                     ApplicationService.Instance.InvokeUIAction(() =>
                     {
-                        moduleManager.LoadModule(moduleInfo.ModuleName);
+                        try
+                        {
+                            App.RegisteredUserUnHandledException = () =>
+                            {
+                                module.IsLoaded = false;
+                                module.IsActive = false;
+                                module.IsLoadedProperly = false;
+                                LoggingService.Instance.Error($"Failed to load module {module.Name}", new Exception(""));
+
+                                App.RegisteredUserUnHandledException = null;
+                            };
+
+                            moduleManager.LoadModule(moduleInfo.ModuleName);
+
+                            module.IsLoaded = true;
+                            module.IsActive = true;
+                            module.IsLoadedProperly = true;
+
+                            LoggingService.Instance.Info($"Loaded module {module.ExecutionLocation}");
+                        }
+                        catch (Exception e)
+                        {
+                            module.IsLoaded = false;
+                            module.IsActive = false;
+                            module.IsLoadedProperly = false;
+                            LoggingService.Instance.Error($"Failed to load module {module.Name}", e);
+                        }
                     });
                 }
             }
+        }
 
-            LoggingService.Instance.Info($"Loaded module {module.ExecutionLocation}");
+        public static void EnableModule(string moduleName)
+        {
+            if (Container == null)
+            {
+                throw new FileNotFoundException($"ModuleLoader.Container property must be setup!");
+            }
+
+            var module = Repositories.RepositoryLocal.ModuleList.FirstOrDefault(p => p.Name == moduleName);
+            if (module != null)
+            {
+                try
+                {
+                    LoadModule(module);
+                    module.IsActive = true;
+                }
+                catch (Exception e)
+                {
+                    module.IsActive = false;
+                    LoggingService.Instance.Error($"Failed to load module '{module.Name}'", e);
+                }
+            }
+        }
+
+        public static void DisableModule(string moduleName)
+        {
+            if (Container == null)
+            {
+                throw new FileNotFoundException($"ModuleLoader.Container property must be setup!");
+            }
+
+            var module = Repositories.RepositoryLocal.ModuleList.FirstOrDefault(p => p.Name == moduleName);
+            if (module != null)
+            {
+                module.IsActive = false;
+            }
+        }
+
+        public static void MarkModuleAsDeleted(string moduleName, string version)
+        {
+            if (Container == null)
+            {
+                throw new FileNotFoundException($"ModuleLoader.Container property must be setup!");
+            }
+
+            var module = Repositories.RepositoryLocal.ModuleList.FirstOrDefault(p => p.Name == moduleName);
+            if (module != null)
+            {
+                module.IsMarkDeleted = true;
+                module.Version = version;
+            }
+
+            Repositories.Store();
         }
 
         private static ModuleInfo CreateModuleInfo(Type type)
