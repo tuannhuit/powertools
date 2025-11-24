@@ -44,7 +44,7 @@
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="xcopy /Y /I &quot;$(ProjectDir)repository.json&quot; &quot;$(TargetDir)modules&quot;" />
+    <Exec Command="mkdir &quot;$(TargetDir)modules&quot;&#xD;&#xA;xcopy /Y /I &quot;$(ProjectDir)repository.json&quot; &quot;$(TargetDir)modules&quot;" />
   </Target>
 
 </Project>

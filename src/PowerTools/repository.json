@@ -93,6 +93,18 @@
         "1.0.0.0"
       ],
       "ExecutionName": "PowerTools.QAutomationTool.dll",
+      "PublisherDisplayName": "Peter Nguyen",
+      "RepoLink": "https://github.com/Peter-Nguyen_hansen/ccb-i-pm-qautomation-tool"
+    },
+    {
+      "Name": "qautomation-tool",
+      "DisplayName": "QAutomation",
+      "Description": "",
+      "Version": "1.0.0.0",
+      "AllVersions": [
+        "1.0.0.0"
+      ],
+      "ExecutionName": "PowerTools.QAutomationTool.dll",
       "Icon": "𝙌",
       "IconColor": "DarkRed",
       "PublisherDisplayName": "Peter Nguyen",
