@@ -16,7 +16,7 @@
       "RepoLink": "https://github.com/hansen-technologies/ccb-i-pm-kafka-client-tool"
     },
     {
-      "Name": "elasicsearch-tool",
+      "Name": "elasticsearch-tool",
       "DisplayName": "Elasticsearch Tool",
       "Description": "Elasicsearch is used for read/delete indices",
       "Version": "1.0.0.0",
@@ -25,6 +25,7 @@
       ],
       "ExecutionName": "PowerTools.ElasticsearchTool.dll",
       "Icon": "𝑬",
+      "IconColor": "DeepPink",
       "PublisherDisplayName": "Peter Nguyen",
       "RepoLink": ""
     },
