@@ -101,6 +101,7 @@ namespace PowerTools.Core.SharedServices
 
         public void Clear()
         {
+            _messageList.Clear();
             WriteLog("Ready");
         }
 

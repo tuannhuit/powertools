@@ -64,6 +64,7 @@ namespace PowerTools.ViewModels
         public ICommand CmdShowLog { get; set; }
         public ICommand CmdSelectModuleList { get; set; }
         public ICommand CmdNavigateToModule { get; set; }
+        public ICommand CmdClearLogs { get; set; }
 
         #endregion
 
@@ -82,6 +83,7 @@ namespace PowerTools.ViewModels
             CmdShowSettings = new DelegateCommand(OnCmdShowSettings);
             CmdSelectModuleList = new DelegateCommand(OnCmdSelectModuleList);
             CmdNavigateToModule = new DelegateCommand<string>(OnCmdNavigateToModule);
+            CmdClearLogs = new DelegateCommand(OnCmdClearLogs);
 
             Repositories.RepositoryLocal.Load(false);
             ModuleLoader.Container = _container;
@@ -121,6 +123,11 @@ namespace PowerTools.ViewModels
             Repositories.RepositoriesChanged += Repositories_RepositoriesChanged;
 
             DownloadPowerToolVersions();
+        }
+
+        private void OnCmdClearLogs()
+        {
+            LoggingService.Instance.Clear();
         }
 
         private void Repositories_RepositoriesChanged()
