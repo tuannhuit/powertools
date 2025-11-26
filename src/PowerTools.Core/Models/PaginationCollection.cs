@@ -138,7 +138,11 @@ namespace PowerTools.Core.Models
                     Command = new DelegateCommand(OnMovePrevious)
                 }
             };
-            Actions.AddRange(actions);
+
+            if (actions != null && actions.Any())
+            {
+                Actions.AddRange(actions);
+            }
             InvokeAction = new DelegateCommand<string>(OnInvokeAction);
         }
 
