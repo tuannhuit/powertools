@@ -141,7 +141,11 @@ namespace PowerTools.ViewModels
                 RaisePropertyChanged("AdditionalInstalledInfo");
                 RaisePropertyChanged("AdditionalRecommendedInfo");
 
-                SelectedModule = InstalledModuleList.First(p => p.Name == moduleName);
+                var installedModule = InstalledModuleList.FirstOrDefault(p => p.Name == moduleName);
+                if (installedModule != null)
+                {
+                    SelectedModule = installedModule;
+                }
             });
         }
 
@@ -178,15 +182,22 @@ namespace PowerTools.ViewModels
             LoggingService.Instance.Info($"Downloading... module{module.Name}");
 
             var remoteRepositoryPath = ModuleGlobalSettings.Instance.RepositoryRemote;
-            if (!Directory.Exists(remoteRepositoryPath))
+            if (!File.Exists(remoteRepositoryPath))
             {
                 MessageBox.Show($"Cannot find the remote repository path {remoteRepositoryPath}");
                 return;
             }
 
+            var remoteDirectory = Path.GetDirectoryName(remoteRepositoryPath);
+            if (!Directory.Exists(remoteDirectory))
+            {
+                MessageBox.Show($"Cannot find the remote repository path {remoteDirectory}");
+                return;
+            }
+
             var downloadModuleName =
                 $"{module.Name}-{module.Version}.{Constants.ModuleExtensionFileName}";
-            var remoteModulePath = Path.Combine(remoteRepositoryPath, downloadModuleName);
+            var remoteModulePath = Path.Combine(remoteDirectory, downloadModuleName);
 
             if (!File.Exists(remoteModulePath))
             {

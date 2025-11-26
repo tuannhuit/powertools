@@ -7,7 +7,8 @@ namespace PowerTools.Core.Models
     {
         public override string GetRepositoryPath()
         {
-            return Path.Combine(ModuleGlobalSettings.Instance.RepositoryRemote, ModuleGlobalSettings.Instance.RepositoryFileName);
+            // By default, the repository would be a specific URL file path
+            return Path.Combine(ModuleGlobalSettings.Instance.RepositoryRemote);
         }
 
         public override void Store()
