@@ -14,7 +14,7 @@
         </Grid.RowDefinitions>
         <Rectangle Grid.Row="0" Stroke="Black" StrokeThickness="0.25"/>
         <TextBox Grid.Row="1" Text="{Binding Source={x:Static sharedServices:LoggingService.Instance}, Path=Message, Mode=OneWay}" BorderBrush="Transparent" Background="Transparent" BorderThickness="0" FontSize="12" FontFamily="Consolas" IsReadOnly="True" TextWrapping="Wrap" Padding="2 5" TextChanged="txbLogs_TextChanged"/>
-        <StackPanel  Grid.Row="1" Orientation="Horizontal" Background="White" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="5 0">
+        <StackPanel  Grid.Row="1" Orientation="Horizontal" Background="White" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="5">
             <Button Style="{StaticResource Button.Icon}" Command="{Binding CmdClearLogs}" Content="{x:Static models:ButtonIcons.Delete}" ToolTip="Clear logs" VerticalAlignment="Center" HorizontalContentAlignment="Left" FontSize="12" Margin="0"/>
         </StackPanel>
     </Grid>
