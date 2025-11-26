@@ -18,7 +18,7 @@
             <ColumnDefinition Width="2" />
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <Grid Grid.Column="0">
+        <Grid Grid.Column="0" Background="{StaticResource Background.Default}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
@@ -57,7 +57,7 @@
                     </ListView.ItemTemplate>
                 </ListView>
             </Expander>
-            <Expander Style="{StaticResource Expander.Normal}" Grid.Row="3" Header="RECOMMENDED" Tag="{Binding AdditionalRecommendedInfo, UpdateSourceTrigger=PropertyChanged}" IsExpanded="True">
+            <Expander Style="{StaticResource Expander.Normal}" Grid.Row="3" Header="RECOMMENDED" Tag="{Binding AdditionalRecommendedInfo, UpdateSourceTrigger=PropertyChanged}" BorderThickness="0" IsExpanded="True">
                 <ListView Style="{StaticResource ListView.Normal}" ItemsSource="{Binding ModuleList}" SelectedItem="{Binding Path=SelectedModule, UpdateSourceTrigger=PropertyChanged}" ItemContainerStyle="{StaticResource ListViewItem.Normal}" HorizontalContentAlignment="Stretch" Margin="5" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto">
                     <ListView.ItemTemplate>
                         <DataTemplate>
