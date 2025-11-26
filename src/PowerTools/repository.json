@@ -27,7 +27,7 @@
       "Icon": "𝑬",
       "IconColor": "DeepPink",
       "PublisherDisplayName": "Peter Nguyen",
-      "RepoLink": ""
+      "RepoLink": "https://github.com/Peter-Nguyen_hansen/ccb-i-pm-elasticsearch-tool"
     },
     {
       "Name": "event-viewer-tool",
@@ -41,16 +41,20 @@
       "Icon": "📚",
       "IconColor": "OrangeRed",
       "PublisherDisplayName": "Peter Nguyen",
-      "RepoLink": ""
+      "RepoLink": "https://github.com/Peter-Nguyen_hansen/ccb-i-pm-event-viewer-tool"
     },
     {
-      "Name": "ICX Configuration Update",
+      "Name": "icx-configuration-update",
+      "DisplayName": "ICX Configuration Update",
       "Description": "This tool is used for update configurations of ICX folder",
       "Version": "1.0.0.0",
+      "Icon": "\ue0D8",
       "AllVersions": [
         "1.0.0.0"
       ],
-      "ExecutionName": "PowerTool.ICXConfigurationUpdate.dll"
+      "ExecutionName": "PowerTools.ICXConfigurationUpdate.dll",
+      "PublisherDisplayName": "Peter Nguyen",
+      "RepoLink": "https://github.com/Peter-Nguyen_hansen/ccb-i-pm-icx-configuration-update"
     },
     {
       "Name": "Base64ToString Converter",
@@ -84,7 +88,7 @@
       "ExecutionName": "PowerTools.ServerManagementTool.dll",
       "Icon": "\ue2E0",
       "PublisherDisplayName": "Peter Nguyen",
-      "RepoLink": ""
+      "RepoLink": "https://github.com/Peter-Nguyen_hansen/ccb-i-pm-server-management-tool"
     },
     {
       "Name": "QAutomation Tool",
