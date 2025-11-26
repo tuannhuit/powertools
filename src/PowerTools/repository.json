@@ -39,6 +39,7 @@
       ],
       "ExecutionName": "PowerTools.EventViewerTool.dll",
       "Icon": "📚",
+      "IconColor": "OrangeRed",
       "PublisherDisplayName": "Peter Nguyen",
       "RepoLink": ""
     },
