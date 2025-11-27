@@ -15,6 +15,7 @@
     <SolidColorBrush x:Key="Background.LightGray" Color="#E5E5E5"/>
     <SolidColorBrush x:Key="Background.WhiteSmoke" Color="#FFFFFF"/>
     <SolidColorBrush x:Key="Background.Default" Color="#F8F8F8"/>
+    <SolidColorBrush x:Key="Background.Black" Color="#2C2C2C"/>
 
     <SolidColorBrush x:Key="TextBox.Background.Black" Color="#0C0C0C"/>
     <SolidColorBrush x:Key="TextBox.Foreground.Grey" Color="#CCCCCC"/>
@@ -400,7 +401,7 @@
 
     <SolidColorBrush x:Key="Button.Background" Color="#FF92D7FF"/>
     <SolidColorBrush x:Key="Button.MouseOver.Background" Color="#FFBEE6FD"/>
-    <SolidColorBrush x:Key="Button.Pressed.Background" Color="#FF90ADC5"/>
+    <SolidColorBrush x:Key="Button.Pressed.Background" Color="#FF5AC0FB"/>
     <SolidColorBrush x:Key="Button.Disabled.Background" Color="#FFF4F4F4"/>
     <SolidColorBrush x:Key="Button.Disabled.Foreground" Color="#FFB7B7B7"/>
 
@@ -429,16 +430,16 @@
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="true">
                             <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Background}"/>
-                            <Setter Property="Foreground" TargetName="textblock" Value="Black"/>
-                            <Setter Property="Foreground" TargetName="textblockText" Value="Black"/>
+                            <!--<Setter Property="Foreground" TargetName="textblock" Value="Black"/>
+                            <Setter Property="Foreground" TargetName="textblockText" Value="Black"/>-->
                         </Trigger>
                         <Trigger Property="IsPressed" Value="true">
                             <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Pressed.Background}"/>
-                            <Setter Property="Foreground" TargetName="textblock" Value="Black"/>
-                            <Setter Property="Foreground" TargetName="textblockText" Value="Black"/>
+                            <Setter Property="Foreground" TargetName="textblock" Value="White"/>
+                            <Setter Property="Foreground" TargetName="textblockText" Value="White"/>
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="false">
-                            <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Disabled.Background}"/>
+                            <!--<Setter Property="Background" TargetName="border" Value="{StaticResource Button.Disabled.Background}"/>-->
                             <Setter Property="Foreground" TargetName="textblock" Value="{StaticResource Button.Disabled.Foreground}"/>
                             <Setter Property="Foreground" TargetName="textblockText" Value="{StaticResource Button.Disabled.Foreground}"/>
                         </Trigger>
@@ -470,16 +471,16 @@
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="true">
                             <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Background}"/>
-                            <Setter Property="Foreground" TargetName="textblock" Value="Black"/>
-                            <Setter Property="Foreground" TargetName="textblockText" Value="Black"/>
+                            <!--<Setter Property="Foreground" TargetName="textblock" Value="Black"/>
+                            <Setter Property="Foreground" TargetName="textblockText" Value="Black"/>-->
                         </Trigger>
                         <Trigger Property="IsPressed" Value="true">
                             <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Pressed.Background}"/>
-                            <Setter Property="Foreground" TargetName="textblock" Value="Black"/>
-                            <Setter Property="Foreground" TargetName="textblockText" Value="Black"/>
+                            <Setter Property="Foreground" TargetName="textblock" Value="White"/>
+                            <Setter Property="Foreground" TargetName="textblockText" Value="White"/>
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="false">
-                            <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Disabled.Background}"/>
+                            <!--<Setter Property="Background" TargetName="border" Value="{StaticResource Button.Disabled.Background}"/>-->
                             <Setter Property="Foreground" TargetName="textblock" Value="{StaticResource Button.Disabled.Foreground}"/>
                             <Setter Property="Foreground" TargetName="textblockText" Value="{StaticResource Button.Disabled.Foreground}"/>
                         </Trigger>
