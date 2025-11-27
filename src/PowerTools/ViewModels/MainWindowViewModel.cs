@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
+using System.Net;
 using PowerTools.Core.Configurations;
 using PowerTools.Core.SharedServices;
 using PowerTools.Helpers;
@@ -70,6 +72,12 @@ namespace PowerTools.ViewModels
 
         public MainWindowViewModel(IContainerProvider container, IRegionManager regionManager, IDialogService dialogService)
         {
+            //var localFile = @"C:\Temp\test.json";
+            //using (var webClient = new WebClient())
+            //{
+            //    webClient.DownloadFile("file://hsnicx-fg01/icxteamcitybucket/Teams/Delta/Tools/PowerTool/modules/repository-v3.0.0.0-PREVIEW.json", localFile);
+            //}
+
             _container = container;
             _dialogService = dialogService;
 
