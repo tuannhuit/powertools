@@ -55,11 +55,7 @@ namespace PowerTools.Core.Models
 
             try
             {
-                if (!File.Exists(repoPath))
-                    throw new FileNotFoundException($"Not found repository file '{repoPath}'");
-
-                var jsonContent = File.ReadAllText(repoPath);
-                repositoryInformation = JsonSerializer.Deserialize<RepositoryInformation<T>>(jsonContent);
+                repositoryInformation = ReadRepositoryInformation(repoPath);
                 repositoryInformation = Format(repositoryInformation);
             }
             catch (Exception e)
@@ -89,6 +85,15 @@ namespace PowerTools.Core.Models
             }
 
             return repoInformation;
+        }
+
+        protected virtual RepositoryInformation<T> ReadRepositoryInformation(string repositoryPath)
+        {
+            if (!File.Exists(repositoryPath))
+                throw new FileNotFoundException($"Not found repository file '{repositoryPath}'");
+
+            var jsonContent = File.ReadAllText(repositoryPath);
+            return JsonSerializer.Deserialize<RepositoryInformation<T>>(jsonContent);
         }
     }
 }

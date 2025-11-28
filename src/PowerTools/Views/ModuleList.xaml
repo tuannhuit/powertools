@@ -33,7 +33,7 @@
                 </commonControls:TextPlaceHolder.InputBindings>
             </commonControls:TextPlaceHolder>
             <Expander Style="{StaticResource Expander.Normal}" Grid.Row="2" Header="INSTALLED" Tag="{Binding AdditionalInstalledInfo, UpdateSourceTrigger=PropertyChanged}" IsExpanded="True">
-                <ListView Style="{StaticResource ListView.Normal}" ItemsSource="{Binding InstalledModuleList}" SelectedItem="{Binding Path=SelectedModule, UpdateSourceTrigger=PropertyChanged}" ItemContainerStyle="{StaticResource ListViewItem.Normal}" HorizontalContentAlignment="Stretch" Margin="5" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto">
+                <ListView Style="{StaticResource ListView.Normal}" ItemsSource="{Binding InstalledModuleList}" SelectedItem="{Binding Path=SelectedModule, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemContainerStyle="{StaticResource ListViewItem.Normal}" HorizontalContentAlignment="Stretch" Margin="5" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto">
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <Grid Margin="0 0 0 5">
@@ -58,7 +58,7 @@
                 </ListView>
             </Expander>
             <Expander Style="{StaticResource Expander.Normal}" Grid.Row="3" Header="RECOMMENDED" Tag="{Binding AdditionalRecommendedInfo, UpdateSourceTrigger=PropertyChanged}" BorderThickness="0" IsExpanded="True">
-                <ListView Style="{StaticResource ListView.Normal}" ItemsSource="{Binding ModuleList}" SelectedItem="{Binding Path=SelectedModule, UpdateSourceTrigger=PropertyChanged}" ItemContainerStyle="{StaticResource ListViewItem.Normal}" HorizontalContentAlignment="Stretch" Margin="5" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto">
+                <ListView Style="{StaticResource ListView.Normal}" ItemsSource="{Binding ModuleList}" SelectedItem="{Binding Path=SelectedModule, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemContainerStyle="{StaticResource ListViewItem.Normal}" HorizontalContentAlignment="Stretch" Margin="5" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto">
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <Grid Margin="0 0 0 5">

@@ -38,7 +38,7 @@
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
-            <Button Style="{StaticResource Button.Icon}" Grid.Row="2" Content="{x:Static models:ButtonIcons.Setting}" Command="{Binding CmdShowSettings}" FontSize="24" Width="40" Height="40" Margin="0" ToolTip="Settings"/>
+            <Button Style="{StaticResource Button.Icon}" Grid.Row="2" Content="{x:Static models:ButtonIcons.Setting}" Command="{Binding CmdShowSettings}" FontSize="24" Width="44" Height="40" Margin="0" ToolTip="Settings"/>
         </Grid>
     </Border>
 </UserControl>

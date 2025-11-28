@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Windows;
-using PowerTools.Core.Models;
 
 namespace PowerTools.Core.SharedServices
 {
