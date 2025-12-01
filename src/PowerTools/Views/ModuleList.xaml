@@ -22,8 +22,8 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="{Binding ElementName=eInstalled, Path=IsExpanded, Converter={StaticResource BooleanToGridSizeConverter}}"/>
+                <RowDefinition Height="{Binding ElementName=eRecommended, Path=IsExpanded, Converter={StaticResource BooleanToGridSizeConverter}}"/>
             </Grid.RowDefinitions>
             <TextBlock Style="{StaticResource TextBlock.ContentSmall}" Grid.Row="0" Text="EXTENSIONS" />
             <Button Style="{StaticResource Button.Icon}" Grid.Row="0" Content="{x:Static models:ButtonIcons.Refresh}" Command="{Binding CmdRefreshModules}" Tag="Refresh" Margin="5" HorizontalAlignment="Right"/>
@@ -32,7 +32,7 @@
                     <KeyBinding Key="Enter" Command="{Binding CmdRefreshModules}"/>
                 </commonControls:TextPlaceHolder.InputBindings>
             </commonControls:TextPlaceHolder>
-            <Expander Style="{StaticResource Expander.Normal}" Grid.Row="2" Header="INSTALLED" Tag="{Binding AdditionalInstalledInfo, UpdateSourceTrigger=PropertyChanged}" IsExpanded="True">
+            <Expander x:Name="eInstalled" Style="{StaticResource Expander.Normal}" Grid.Row="2" Header="INSTALLED" Tag="{Binding AdditionalInstalledInfo, UpdateSourceTrigger=PropertyChanged}" IsExpanded="True">
                 <ListView Style="{StaticResource ListView.Normal}" ItemsSource="{Binding InstalledModuleList}" SelectedItem="{Binding Path=SelectedModule, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemContainerStyle="{StaticResource ListViewItem.Normal}" HorizontalContentAlignment="Stretch" Margin="5" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto">
                     <ListView.ItemTemplate>
                         <DataTemplate>
@@ -57,7 +57,7 @@
                     </ListView.ItemTemplate>
                 </ListView>
             </Expander>
-            <Expander Style="{StaticResource Expander.Normal}" Grid.Row="3" Header="RECOMMENDED" Tag="{Binding AdditionalRecommendedInfo, UpdateSourceTrigger=PropertyChanged}" BorderThickness="0" IsExpanded="True">
+            <Expander x:Name="eRecommended" Style="{StaticResource Expander.Normal}" Grid.Row="3" Header="RECOMMENDED" Tag="{Binding AdditionalRecommendedInfo, UpdateSourceTrigger=PropertyChanged}" BorderThickness="0" IsExpanded="True">
                 <ListView Style="{StaticResource ListView.Normal}" ItemsSource="{Binding ModuleList}" SelectedItem="{Binding Path=SelectedModule, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemContainerStyle="{StaticResource ListViewItem.Normal}" HorizontalContentAlignment="Stretch" Margin="5" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto">
                     <ListView.ItemTemplate>
                         <DataTemplate>
