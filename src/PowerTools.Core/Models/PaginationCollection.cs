@@ -61,7 +61,7 @@ namespace PowerTools.Core.Models
         }
 
         private IEnumerable<T> _itemSource;
-        public ObservableCollection<T> Items => new(_itemSource.Skip(PAGE_SIZE * (Page - 1)).Take(PAGE_SIZE));
+        public List<T> Items => new(_itemSource.Skip(PAGE_SIZE * (Page - 1)).Take(PAGE_SIZE));
 
         /// <summary>
         /// Total number of pages
@@ -113,6 +113,12 @@ namespace PowerTools.Core.Models
         public bool IsLastPage => _itemSource.Any() ? _page == _totalPage : _page == 0;
 
         public ICommand InvokeAction { get; set; }
+
+        public PaginationCollection(IEnumerable<CustomAction> actions = null)
+            : this(new List<T>(), actions)
+        {
+
+        }
 
         public PaginationCollection(IEnumerable<T> items, IEnumerable<CustomAction> actions = null)
         {
@@ -231,6 +237,11 @@ namespace PowerTools.Core.Models
 
         public void AddItemRange(IEnumerable<T> newItems)
         {
+            if (newItems == null)
+            {
+                return;
+            }
+
             if (_itemSource == null)
             {
                 _itemSource = new List<T>();
@@ -243,9 +254,19 @@ namespace PowerTools.Core.Models
 
         public void SetItems(IEnumerable<T> newItems)
         {
+            if (newItems == null)
+            {
+                return;
+            }
+
             _itemSource = new List<T>(newItems);
 
             RecalculateItems();
+        }
+
+        public void Clear()
+        {
+            SetItems(new List<T>());
         }
     }
 }
