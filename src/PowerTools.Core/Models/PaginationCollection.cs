@@ -61,7 +61,7 @@ namespace PowerTools.Core.Models
         }
 
         private IEnumerable<T> _itemSource;
-        public ObservableCollection<T> Items => new ObservableCollection<T>(_itemSource.Skip(PAGE_SIZE * (Page - 1)).Take(PAGE_SIZE));
+        public ObservableCollection<T> Items => new(_itemSource.Skip(PAGE_SIZE * (Page - 1)).Take(PAGE_SIZE));
 
         /// <summary>
         /// Total number of pages
@@ -195,7 +195,7 @@ namespace PowerTools.Core.Models
             if (_itemSource.Count() > _totalPage * PAGE_SIZE)
             {
                 // Calculate total pages and Raise UI event
-                TotalPage += 1;
+                _totalPage += 1;
             }
 
             if (_page < 1)
@@ -209,6 +209,7 @@ namespace PowerTools.Core.Models
             }
 
             RaisePropertyChanged("Items");
+            RaisePropertyChanged("TotalPage");
             RaisePropertyChanged("TotalItems");
             RaisePropertyChanged("ItemStart");
             RaisePropertyChanged("ItemEnd");
@@ -235,22 +236,14 @@ namespace PowerTools.Core.Models
                 _itemSource = new List<T>();
             }
 
-            foreach (var newItem in newItems)
-            {
-                _itemSource.Append(newItem);
-            }
+            ((List<T>)_itemSource).AddRange(newItems);
 
             RecalculateItems();
         }
 
         public void SetItems(IEnumerable<T> newItems)
         {
-            _itemSource = new List<T>();
-
-            foreach (var newItem in newItems)
-            {
-                _itemSource.Append(newItem);
-            }
+            _itemSource = new List<T>(newItems);
 
             RecalculateItems();
         }

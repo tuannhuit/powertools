@@ -874,7 +874,7 @@
         <Setter Property="AutoGenerateColumns" Value="False" />
         <Setter Property="CanUserAddRows" Value="False" />
         <Setter Property="FontWeight" Value="Normal"/>
-        <Setter Property="ItemsSource" Value="{Binding Tag.Items, RelativeSource={RelativeSource Self}}"/>
+        <Setter Property="ItemsSource" Value="{Binding Tag.Items, RelativeSource={RelativeSource Self}, UpdateSourceTrigger=PropertyChanged}"/>
         <Setter Property="RowStyle">
             <Setter.Value>
                 <Style TargetType="DataGridRow">
