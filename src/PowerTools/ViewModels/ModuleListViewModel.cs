@@ -263,6 +263,7 @@ namespace PowerTools.ViewModels
                 Repositories.Store();
 
                 RaisePropertyChanged("ModuleList");
+                RaisePropertyChanged("SelectedModule");
                 RaisePropertyChanged("InstalledModuleList");
                 RaisePropertyChanged("AdditionalInstalledInfo");
                 RaisePropertyChanged("AdditionalRecommendedInfo");
