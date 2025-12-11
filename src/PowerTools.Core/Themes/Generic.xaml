@@ -2,7 +2,6 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:theme="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero2"
                     xmlns:converters="clr-namespace:PowerTools.Core.Converters">
-    <converters:ValueToVisibilityConverter x:Key="ValueToVisibilityConverter1"/>
 
     <converters:ValueToVisibilityConverter x:Key="ValueToVisibilityConverter"/>
     <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
@@ -854,6 +853,8 @@
         <Setter Property="RowStyle">
             <Setter.Value>
                 <Style TargetType="DataGridRow">
+                    <Setter Property="MinHeight" Value="25"/>
+                    <Setter Property="MaxHeight" Value="250"/>
                     <Style.Triggers>
                         <!-- Highlight a grid row as the mouse passes over -->
                         <Trigger Property="IsMouseOver" Value="True">
@@ -878,6 +879,8 @@
         <Setter Property="RowStyle">
             <Setter.Value>
                 <Style TargetType="DataGridRow">
+                    <Setter Property="MinHeight" Value="25"/>
+                    <Setter Property="MaxHeight" Value="250"/>
                     <Style.Triggers>
                         <!-- Highlight a grid row as the mouse passes over -->
                         <Trigger Property="IsMouseOver" Value="True">
