@@ -11,7 +11,7 @@
         <Rectangle Fill="WhiteSmoke" Opacity="0.2"/>
         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" >
             <TextBlock Style="{StaticResource TextBlock.Icon}" Text="{x:Static models:ButtonIcons.Loading}" VerticalAlignment="Center" HorizontalAlignment="Center"  FontWeight="SemiBold" Margin="5"/>
-            <Border Background="White" BorderBrush="White" BorderThickness="1" CornerRadius="5">
+            <Border Background="White" BorderBrush="DarkGray" BorderThickness="1" CornerRadius="5">
                 <TextBlock Style="{StaticResource TextBlock.ContentSmall}" Text="{Binding Source={x:Static sharedServices:ApplicationService.Instance}, Path=WaitMessage, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}" HorizontalAlignment="Center" Margin="5"/>
             </Border>
         </StackPanel>
