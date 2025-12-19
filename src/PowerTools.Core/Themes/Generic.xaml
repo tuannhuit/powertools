@@ -822,7 +822,7 @@
         <Setter Property="Padding" Value="3 2 3 2" />
         <Setter Property="BorderBrush" Value="Transparent"/>
         <Setter Property="BorderThickness" Value="1"/>
-        <Setter Property="MaxHeight" Value="200"/>
+        <Setter Property="MaxHeight" Value="75"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="DataGridCell">
@@ -855,7 +855,7 @@
             <Setter.Value>
                 <Style TargetType="DataGridRow">
                     <Setter Property="MinHeight" Value="25"/>
-                    <Setter Property="MaxHeight" Value="250"/>
+                    <Setter Property="MaxHeight" Value="75"/>
                     <Style.Triggers>
                         <!-- Highlight a grid row as the mouse passes over -->
                         <Trigger Property="IsMouseOver" Value="True">
@@ -881,7 +881,7 @@
             <Setter.Value>
                 <Style TargetType="DataGridRow">
                     <Setter Property="MinHeight" Value="25"/>
-                    <Setter Property="MaxHeight" Value="250"/>
+                    <Setter Property="MaxHeight" Value="75"/>
                     <Style.Triggers>
                         <!-- Highlight a grid row as the mouse passes over -->
                         <Trigger Property="IsMouseOver" Value="True">
