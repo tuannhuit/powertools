@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Windows;
+using Prism.Mvvm;
 
 namespace PowerTools.Core.SharedServices
 {
-    public class ApplicationService
+    public class ApplicationService : BindableBase
     {
         private static ApplicationService _instance;
         private static List<Action> _disposedActions = new List<Action>();
@@ -22,6 +23,20 @@ namespace PowerTools.Core.SharedServices
                     _instance = new ApplicationService();
 
                 return _instance;
+            }
+        }
+
+        private string _waitMessage;
+        /// <summary>
+        /// The wait message showing in Waiting Window Screen
+        /// </summary>
+        public string WaitMessage
+        {
+            get => _waitMessage;
+            set
+            {
+                _waitMessage = value;
+                RaisePropertyChanged();
             }
         }
 
@@ -41,7 +56,7 @@ namespace PowerTools.Core.SharedServices
 
         public void InvokeUIAction(Action action)
         {
-            if(action == null)
+            if (action == null)
             {
                 return;
             }
@@ -65,14 +80,20 @@ namespace PowerTools.Core.SharedServices
             }
             catch (Exception e)
             {
-                LoggingService.Instance.Error("Occured error during invoking UI action",e);
+                LoggingService.Instance.Error("Occured error during invoking UI action", e);
             }
         }
 
         public void Busy()
         {
+            Busy("Please wait...");
+        }
+
+        public void Busy(string waitMessage)
+        {
             InvokeUIAction(() =>
             {
+                WaitMessage = waitMessage;
                 DoBusy?.Invoke(true);
             });
         }
@@ -117,7 +138,7 @@ namespace PowerTools.Core.SharedServices
                 {
                     action.Invoke();
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     LoggingService.Instance.Error("Dispose", e);
                 }
