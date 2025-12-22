@@ -14,12 +14,14 @@ namespace PowerTools.Core.Converters
         {
             var boolValue = (bool?)value;
             var param = parameter == null ? string.Empty : parameter.ToString();
+            var parts = param.Split(":");
+
             if (boolValue.GetValueOrDefault())
             {
-                return $"{param}";
+                return $"{parts[0]}";
             }
 
-            return "Auto";
+            return parts.Length == 2 ? parts[1] : "Auto";
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
