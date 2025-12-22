@@ -16,7 +16,7 @@ namespace PowerTools.Core.Converters
             var param = parameter == null ? string.Empty : parameter.ToString();
             if (boolValue.GetValueOrDefault())
             {
-                return $"{param}*";
+                return $"{param}";
             }
 
             return "Auto";
