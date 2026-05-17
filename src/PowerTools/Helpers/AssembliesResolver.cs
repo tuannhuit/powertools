@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PowerTools.Core.Configurations;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
@@ -35,6 +36,20 @@ namespace PowerTools.Helpers
                 catch
                 {
                     assembly = null;
+                }
+
+                if (assembly == null)
+                {
+                    try
+                    {
+                        fullPath = Path.Combine(ModuleGlobalSettings.Instance.CurrentModule?.ModuleLocation, $"{assemblyShortName}.dll");
+                        assembly = Assembly.LoadFrom(fullPath);
+                        DependentAssemblies[assemblyShortName] = assembly;
+                    }
+                    catch
+                    {
+                        assembly = null;
+                    }
                 }
 
                 return assembly;
