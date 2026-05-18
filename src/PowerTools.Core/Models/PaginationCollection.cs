@@ -61,6 +61,7 @@ namespace PowerTools.Core.Models
         }
 
         private IEnumerable<T> _itemSource;
+        public List<T> ItemSource => new (_itemSource);
         public List<T> Items => new(_itemSource.Skip(PAGE_SIZE * (Page - 1)).Take(PAGE_SIZE));
 
         /// <summary>
