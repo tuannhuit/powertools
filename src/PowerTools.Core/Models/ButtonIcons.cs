@@ -16,6 +16,7 @@
         public static string Books = "📚";
         public static string ServerSide = "\ue2E0";
         public static string PenEdit = "\ue0D8";
+        public static string Filters = "\uE16E";
         public static string Char_K = "𝞙";
         public static string Char_E = "𝐄";
         public static string Char_Q = "𝙌";
