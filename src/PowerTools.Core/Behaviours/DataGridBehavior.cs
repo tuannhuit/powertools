@@ -8,6 +8,38 @@ namespace PowerTools.Core.Behaviours
 {
     public static class DataGridBehavior
     {
+        public static object GetHeader(DependencyObject obj)
+        {
+            return (object)obj.GetValue(HeaderProperty);
+        }
+
+        public static void SetHeader(DependencyObject obj, object value)
+        {
+            obj.SetValue(HeaderProperty, value);
+        }
+
+        public static readonly DependencyProperty HeaderProperty = DependencyProperty.RegisterAttached(
+            "Header",
+            typeof(object),
+            typeof(DataGridBehavior),
+            new PropertyMetadata(null));
+
+        public static object GetHeaderSettings(DependencyObject obj)
+        {
+            return (object)obj.GetValue(HeaderSettingsProperty);
+        }
+
+        public static void SetHeaderSettings(DependencyObject obj, object value)
+        {
+            obj.SetValue(HeaderSettingsProperty, value);
+        }
+
+        public static readonly DependencyProperty HeaderSettingsProperty = DependencyProperty.RegisterAttached(
+            "HeaderSettings",
+            typeof(object),
+            typeof(DataGridBehavior),
+            new PropertyMetadata(null));
+
         public static readonly DependencyProperty SelectedItemProperty = DependencyProperty.RegisterAttached(
             "SelectedItem",
             typeof(object),
