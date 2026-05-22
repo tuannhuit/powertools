@@ -736,8 +736,7 @@
                                     <StackPanel Grid.Column="1" Orientation="Horizontal">
                                         <Button Style="{StaticResource Button.Icon}" Content="{x:Static buttonIcons:ButtonIcons.Filters}" FontSize="12" Margin="5 0 0 0" MinWidth="25" MinHeight="25" />
                                         <ToggleButton x:Name="SettingsButton" Style="{StaticResource ToggleButton.Icon}" Content="{x:Static buttonIcons:ButtonIcons.Setting}" FontSize="12" Margin="0 0 5 0" MinWidth="25" MinHeight="25" />
-                                        <Popup PlacementTarget="{Binding ElementName=SettingsButton}" Placement="Left" StaysOpen="False" IsOpen="{Binding IsChecked, ElementName=SettingsButton, Mode=TwoWay}"
-                                               VerticalOffset="27" HorizontalOffset="20">
+                                        <Popup PlacementTarget="{Binding ElementName=SettingsButton}" Placement="Bottom" StaysOpen="False" IsOpen="{Binding IsChecked, ElementName=SettingsButton, Mode=TwoWay}">
                                             <Border Background="WhiteSmoke" BorderThickness="1" BorderBrush="LightGray" >
                                                 <ScrollViewer CanContentScroll="True" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto"  FontWeight="Normal">
                                                     <ContentPresenter Content="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}, Path=(dg:DataGridBehavior.HeaderSettings), UpdateSourceTrigger=PropertyChanged}" Margin="5" SnapsToDevicePixels="true"/>
