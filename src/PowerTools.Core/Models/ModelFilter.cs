@@ -5,9 +5,6 @@ namespace PowerTools.Core.Models
 {
     public delegate void ModelFilterHandler(string filterName, object valueChanged);
 
-    /// <summary>
-    /// 
-    /// </summary>
     public class ModelFilter: BindableBase
     {
         protected ModelFilterHandler Handler { get; set; }

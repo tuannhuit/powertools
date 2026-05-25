@@ -1,0 +1,97 @@
+﻿using Prism.Mvvm;
+using System.Runtime.CompilerServices;
+
+namespace PowerTools.Core.Models
+{
+    public delegate void CriteriaHandler(string criteria, object valueChanged);
+
+    public class Criteria : BindableBase
+    {
+        protected CriteriaHandler ValueChangedHandler { get; set; }
+
+        private string _name;
+        public string Name
+        {
+            get => _name;
+            set
+            {
+                _name = value;
+                OnRaisePropertyChanged(value);
+            }
+        }
+
+        private string _description;
+        public string Description
+        {
+            get => _description;
+            set
+            {
+                _description = value;
+                OnRaisePropertyChanged(value);
+            }
+        }
+
+        private object _value;
+        public object Value
+        {
+            get => _value;
+            set
+            {
+                _value = value;
+                OnRaisePropertyChanged(value);
+            }
+        }
+
+        private CriteriaType _type;
+        public CriteriaType Type
+        {
+            get => _type;
+            private set
+            {
+                _type = value;
+                OnRaisePropertyChanged(value);
+            }
+        }
+
+        public Criteria(string name, string description, object value, CriteriaType type, CriteriaHandler valueChangedHandler)
+        {
+            Name = name;
+            Description = description;
+            Value = value;
+            Type = type;
+            ValueChangedHandler = valueChangedHandler;
+        }
+
+        public Criteria(string name, string description, CriteriaType type, CriteriaHandler valueChangedHandler)
+        {
+            Name = name;
+            Description = description;
+            Type = type;
+            ValueChangedHandler = valueChangedHandler;
+        }
+
+        public Criteria(string name, string description, CriteriaHandler valueChangedHandler)
+            : this(name, description, CriteriaType.Value, valueChangedHandler)
+        {
+
+        }
+
+        public Criteria(string name, string description, object value, CriteriaHandler valueChangedHandler)
+            : this(name, description, value, CriteriaType.Value, valueChangedHandler)
+        {
+
+        }
+
+        public Criteria(string name, CriteriaHandler valueChangedHandler)
+            : this(name, name, CriteriaType.Value, valueChangedHandler)
+        {
+
+        }
+
+        protected void OnRaisePropertyChanged<T>(T valueChanged = default(T), [CallerMemberName] string propertyName = null)
+        {
+            RaisePropertyChanged(propertyName);
+            ValueChangedHandler?.Invoke(propertyName, valueChanged);
+        }
+    }
+}

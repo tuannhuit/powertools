@@ -2,7 +2,8 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:theme="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero2"
                     xmlns:converters="clr-namespace:PowerTools.Core.Converters"
-                    xmlns:buttonIcons="clr-namespace:PowerTools.Core.Models"
+                    xmlns:controls="clr-namespace:PowerTools.Core.Controls"
+                    xmlns:models="clr-namespace:PowerTools.Core.Models"
                     xmlns:dg="clr-namespace:PowerTools.Core.Behaviours">
 
     <converters:ValueToVisibilityConverter x:Key="ValueToVisibilityConverter"/>
@@ -40,7 +41,7 @@
     <SolidColorBrush x:Key="Button.MouseOver.Background" Color="#FFBEE6FD"/>
     <SolidColorBrush x:Key="Button.Pressed.Background" Color="#FF5AC0FB"/>
     <SolidColorBrush x:Key="Button.Disabled.Background" Color="#FFF4F4F4"/>
-    <SolidColorBrush x:Key="Button.Disabled.Foreground" Color="Gray"/>
+    <SolidColorBrush x:Key="Button.Disabled.Foreground" Color="#FFBAB8B8"/>
 
     <Style x:Key="FocusVisual">
         <Setter Property="Control.Template">
@@ -111,6 +112,12 @@
     <SolidColorBrush x:Key="ComboBox.Disabled.Editable.Border" Color="#FFBFBFBF"/>
     <SolidColorBrush x:Key="ComboBox.Disabled.Editable.Button.Background" Color="Transparent"/>
     <SolidColorBrush x:Key="ComboBox.Disabled.Editable.Button.Border" Color="Transparent"/>
+
+    <Style TargetType="{x:Type controls:TextPlaceHolder}">
+        <Setter Property="Background" Value="White"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="BorderBrush" Value="LightGray"/>
+    </Style>
 
     <Style x:Key="ToggleButton.Icon" TargetType="{x:Type ToggleButton}">
         <Setter Property="OverridesDefaultStyle" Value="true"/>
@@ -459,6 +466,17 @@
         <Setter Property="FontWeight" Value="Normal"/>
     </Style>
 
+    <Style x:Key="CheckBox.Normal" TargetType="{x:Type CheckBox}">
+        <Setter Property="Margin" Value="5 5 5 0"/>
+        <Setter Property="FontSize" Value="11"/>
+        <Setter Property="FontWeight" Value="Normal"/>
+    </Style>
+
+    <Style x:Key="RadioButton.Normal" TargetType="{x:Type RadioButton}">
+        <Setter Property="Margin" Value="5 5 5 0"/>
+        <Setter Property="FontWeight" Value="Normal"/>
+    </Style>
+
     <!--https://www.adamdawes.com/windows8/win8_segoeuisymbol.html-->
     <!--Example: &#xE10F;-->
     <Style x:Key="Button.Icon" TargetType="{x:Type Button}">
@@ -731,21 +749,47 @@
                                         <ColumnDefinition Width="*"/>
                                         <ColumnDefinition Width="Auto"/>
                                     </Grid.ColumnDefinitions>
-                                    <TextBlock Style="{StaticResource TextBlock.ContentSmall}" Text="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}, Path=(dg:DataGridBehavior.Header), Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontWeight="SemiBold" Margin="5 0 0 0" VerticalAlignment="Center"/>
+                                    <TextBlock Style="{StaticResource TextBlock.ContentSmall}" Text="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}, Path=(dg:DataGridBehavior.Header), Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontWeight="SemiBold" Margin="5" VerticalAlignment="Center"/>
                                     <StackPanel Grid.Column="1" Orientation="Horizontal">
-                                        <Button Style="{StaticResource Button.Icon}" Content="{x:Static buttonIcons:ButtonIcons.Filters}" FontSize="12" Margin="5 0 0 0" MinWidth="25" MinHeight="25" />
-                                        <ToggleButton x:Name="SettingsButton" Style="{StaticResource ToggleButton.Icon}" Content="{x:Static buttonIcons:ButtonIcons.Setting}" FontSize="12" Margin="0 0 5 0" MinWidth="25" MinHeight="25" />
-                                        <Popup PlacementTarget="{Binding ElementName=SettingsButton}" Placement="Bottom" StaysOpen="False" IsOpen="{Binding IsChecked, ElementName=SettingsButton, Mode=TwoWay}">
-                                            <Border Background="WhiteSmoke" BorderThickness="1" BorderBrush="LightGray" >
-                                                <ScrollViewer CanContentScroll="True" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto"  FontWeight="Normal">
-                                                    <ContentPresenter Content="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}, Path=(dg:DataGridBehavior.HeaderSettings), UpdateSourceTrigger=PropertyChanged}" Margin="5" SnapsToDevicePixels="true"/>
+                                        <ToggleButton Style="{StaticResource ToggleButton.Icon}" 
+                                                      Content="{x:Static models:ButtonIcons.Filters}" 
+                                                      IsChecked="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}, Path=(dg:DataGridBehavior.IsFiltersVisible), UpdateSourceTrigger=PropertyChanged}" 
+                                                      Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}, Path=(dg:DataGridBehavior.IsFiltersEnable), UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolToVisibilityConverter}}" 
+                                                      FontSize="12" Margin="0 0 5 0" MinWidth="25" MinHeight="25" />
+                                        <ToggleButton x:Name="btnSettings" Style="{StaticResource ToggleButton.Icon}" 
+                                                      Content="{x:Static models:ButtonIcons.Setting}"
+                                                      Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}, Path=(dg:DataGridBehavior.IsHeaderSettingsEnable), UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolToVisibilityConverter}}" 
+                                                      FontSize="12" Margin="0 0 5 0" MinWidth="25" MinHeight="25"/>
+                                        <Popup PlacementTarget="{Binding ElementName=btnSettings}" Placement="Bottom" StaysOpen="False" IsOpen="{Binding IsChecked, ElementName=btnSettings, Mode=TwoWay}">
+                                            <Border Background="White" BorderThickness="1" BorderBrush="LightGray" MinWidth="250">
+                                                <ScrollViewer CanContentScroll="True" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" FontWeight="Normal" Margin="5">
+                                                    <Grid>
+                                                        <Grid.RowDefinitions>
+                                                            <RowDefinition Height="Auto"/>
+                                                            <RowDefinition Height="Auto"/>
+                                                        </Grid.RowDefinitions>
+                                                        <StackPanel Grid.Row="0" Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}, Path=(dg:DataGridBehavior.ColumnSettings), UpdateSourceTrigger=PropertyChanged, Converter={StaticResource ValueToVisibilityConverter}}">
+                                                            <TextBlock Style="{StaticResource TextBlock.ContentSmall}" Text="Column Display Settings" FontWeight="SemiBold" Margin="5"/>
+                                                            <ItemsControl ItemsSource="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}, Path=(dg:DataGridBehavior.ColumnSettings), UpdateSourceTrigger=PropertyChanged}">
+                                                                <ItemsControl.ItemTemplate>
+                                                                    <DataTemplate>
+                                                                        <Grid>
+                                                                            <CheckBox Style="{StaticResource CheckBox.Normal}" Content="{Binding Description}" IsChecked="{Binding Value, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                                                                        </Grid>
+                                                                    </DataTemplate>
+                                                                </ItemsControl.ItemTemplate>
+                                                            </ItemsControl>
+                                                            <Separator Margin="5 10"/>
+                                                        </StackPanel>
+                                                        <ContentPresenter Grid.Row="1" Content="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}, Path=(dg:DataGridBehavior.HeaderExtendedSettings), UpdateSourceTrigger=PropertyChanged}" Margin="5 0" SnapsToDevicePixels="true"/>
+                                                    </Grid>
                                                 </ScrollViewer>
                                                 <Border.Triggers>
                                                     <EventTrigger RoutedEvent="MouseLeave">
                                                         <BeginStoryboard>
                                                             <Storyboard>
                                                                 <BooleanAnimationUsingKeyFrames 
-                                                                        Storyboard.TargetName="SettingsButton" 
+                                                                        Storyboard.TargetName="btnSettings" 
                                                                         Storyboard.TargetProperty="IsChecked">
                                                                     <DiscreteBooleanKeyFrame KeyTime="0:0:0" Value="False" />
                                                                 </BooleanAnimationUsingKeyFrames>
@@ -758,7 +802,7 @@
                                     </StackPanel>
                                 </Grid>
                                 <Button  Grid.Row="1" Command="{x:Static DataGrid.SelectAllCommand}" Focusable="false" Style="{DynamicResource {ComponentResourceKey ResourceId=DataGridSelectAllButtonStyle, TypeInTargetAssembly={x:Type DataGrid}}}" Visibility="{Binding HeadersVisibility, ConverterParameter={x:Static DataGridHeadersVisibility.All}, Converter={x:Static DataGrid.HeadersVisibilityConverter}, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" Width="{Binding CellsPanelHorizontalOffset, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"/>
-                                <DataGridColumnHeadersPresenter x:Name="PART_ColumnHeadersPresenter" Grid.Column="1" Grid.Row="1" Visibility="{Binding HeadersVisibility, ConverterParameter={x:Static DataGridHeadersVisibility.Column}, Converter={x:Static DataGrid.HeadersVisibilityConverter}, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"/>
+                                <DataGridColumnHeadersPresenter x:Name="PART_ColumnHeadersPresenter" Grid.Column="1" Grid.Row="1" Visibility="{Binding HeadersVisibility, ConverterParameter={x:Static DataGridHeadersVisibility.Column}, Converter={x:Static DataGrid.HeadersVisibilityConverter}, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" Margin="0 0 -1 0"/>
                                 <ScrollContentPresenter x:Name="PART_ScrollContentPresenter" Grid.ColumnSpan="2" Grid.Row="2" CanContentScroll="{TemplateBinding CanContentScroll}" />
                                 <ScrollBar x:Name="PART_VerticalScrollBar" Grid.Column="2" Grid.Row="2"  Maximum="{TemplateBinding ScrollableHeight}" Orientation="Vertical" Value="{Binding VerticalOffset, Mode=OneWay, RelativeSource={RelativeSource Mode=TemplatedParent}}" ViewportSize="{TemplateBinding ViewportHeight}" Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}"/>
                                 <Grid Grid.Column="1" Grid.Row="3">
@@ -825,9 +869,8 @@
                                 </MultiBinding>
                             </TextBlock.Text>
                         </TextBlock>
-                        <Button Style="{StaticResource Button.Icon}" Content="&#xE016;" Command="{Binding Tag.InvokeAction, RelativeSource={RelativeSource AncestorType=DataGrid}}" CommandParameter="MovePreviousPage" IsEnabled="{Binding Tag.IsFirstPage, RelativeSource={RelativeSource AncestorType=DataGrid}, Converter={StaticResource BoolToReverseConverter}}" FontSize="13" Margin="0" Padding="0" MinWidth="0" MinHeight="0" VerticalAlignment="Center">
-                        </Button>
-                        <Button Style="{StaticResource Button.Icon}" Content="&#xE017;" Command="{Binding Tag.InvokeAction, RelativeSource={RelativeSource AncestorType=DataGrid}}" CommandParameter="MoveNextPage" IsEnabled="{Binding Tag.IsLastPage, RelativeSource={RelativeSource AncestorType=DataGrid}, Converter={StaticResource BoolToReverseConverter}}" FontSize="13" Margin="0 0 5 0" Padding="0" MinWidth="0" MinHeight="0" VerticalAlignment="Center"/>
+                        <Button Style="{StaticResource Button.Icon}" Content="{x:Static models:ButtonIcons.Left}" Command="{Binding Tag.InvokeAction, RelativeSource={RelativeSource AncestorType=DataGrid}}" CommandParameter="MovePreviousPage" IsEnabled="{Binding Tag.IsFirstPage, RelativeSource={RelativeSource AncestorType=DataGrid}, Converter={StaticResource BoolToReverseConverter}}" FontSize="13" Margin="0 5 0 5" Padding="0" MinWidth="0" MinHeight="0" VerticalAlignment="Center"/>
+                        <Button Style="{StaticResource Button.Icon}" Content="{x:Static models:ButtonIcons.Right}" Command="{Binding Tag.InvokeAction, RelativeSource={RelativeSource AncestorType=DataGrid}}" CommandParameter="MoveNextPage" IsEnabled="{Binding Tag.IsLastPage, RelativeSource={RelativeSource AncestorType=DataGrid}, Converter={StaticResource BoolToReverseConverter}}" FontSize="13" Margin="0 5 5 5" Padding="0" MinWidth="0" MinHeight="0" VerticalAlignment="Center"/>
                     </StackPanel>
                 </Grid>
             </Grid>
@@ -892,35 +935,86 @@
     </ControlTemplate>
 
     <Style x:Key="DataGridColumnHeader.Normal" TargetType="DataGridColumnHeader">
+        <Setter Property="Background" Value="White"/>
+        <Setter Property="BorderBrush" Value="LightGray"/>
+        <Setter Property="BorderThickness" Value="0,0,1,1"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type DataGridColumnHeader}">
-                    <Border BorderBrush="LightGray" BorderThickness="0,0,1,1" Background="WhiteSmoke">
+                    <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}">
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="*" />
                                 <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
-                            <ContentPresenter Grid.Row="0" 
-                                          HorizontalAlignment="Left" 
-                                          VerticalAlignment="Center" 
-                                          Margin="5,2"/>
-                            <TextBox Grid.Row="1"
-                                 x:Name="txbFilter"
-                                 Style="{StaticResource TextBox.ContentSmall}"
-                                 Margin="0,5,0,0"
-                                 Text="ABC"
-                                 Visibility="Visible"
-                                 BorderThickness="0 1 0 0"/>
+                            <Grid Grid.Row="0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <ContentPresenter Grid.Column="0" 
+                                                  HorizontalAlignment="Left" 
+                                                  VerticalAlignment="Top" 
+                                                  Margin="5"/>
+                                <TextBlock x:Name="tblSortIcon" Grid.Column="1" Style="{StaticResource TextBlock.Icon}" FontSize="11" VerticalAlignment="Center"/>
+                            </Grid>
+                            <Border x:Name="gFilter" Grid.Row="1" Visibility="Collapsed" BorderBrush="LightGray" BorderThickness="0 1 0 0">
+                                <Grid Background="White">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock x:Name="tblFilterIcon" 
+                                               Grid.Column="0"
+                                               Style="{StaticResource TextBlock.Icon}"
+                                               Text="{x:Static models:ButtonIcons.Filters}"
+                                               FontSize="10"
+                                               Foreground="LightGray"
+                                               Margin="5 8 0 0"/>
+                                    <controls:TextPlaceHolder x:Name="txbFilterInput" Grid.Column="1" Text="" PlaceHolder="xxxy" BorderThickness="0" BorderBrush="Transparent" Margin="0"/>
+                                </Grid>
+                            </Border>
+                            <Thumb x:Name="PART_RightHeaderGripper"
+                                   Grid.RowSpan="2"
+                                   HorizontalAlignment="Right"
+                                   Width="5"
+                                   Cursor="SizeWE"
+                                   Background="Transparent">
+                                <Thumb.Style>
+                                    <Style TargetType="Thumb">
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="Thumb">
+                                                    <Border Background="Transparent" Width="{TemplateBinding Width}"/>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Style>
+                                </Thumb.Style>
+                            </Thumb>
                         </Grid>
                     </Border>
                     <ControlTemplate.Triggers>
-                        <!-- If the master DataGrid has IsGlobalFilterVisible set to True, show this textbox -->
-                        <!--<DataTrigger Binding="{Binding Path=(local:DataGridFilterExtensions.IsGlobalFilterVisible), 
+                        <DataTrigger Binding="{Binding Path=(dg:DataGridBehavior.IsFiltersVisible), 
                                            RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" 
                                  Value="True">
-                            <Setter TargetName="FilterTextBox" Property="Visibility" Value="Visible" />
-                        </DataTrigger>-->
+                            <Setter TargetName="gFilter" Property="Visibility" Value="Visible" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding ElementName=txbFilterInput, Path=Text, Converter={StaticResource StringNullOrEmptyToVisibilityConverter}}" Value="Collapsed">
+                            <Setter TargetName="tblFilterIcon" Property="Foreground" Value="Black" />
+                        </DataTrigger>
+                        <Trigger Property="SortDirection"  Value="Ascending">
+                            <Setter TargetName="tblSortIcon" Property="Text" Value="{x:Static models:ButtonIcons.Up}" />
+                            <Setter TargetName="tblSortIcon" Property="Margin" Value="2 0" />
+                        </Trigger>
+                        <Trigger Property="SortDirection"  Value="Descending">
+                            <Setter TargetName="tblSortIcon" Property="Text" Value="{x:Static models:ButtonIcons.Down}" />
+                            <Setter TargetName="tblSortIcon" Property="Margin" Value="2 0" />
+                        </Trigger>
+                        <Trigger Property="Content"  Value="{x:Null}">
+                            <Setter TargetName="gFilter" Property="Visibility" Value="Collapsed" />
+                        </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
@@ -1022,16 +1116,6 @@
     </Style>
 
     <!--End DataGrid.Normal-->
-    <Style x:Key="CheckBox.Normal" TargetType="{x:Type CheckBox}">
-        <Setter Property="Margin" Value="5 5 5 0"/>
-        <Setter Property="FontSize" Value="11"/>
-        <Setter Property="FontWeight" Value="Normal"/>
-    </Style>
-
-    <Style x:Key="RadioButton.Normal" TargetType="{x:Type RadioButton}">
-        <Setter Property="Margin" Value="5 5 5 0"/>
-        <Setter Property="FontWeight" Value="Normal"/>
-    </Style>
 
     <!--TabControl.Normal-->
     <SolidColorBrush x:Key="TabControl.Background" Color="Transparent"/>

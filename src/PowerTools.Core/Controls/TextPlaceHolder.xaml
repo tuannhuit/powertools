@@ -11,9 +11,9 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
-    <Grid Background="White" HorizontalAlignment="Stretch" VerticalAlignment="Top">
-        <TextBlock Text="{Binding ElementName=UserControl, Path=PlaceHolder, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Margin="0" Padding="6" Visibility="{Binding ElementName=UserControl, Path=Text, Converter={StaticResource StringNullOrEmptyToVisibilityConverter}}" Foreground="Gray"/>
-        <TextBox Style="{StaticResource TextBox.ContentSmall}" Text="{Binding ElementName=UserControl, Path=Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Stretch" VerticalAlignment="Center" Background="Transparent" Margin="0" Padding="3 3 26 3">
+    <Grid Background="{Binding ElementName=UserControl, Path=Background}" HorizontalAlignment="Stretch" VerticalAlignment="Top">
+        <TextBlock Text="{Binding ElementName=UserControl, Path=PlaceHolder, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Margin="0" Padding="6" Visibility="{Binding ElementName=UserControl, Path=Text, Converter={StaticResource StringNullOrEmptyToVisibilityConverter}}" Foreground="LightGray"/>
+        <TextBox Style="{StaticResource TextBox.ContentSmall}" Text="{Binding ElementName=UserControl, Path=Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Stretch" VerticalAlignment="Center" Background="Transparent" Margin="0" Padding="3 3 26 3" BorderThickness="0" BorderBrush="Transparent">
             <TextBox.InputBindings>
                 <KeyBinding Key="Enter" Command="{Binding ElementName=UserControl, Path=CmdEnterKeyPressed}"/>
             </TextBox.InputBindings>

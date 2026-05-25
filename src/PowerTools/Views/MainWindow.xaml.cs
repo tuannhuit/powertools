@@ -1,4 +1,6 @@
-﻿using System.Windows;
+﻿using System.Collections.Generic;
+using System.Windows;
+using PowerTools.Core.Models;
 
 namespace PowerTools.Views
 {
@@ -7,6 +9,20 @@ namespace PowerTools.Views
     /// </summary>
     public partial class MainWindow : Window
     {
+        public static DataGridCriteriaList CriteriaList = new DataGridCriteriaList(new List<Criteria>
+        {
+            new Criteria("Column1", (p, c) =>
+            {
+
+            })
+        },new List<Criteria>
+        {
+            new Criteria("Column1", "Column 1", false, (p, c) =>
+            {
+
+            })
+        });
+
         public MainWindow()
         {
             InitializeComponent();
