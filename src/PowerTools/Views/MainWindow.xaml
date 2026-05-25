@@ -48,9 +48,9 @@
                       behaviours:DataGridBehavior.SelectedItem="{Binding SelectedMessage, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}" 
                       behaviours:DataGridBehavior.SelectedCellValues="{Binding SelectedMessageCellValues, UpdateSourceTrigger=PropertyChanged}"  
                       SelectionUnit="Cell" SelectionMode="Extended" ClipboardCopyMode="IncludeHeader">
-                <behaviours:DataGridBehavior.HeaderExtendedSettings>
+                <behaviours:DataGridBehavior.HeaderSettings>
                     <TextBlock Text="ABC"/>
-                </behaviours:DataGridBehavior.HeaderExtendedSettings>
+                </behaviours:DataGridBehavior.HeaderSettings>
                 <DataGrid.Columns>
                     <DataGridTextColumn behaviours:DataGridBehavior.HeaderName="Column1" Header="Timestamp (UTC)" SortDirection="Ascending"/>
                     <DataGridTextColumn Header="Column1" />

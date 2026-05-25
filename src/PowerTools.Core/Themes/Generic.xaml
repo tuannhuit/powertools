@@ -761,7 +761,7 @@
                                                       Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}, Path=(dg:DataGridBehavior.IsHeaderSettingsEnable), UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolToVisibilityConverter}}" 
                                                       FontSize="12" Margin="0 0 5 0" MinWidth="25" MinHeight="25"/>
                                         <Popup PlacementTarget="{Binding ElementName=btnSettings}" Placement="Bottom" StaysOpen="False" IsOpen="{Binding IsChecked, ElementName=btnSettings, Mode=TwoWay}">
-                                            <Border Background="White" BorderThickness="1" BorderBrush="LightGray" MinWidth="250">
+                                            <Border Background="White" BorderThickness="1" BorderBrush="LightGray" MinWidth="220">
                                                 <ScrollViewer CanContentScroll="True" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" FontWeight="Normal" Margin="5">
                                                     <Grid>
                                                         <Grid.RowDefinitions>
@@ -781,7 +781,7 @@
                                                             </ItemsControl>
                                                             <Separator Margin="5 10"/>
                                                         </StackPanel>
-                                                        <ContentPresenter Grid.Row="1" Content="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}, Path=(dg:DataGridBehavior.HeaderExtendedSettings), UpdateSourceTrigger=PropertyChanged}" Margin="5 0" SnapsToDevicePixels="true"/>
+                                                        <ContentPresenter Grid.Row="1" Content="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}, Path=(dg:DataGridBehavior.HeaderSettings), UpdateSourceTrigger=PropertyChanged}" Margin="5 0" SnapsToDevicePixels="true"/>
                                                     </Grid>
                                                 </ScrollViewer>
                                                 <Border.Triggers>
@@ -972,7 +972,10 @@
                                                FontSize="10"
                                                Foreground="LightGray"
                                                Margin="5 8 0 0"/>
-                                    <controls:TextPlaceHolder x:Name="txbFilterInput" Grid.Column="1" Text="" PlaceHolder="xxxy" BorderThickness="0" BorderBrush="Transparent" Margin="0"/>
+                                    <controls:TextPlaceHolder x:Name="txbFilterInput" Grid.Column="1" 
+                                                              Text="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGridColumnHeader}}, Path=Column.(dg:DataGridBehavior.ColumnFilterModel).Value, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
+                                                              PlaceHolder="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGridColumnHeader}}, Path=Column.(dg:DataGridBehavior.ColumnFilterModel).Description, UpdateSourceTrigger=PropertyChanged}" 
+                                                              BorderThickness="0" BorderBrush="Transparent" Margin="0"/>
                                 </Grid>
                             </Border>
                             <Thumb x:Name="PART_RightHeaderGripper"
@@ -1088,6 +1091,7 @@
     </Style>
 
     <Style x:Key="DataGrid.Pagination" TargetType="DataGrid">
+        <Setter Property="Margin" Value="5" />
         <Setter Property="BorderBrush" Value="LightGray" />
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="HorizontalGridLinesBrush" Value="WhiteSmoke" />

@@ -50,6 +50,26 @@ namespace PowerTools.Core.Behaviours
 
         #endregion
 
+        #region ColumnFilterModel Property
+
+        public static Criteria GetColumnFilterModel(DependencyObject obj)
+        {
+            return (Criteria)obj.GetValue(ColumnFilterModelProperty);
+        }
+
+        public static void SetColumnFilterModel(DependencyObject obj, Criteria value)
+        {
+            obj.SetValue(ColumnFilterModelProperty, value);
+        }
+
+        public static readonly DependencyProperty ColumnFilterModelProperty = DependencyProperty.RegisterAttached(
+            "ColumnFilterModel",
+            typeof(Criteria),
+            typeof(DataGridBehavior),
+            new PropertyMetadata(null));
+
+        #endregion
+
         #region IsFiltersVisible Property
 
         public static bool GetIsFiltersVisible(DependencyObject obj)
@@ -135,6 +155,42 @@ namespace PowerTools.Core.Behaviours
                 if (e.OldValue == null && e.NewValue != null)
                 {
                     SetIsFiltersEnable(d, true);
+
+                    var filters = (IEnumerable<Criteria>)e.NewValue;
+                    if (filters != null && filters.Any())
+                    {
+                        if (dataGrid.Columns.Any())
+                        {
+                            foreach (var dataGridColumn in dataGrid.Columns)
+                            {
+                                foreach (var filter in filters)
+                                {
+                                    if (GetHeaderName(dataGridColumn)?.ToString() == filter.Name)
+                                    {
+                                        SetColumnFilterModel(dataGridColumn, filter);
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        else
+                        {
+                            dataGrid.Columns.CollectionChanged += (sender, args) =>
+                            {
+                                foreach (var dataGridColumn in dataGrid.Columns)
+                                {
+                                    foreach (var filter in filters)
+                                    {
+                                        if (GetHeaderName(dataGridColumn)?.ToString() == filter.Name)
+                                        {
+                                            SetColumnFilterModel(dataGridColumn, filter);
+                                            break;
+                                        }
+                                    }
+                                }
+                            };
+                        }
+                    }
                 }
                 else if (e.OldValue != null && e.NewValue == null)
                 {
@@ -183,14 +239,14 @@ namespace PowerTools.Core.Behaviours
                                     DisplayColumn(column, columnSetting);
                                 }
 
-                                columnSetting.PropertyChanged += (s, e) =>
+                                columnSetting.SetValueChangedHandler((s, e) =>
                                 {
                                     var dataGridColumn = dataGrid.Columns.FirstOrDefault(p => GetHeaderName(p)?.ToString() == columnSetting.Name);
                                     if (dataGridColumn != null)
                                     {
                                         DisplayColumn(dataGridColumn, columnSetting);
                                     }
-                                };
+                                });
                             }
                         }
                         else
@@ -204,14 +260,14 @@ namespace PowerTools.Core.Behaviours
                                         DisplayColumn(column, columnSetting);
                                     }
 
-                                    columnSetting.PropertyChanged += (s, e) =>
+                                    columnSetting.SetValueChangedHandler((s, e) =>
                                     {
                                         var dataGridColumn = dataGrid.Columns.FirstOrDefault(p => GetHeaderName(p)?.ToString() == columnSetting.Name);
                                         if (dataGridColumn != null)
                                         {
                                             DisplayColumn(dataGridColumn, columnSetting);
                                         }
-                                    };
+                                    });
                                 }
                             };
                         }
@@ -235,25 +291,25 @@ namespace PowerTools.Core.Behaviours
 
         #endregion
 
-        #region HeaderExtendedSettings Property
+        #region HeaderSettings Property
 
-        public static object GetHeaderExtendedSettings(DependencyObject obj)
+        public static object GetHeaderSettings(DependencyObject obj)
         {
-            return (object)obj.GetValue(HeaderExtendedSettingsProperty);
+            return (object)obj.GetValue(HeaderSettingsProperty);
         }
 
-        public static void SetHeaderExtendedSettings(DependencyObject obj, object value)
+        public static void SetHeaderSettings(DependencyObject obj, object value)
         {
-            obj.SetValue(HeaderExtendedSettingsProperty, value);
+            obj.SetValue(HeaderSettingsProperty, value);
         }
 
-        public static readonly DependencyProperty HeaderExtendedSettingsProperty = DependencyProperty.RegisterAttached(
-            "HeaderExtendedSettings",
+        public static readonly DependencyProperty HeaderSettingsProperty = DependencyProperty.RegisterAttached(
+            "HeaderSettings",
             typeof(object),
             typeof(DataGridBehavior),
-            new PropertyMetadata(null, OnHeaderExtendedSettingsChanged));
+            new PropertyMetadata(null, OnHeaderSettingsChanged));
 
-        private static void OnHeaderExtendedSettingsChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void OnHeaderSettingsChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             if (d is DataGrid dataGrid)
             {
