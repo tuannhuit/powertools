@@ -42,6 +42,7 @@
         <!--<Grid Grid.ColumnSpan="2" Grid.RowSpan="4" Margin="5">
             <DataGrid Style="{StaticResource DataGrid.Pagination}" Margin="5 0 0 0" 
                       behaviours:DataGridBehavior.Header="ABC"
+                      behaviours:DataGridBehavior.IsFiltersVisible="True"
                       behaviours:DataGridBehavior.Filters="{Binding Source={x:Static data:MainWindow.CriteriaList}, Path=Filters}"
                       behaviours:DataGridBehavior.ColumnSettings="{Binding Source={x:Static data:MainWindow.CriteriaList}, Path=ColumnSettings}"
                       Tag="{Binding MessagesWithFilters, UpdateSourceTrigger=PropertyChanged}" 
@@ -52,11 +53,10 @@
                     <TextBlock Text="ABC"/>
                 </behaviours:DataGridBehavior.HeaderSettings>
                 <DataGrid.Columns>
-                    <DataGridTextColumn behaviours:DataGridBehavior.HeaderName="Column1" Header="Timestamp (UTC)" SortDirection="Ascending"/>
-                    <DataGridTextColumn Header="Column1" />
-                    <DataGridTextColumn Header="Timestamp (UTC)" />
-                    <DataGridTextColumn Header="Timestamp (UTC)" />
-                    <DataGridTextColumn Header="Timestamp (UTC)" />
+                    <DataGridTextColumn behaviours:DataGridBehavior.ColumnName="Column1" Header="Column 1" SortDirection="Ascending"/>
+                    <DataGridTextColumn behaviours:DataGridBehavior.ColumnName="Column2" Header="Column 2" Width="200"/>
+                    <DataGridTextColumn behaviours:DataGridBehavior.ColumnName="Column3" Header="Column 3"/>
+                    <DataGridTextColumn behaviours:DataGridBehavior.ColumnName="Column4" Header="Column 4" />
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>-->

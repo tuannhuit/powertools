@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using Prism.Commands;
 
 namespace PowerTools.Core.Controls
 {
@@ -27,20 +28,21 @@ namespace PowerTools.Core.Controls
             set { SetValue(CmdClearTextProperty, value); }
         }
 
-        public ICommand CmdEnterKeyPressed
-        {
-            get { return (ICommand)GetValue(CmdEnterKeyPressedProperty); }
-            set { SetValue(CmdEnterKeyPressedProperty, value); }
-        }
+        public ICommand CmdEnterKeyPressed { get; set; }
 
         public static readonly DependencyProperty PlaceHolderProperty = DependencyProperty.Register("PlaceHolder", typeof(string), typeof(TextPlaceHolder), new PropertyMetadata(null));
         public static readonly DependencyProperty TextProperty = DependencyProperty.Register("Text", typeof(string), typeof(TextPlaceHolder), new PropertyMetadata(null));
         public static readonly DependencyProperty CmdClearTextProperty = DependencyProperty.Register("CmdClearText", typeof(ICommand), typeof(TextPlaceHolder), new PropertyMetadata(null));
-        public static readonly DependencyProperty CmdEnterKeyPressedProperty = DependencyProperty.Register("CmdEnterKeyPressed", typeof(ICommand), typeof(TextPlaceHolder), new PropertyMetadata(null));
 
         public TextPlaceHolder()
         {
+            CmdEnterKeyPressed = new DelegateCommand(OnCmdEnterKeyPressed);
             InitializeComponent();
+        }
+
+        private void OnCmdEnterKeyPressed()
+        {
+            SetValue(TextProperty, Text);
         }
 
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)

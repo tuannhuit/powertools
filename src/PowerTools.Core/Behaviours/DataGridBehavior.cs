@@ -32,18 +32,18 @@ namespace PowerTools.Core.Behaviours
 
         #region Header Property
 
-        public static object GetHeaderName(DependencyObject obj)
+        public static object GetColumnName(DependencyObject obj)
         {
-            return (object)obj.GetValue(HeaderNameProperty);
+            return (object)obj.GetValue(ColumnNameProperty);
         }
 
-        public static void SetHeaderName(DependencyObject obj, object value)
+        public static void SetColumnName(DependencyObject obj, object value)
         {
-            obj.SetValue(HeaderNameProperty, value);
+            obj.SetValue(ColumnNameProperty, value);
         }
 
-        public static readonly DependencyProperty HeaderNameProperty = DependencyProperty.RegisterAttached(
-            "HeaderName",
+        public static readonly DependencyProperty ColumnNameProperty = DependencyProperty.RegisterAttached(
+            "ColumnName",
             typeof(object),
             typeof(DataGridBehavior),
             new PropertyMetadata(null));
@@ -92,26 +92,6 @@ namespace PowerTools.Core.Behaviours
 
         #region IsFiltersEnable Property
 
-        public static object GetIsFiltersEnable(DependencyObject obj)
-        {
-            return (object)obj.GetValue(IsFiltersEnableProperty);
-        }
-
-        public static void SetIsFiltersEnable(DependencyObject obj, bool value)
-        {
-            obj.SetValue(IsFiltersEnableProperty, value);
-        }
-
-        public static readonly DependencyProperty IsFiltersEnableProperty = DependencyProperty.RegisterAttached(
-            "IsFiltersEnable",
-            typeof(bool),
-            typeof(DataGridBehavior),
-            new PropertyMetadata(null));
-
-        #endregion
-
-        #region IsFiltersEnable Property
-
         public static object GetIsHeaderSettingsEnable(DependencyObject obj)
         {
             return (object)obj.GetValue(IsHeaderSettingsEnableProperty);
@@ -154,8 +134,6 @@ namespace PowerTools.Core.Behaviours
             {
                 if (e.OldValue == null && e.NewValue != null)
                 {
-                    SetIsFiltersEnable(d, true);
-
                     var filters = (IEnumerable<Criteria>)e.NewValue;
                     if (filters != null && filters.Any())
                     {
@@ -165,7 +143,7 @@ namespace PowerTools.Core.Behaviours
                             {
                                 foreach (var filter in filters)
                                 {
-                                    if (GetHeaderName(dataGridColumn)?.ToString() == filter.Name)
+                                    if (GetColumnName(dataGridColumn)?.ToString() == filter.Name)
                                     {
                                         SetColumnFilterModel(dataGridColumn, filter);
                                         break;
@@ -181,7 +159,7 @@ namespace PowerTools.Core.Behaviours
                                 {
                                     foreach (var filter in filters)
                                     {
-                                        if (GetHeaderName(dataGridColumn)?.ToString() == filter.Name)
+                                        if (GetColumnName(dataGridColumn)?.ToString() == filter.Name)
                                         {
                                             SetColumnFilterModel(dataGridColumn, filter);
                                             break;
@@ -191,10 +169,6 @@ namespace PowerTools.Core.Behaviours
                             };
                         }
                     }
-                }
-                else if (e.OldValue != null && e.NewValue == null)
-                {
-                    SetIsFiltersEnable(d, false);
                 }
             }
         }
@@ -241,7 +215,7 @@ namespace PowerTools.Core.Behaviours
 
                                 columnSetting.SetValueChangedHandler((s, e) =>
                                 {
-                                    var dataGridColumn = dataGrid.Columns.FirstOrDefault(p => GetHeaderName(p)?.ToString() == columnSetting.Name);
+                                    var dataGridColumn = dataGrid.Columns.FirstOrDefault(p => GetColumnName(p)?.ToString() == columnSetting.Name);
                                     if (dataGridColumn != null)
                                     {
                                         DisplayColumn(dataGridColumn, columnSetting);
@@ -262,7 +236,7 @@ namespace PowerTools.Core.Behaviours
 
                                     columnSetting.SetValueChangedHandler((s, e) =>
                                     {
-                                        var dataGridColumn = dataGrid.Columns.FirstOrDefault(p => GetHeaderName(p)?.ToString() == columnSetting.Name);
+                                        var dataGridColumn = dataGrid.Columns.FirstOrDefault(p => GetColumnName(p)?.ToString() == columnSetting.Name);
                                         if (dataGridColumn != null)
                                         {
                                             DisplayColumn(dataGridColumn, columnSetting);
@@ -282,8 +256,8 @@ namespace PowerTools.Core.Behaviours
 
         private static void DisplayColumn(DataGridColumn dataGridColumn, Criteria criteria)
         {
-            var columnHeader = GetHeaderName(dataGridColumn)?.ToString();
-            if (columnHeader != null && columnHeader == criteria.Name)
+            var ColumnName = GetColumnName(dataGridColumn)?.ToString();
+            if (ColumnName != null && ColumnName == criteria.Name)
             {
                 dataGridColumn.Visibility = (bool)criteria.Value ? Visibility.Visible : Visibility.Collapsed;
             }

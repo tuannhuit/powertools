@@ -1,10 +1,9 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:theme="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero2"
-                    xmlns:converters="clr-namespace:PowerTools.Core.Converters"
+                    xmlns:dg="clr-namespace:PowerTools.Core.Behaviours"
                     xmlns:controls="clr-namespace:PowerTools.Core.Controls"
-                    xmlns:models="clr-namespace:PowerTools.Core.Models"
-                    xmlns:dg="clr-namespace:PowerTools.Core.Behaviours">
+                    xmlns:converters="clr-namespace:PowerTools.Core.Converters"
+                    xmlns:models="clr-namespace:PowerTools.Core.Models">
 
     <converters:ValueToVisibilityConverter x:Key="ValueToVisibilityConverter"/>
     <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
@@ -754,7 +753,7 @@
                                         <ToggleButton Style="{StaticResource ToggleButton.Icon}" 
                                                       Content="{x:Static models:ButtonIcons.Filters}" 
                                                       IsChecked="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}, Path=(dg:DataGridBehavior.IsFiltersVisible), UpdateSourceTrigger=PropertyChanged}" 
-                                                      Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}, Path=(dg:DataGridBehavior.IsFiltersEnable), UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolToVisibilityConverter}}" 
+                                                      Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}, Path=(dg:DataGridBehavior.Filters), UpdateSourceTrigger=PropertyChanged, Converter={StaticResource ValueToVisibilityConverter}}" 
                                                       FontSize="12" Margin="0 0 5 0" MinWidth="25" MinHeight="25" />
                                         <ToggleButton x:Name="btnSettings" Style="{StaticResource ToggleButton.Icon}" 
                                                       Content="{x:Static models:ButtonIcons.Setting}"
@@ -934,6 +933,61 @@
         </Border>
     </ControlTemplate>
 
+    <DataTemplate DataType="{x:Type models:Criteria}">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0"
+                       Style="{StaticResource TextBlock.ContentSmall}"
+                       Text="123&#x0a;abc"
+                       FontSize="8"
+                       Foreground="Gray"
+                       VerticalAlignment="Top"
+                       Margin="5 2 0 0"/>
+            <controls:TextPlaceHolder x:Name="txbFilterInput" Grid.Column="1" 
+                                      Text="{Binding Value, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
+                                      PlaceHolder="{Binding Description, UpdateSourceTrigger=PropertyChanged}" 
+                                      BorderThickness="0" BorderBrush="Transparent" Margin="0"/>
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type models:RangeCriteria}">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Column="0" Grid.Row="0"
+                       Style="{StaticResource TextBlock.ContentSmall}"
+                       Text="from"
+                       FontSize="8"
+                       Foreground="Gray"
+                       VerticalAlignment="Top"
+                       Margin="5 2 0 0"/>
+            <TextBlock Grid.Column="0" Grid.Row="1"
+                       Style="{StaticResource TextBlock.ContentSmall}"
+                       Text="to"
+                       FontSize="8"
+                       Foreground="Gray"
+                       VerticalAlignment="Top"
+                       Margin="5 2 0 0"/>
+            <controls:TextPlaceHolder Grid.Column="1" Grid.Row="0"
+                                      Text="{Binding Value, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
+                                      PlaceHolder="{Binding Description, UpdateSourceTrigger=PropertyChanged}" 
+                                      BorderThickness="0" BorderBrush="Transparent" Margin="0"/>
+            <controls:TextPlaceHolder Grid.Column="1" Grid.Row="1"
+                                      Text="{Binding Value2, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
+                                      PlaceHolder="{Binding Description2, UpdateSourceTrigger=PropertyChanged}" 
+                                      BorderThickness="0" BorderBrush="Transparent" Margin="0"/>
+        </Grid>
+    </DataTemplate>
+
     <Style x:Key="DataGridColumnHeader.Normal" TargetType="DataGridColumnHeader">
         <Setter Property="Background" Value="White"/>
         <Setter Property="BorderBrush" Value="LightGray"/>
@@ -945,7 +999,7 @@
                     <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}">
                         <Grid>
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="*" />
+                                <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
                             <Grid Grid.Row="0">
@@ -953,37 +1007,16 @@
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
-                                <ContentPresenter Grid.Column="0" 
-                                                  HorizontalAlignment="Left" 
-                                                  VerticalAlignment="Top" 
-                                                  Margin="5"/>
+                                <ContentPresenter Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5"/>
                                 <TextBlock x:Name="tblSortIcon" Grid.Column="1" Style="{StaticResource TextBlock.Icon}" FontSize="11" VerticalAlignment="Center"/>
                             </Grid>
                             <Border x:Name="gFilter" Grid.Row="1" Visibility="Collapsed" BorderBrush="LightGray" BorderThickness="0 1 0 0">
                                 <Grid Background="White">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <TextBlock x:Name="tblFilterIcon" 
-                                               Grid.Column="0"
-                                               Style="{StaticResource TextBlock.Icon}"
-                                               Text="{x:Static models:ButtonIcons.Filters}"
-                                               FontSize="10"
-                                               Foreground="LightGray"
-                                               Margin="5 8 0 0"/>
-                                    <controls:TextPlaceHolder x:Name="txbFilterInput" Grid.Column="1" 
-                                                              Text="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGridColumnHeader}}, Path=Column.(dg:DataGridBehavior.ColumnFilterModel).Value, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
-                                                              PlaceHolder="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGridColumnHeader}}, Path=Column.(dg:DataGridBehavior.ColumnFilterModel).Description, UpdateSourceTrigger=PropertyChanged}" 
-                                                              BorderThickness="0" BorderBrush="Transparent" Margin="0"/>
+                                    <ContentControl MinHeight="28"
+                                                    Content="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGridColumnHeader}}, Path=Column.(dg:DataGridBehavior.ColumnFilterModel), UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
                                 </Grid>
                             </Border>
-                            <Thumb x:Name="PART_RightHeaderGripper"
-                                   Grid.RowSpan="2"
-                                   HorizontalAlignment="Right"
-                                   Width="5"
-                                   Cursor="SizeWE"
-                                   Background="Transparent">
+                            <Thumb x:Name="PART_RightHeaderGripper" HorizontalAlignment="Right" Width="5" Cursor="SizeWE" Background="Transparent">
                                 <Thumb.Style>
                                     <Style TargetType="Thumb">
                                         <Setter Property="Template">
@@ -999,13 +1032,9 @@
                         </Grid>
                     </Border>
                     <ControlTemplate.Triggers>
-                        <DataTrigger Binding="{Binding Path=(dg:DataGridBehavior.IsFiltersVisible), 
-                                           RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" 
-                                 Value="True">
+                        <DataTrigger Binding="{Binding Path=(dg:DataGridBehavior.IsFiltersVisible), RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" 
+                                     Value="True">
                             <Setter TargetName="gFilter" Property="Visibility" Value="Visible" />
-                        </DataTrigger>
-                        <DataTrigger Binding="{Binding ElementName=txbFilterInput, Path=Text, Converter={StaticResource StringNullOrEmptyToVisibilityConverter}}" Value="Collapsed">
-                            <Setter TargetName="tblFilterIcon" Property="Foreground" Value="Black" />
                         </DataTrigger>
                         <Trigger Property="SortDirection"  Value="Ascending">
                             <Setter TargetName="tblSortIcon" Property="Text" Value="{x:Static models:ButtonIcons.Up}" />

@@ -14,7 +14,11 @@ namespace PowerTools.Views
             new Criteria("Column1", "Column ABC", (p, c) =>
             {
 
-            })
+            }),
+            new RangeCriteria("Column2", "Column ABC", "Column ABC 2", (p, c) =>
+            {
+
+            }),
         },new List<Criteria>
         {
             new Criteria("Column1", "Column 1", true, (p, c) =>
