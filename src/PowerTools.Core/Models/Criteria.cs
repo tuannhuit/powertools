@@ -7,7 +7,7 @@ namespace PowerTools.Core.Models
 
     public class Criteria : BindableBase
     {
-        private CriteriaHandler PreValueChangedHandler;
+        protected CriteriaHandler PreValueChangedHandler;
         public CriteriaHandler ValueChangedHandler { get; set; }
 
         private string _name;
@@ -62,6 +62,13 @@ namespace PowerTools.Core.Models
             : this(name, name, valueChangedHandler)
         {
 
+        }
+
+        public void SetValue(object value)
+        {
+            _value = value;
+            RaisePropertyChanged("Value");
+            PreValueChangedHandler?.Invoke("Value", value);
         }
 
         public void SetValueChangedHandler(CriteriaHandler valueChangedHandler)

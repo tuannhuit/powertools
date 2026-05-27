@@ -40,5 +40,12 @@
         {
 
         }
+
+        public void SetValue2(object value)
+        {
+            _value2 = value;
+            RaisePropertyChanged("Value2");
+            PreValueChangedHandler?.Invoke("Value2", value);
+        }
     }
 }
