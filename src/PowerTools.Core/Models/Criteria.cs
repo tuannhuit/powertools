@@ -77,13 +77,6 @@ namespace PowerTools.Core.Models
 
         }
 
-        public void SetValue(object value)
-        {
-            _value = value;
-            RaisePropertyChanged("Value");
-            PreValueChangedHandler?.Invoke("Value", value);
-        }
-
         public void SetValueChangedHandler(CriteriaHandler valueChangedHandler)
         {
             PreValueChangedHandler = valueChangedHandler;
