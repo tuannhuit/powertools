@@ -13,13 +13,13 @@
             }
         }
 
-        public MultipleValueCriteria(string name, string description, CriteriaHandler valueChangedHandler)
+        public MultipleValueCriteria(string name, string description, ValueChangedHandler valueChangedHandler)
             : base(name, description, CriteriaType.Range, valueChangedHandler)
         {
 
         }
 
-        public MultipleValueCriteria(string name, CriteriaHandler valueChangedHandler)
+        public MultipleValueCriteria(string name, ValueChangedHandler valueChangedHandler)
             : base(name, name, CriteriaType.Range, valueChangedHandler)
         {
 

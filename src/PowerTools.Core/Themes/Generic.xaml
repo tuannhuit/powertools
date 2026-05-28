@@ -760,7 +760,7 @@
                                                       Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}, Path=(dg:DataGridBehavior.IsHeaderSettingsEnable), UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolToVisibilityConverter}}" 
                                                       FontSize="12" Margin="0 0 5 0" MinWidth="25" MinHeight="25"/>
                                         <Popup PlacementTarget="{Binding ElementName=btnSettings}" Placement="Bottom" StaysOpen="False" IsOpen="{Binding IsChecked, ElementName=btnSettings, Mode=TwoWay}">
-                                            <Border Background="White" BorderThickness="1" BorderBrush="LightGray" Width="220">
+                                            <Border Background="White" BorderThickness="1" BorderBrush="LightGray" Width="250">
                                                 <ScrollViewer CanContentScroll="True" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" FontWeight="Normal" Margin="5">
                                                     <Grid>
                                                         <Grid.RowDefinitions>
@@ -780,7 +780,7 @@
                                                             </ItemsControl>
                                                             <Separator Margin="5 10"/>
                                                         </StackPanel>
-                                                        <ContentPresenter Grid.Row="1" Content="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}, Path=(dg:DataGridBehavior.HeaderSettings), UpdateSourceTrigger=PropertyChanged}" Margin="5 0" SnapsToDevicePixels="true"/>
+                                                        <ContentPresenter Grid.Row="1" Content="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}, Path=(dg:DataGridBehavior.HeaderSettings), UpdateSourceTrigger=PropertyChanged}" Margin="5" SnapsToDevicePixels="true"/>
                                                     </Grid>
                                                 </ScrollViewer>
                                                 <Border.Triggers>
@@ -946,9 +946,10 @@
                        Foreground="Gray"
                        VerticalAlignment="Top"
                        Margin="5 2 0 0"/>
-            <controls:TextPlaceHolder x:Name="txbFilterInput" Grid.Column="1" 
-                                      Text="{Binding Value, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
-                                      PlaceHolder="{Binding Description, UpdateSourceTrigger=PropertyChanged}" 
+            <controls:TextPlaceHolder x:Name="txbFilterInput" Grid.Column="1"
+                                      Model="{Binding}"
+                                      Text="{Binding Value, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                      PlaceHolder="{Binding Description, UpdateSourceTrigger=PropertyChanged}"
                                       BorderThickness="0" BorderBrush="Transparent" Margin="0"/>
         </Grid>
     </DataTemplate>
@@ -978,10 +979,12 @@
                        VerticalAlignment="Top"
                        Margin="5 2 0 0"/>
             <controls:TextPlaceHolder Grid.Column="1" Grid.Row="0"
+                                      Model="{Binding}"
                                       Text="{Binding Value, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
                                       PlaceHolder="{Binding Description, UpdateSourceTrigger=PropertyChanged}" 
                                       BorderThickness="0" BorderBrush="Transparent" Margin="0"/>
             <controls:TextPlaceHolder Grid.Column="1" Grid.Row="1"
+                                      Model="{Binding}"
                                       Text="{Binding Value2, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
                                       PlaceHolder="{Binding Description2, UpdateSourceTrigger=PropertyChanged}" 
                                       BorderThickness="0" BorderBrush="Transparent" Margin="0"/>

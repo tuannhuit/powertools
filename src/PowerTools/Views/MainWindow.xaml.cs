@@ -11,17 +11,17 @@ namespace PowerTools.Views
     {
         public static DataGridCriteriaList CriteriaList = new DataGridCriteriaList(new List<Criteria>
         {
-            new Criteria("Column1", "Column ABC", (p, c) =>
+            new Criteria("Column1", "Column ABC", (s) =>
             {
 
             }),
-            new RangeCriteria("Column2", "Column ABC", "Column ABC 2", (p, c) =>
+            new RangeCriteria("Column2", "Column ABC", "Column ABC 2", (s) =>
             {
 
             }),
         },new List<Criteria>
         {
-            new Criteria("Column1", "Column 1", true, (p, c) =>
+            new Criteria("Column1", "Column 1", true, (s) =>
             {
 
             })

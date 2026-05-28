@@ -24,7 +24,7 @@
             }
         }
 
-        public RangeCriteria(string name, string description, string description2, object value, object value2, CriteriaHandler valueChangedHandler) : base(name, description, value, valueChangedHandler)
+        public RangeCriteria(string name, string description, string description2, object value, object value2, ValueChangedHandler valueChangedHandler) : base(name, description, value, valueChangedHandler)
         {
             Description2 = description2;
             Value2 = value2;
@@ -36,12 +36,12 @@
             Value2 = value2;
         }
 
-        public RangeCriteria(string name, string description, string description2, CriteriaHandler valueChangedHandler) : base(name, description, valueChangedHandler)
+        public RangeCriteria(string name, string description, string description2, ValueChangedHandler valueChangedHandler) : base(name, description, valueChangedHandler)
         {
             Description2 = description2;
         }
 
-        public RangeCriteria(string name, CriteriaHandler valueChangedHandler)
+        public RangeCriteria(string name, ValueChangedHandler valueChangedHandler)
             : base(name, name, valueChangedHandler)
         {
 

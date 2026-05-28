@@ -213,14 +213,15 @@ namespace PowerTools.Core.Behaviours
                                     DisplayColumn(column, columnSetting);
                                 }
 
-                                columnSetting.SetValueChangedHandler((s, e) =>
+                                columnSetting.ValueCallbackHandler = (sender) =>
                                 {
-                                    var dataGridColumn = dataGrid.Columns.FirstOrDefault(p => GetColumnName(p)?.ToString() == columnSetting.Name);
+                                    var dataGridColumn = dataGrid.Columns.FirstOrDefault(p =>
+                                        GetColumnName(p)?.ToString() == columnSetting.Name);
                                     if (dataGridColumn != null)
                                     {
                                         DisplayColumn(dataGridColumn, columnSetting);
                                     }
-                                });
+                                };
                             }
                         }
                         else
@@ -234,14 +235,15 @@ namespace PowerTools.Core.Behaviours
                                         DisplayColumn(column, columnSetting);
                                     }
 
-                                    columnSetting.SetValueChangedHandler((s, e) =>
+                                    columnSetting.ValueCallbackHandler = (sender) =>
                                     {
-                                        var dataGridColumn = dataGrid.Columns.FirstOrDefault(p => GetColumnName(p)?.ToString() == columnSetting.Name);
+                                        var dataGridColumn = dataGrid.Columns.FirstOrDefault(p =>
+                                            GetColumnName(p)?.ToString() == columnSetting.Name);
                                         if (dataGridColumn != null)
                                         {
                                             DisplayColumn(dataGridColumn, columnSetting);
                                         }
-                                    });
+                                    };
                                 }
                             };
                         }
