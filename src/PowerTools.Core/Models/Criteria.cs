@@ -51,6 +51,13 @@ namespace PowerTools.Core.Models
             ValueChangedHandler = valueChangedHandler;
         }
 
+        public Criteria(string name, string description, object value)
+        {
+            Name = name;
+            Description = description;
+            Value = value;
+        }
+
         public Criteria(string name, string description, CriteriaHandler valueChangedHandler)
         {
             Name = name;
@@ -60,6 +67,12 @@ namespace PowerTools.Core.Models
 
         public Criteria(string name, CriteriaHandler valueChangedHandler)
             : this(name, name, valueChangedHandler)
+        {
+
+        }
+
+        public Criteria(string name)
+            : this(name, name, null)
         {
 
         }
