@@ -6,6 +6,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:configurations="clr-namespace:PowerTools.Core.Configurations;assembly=PowerTools.Core"
         xmlns:userControls="clr-namespace:PowerTools.Views.UserControls"
+        xmlns:controls="clr-namespace:PowerTools.Core.Controls;assembly=PowerTools.Core"
         xmlns:behaviours="clr-namespace:PowerTools.Core.Behaviours;assembly=PowerTools.Core"
         prism:ViewModelLocator.AutoWireViewModel="True"
         xmlns:data="clr-namespace:PowerTools.Views"
@@ -27,7 +28,7 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="2"/>
+            <RowDefinition Height="4"/>
             <RowDefinition Height="{Binding ViewLogGridLength, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MaxHeight="500"/>
             <RowDefinition Height="22"/>
         </Grid.RowDefinitions>
@@ -39,26 +40,30 @@
         <GridSplitter Style="{StaticResource GridSplitter.Normal}" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Stretch" Background="Transparent"/>
         <userControls:LogsView Grid.Column="1" Grid.Row="2"/>
         <userControls:StatusBar Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="3" />
-        <!--<Grid Grid.ColumnSpan="2" Grid.RowSpan="4" Margin="5">
-            <DataGrid Style="{StaticResource DataGrid.Pagination}" Margin="5 0 0 0" 
-                      behaviours:DataGridBehavior.Header="ABC"
-                      behaviours:DataGridBehavior.IsFiltersVisible="True"
-                      behaviours:DataGridBehavior.Filters="{Binding Source={x:Static data:MainWindow.CriteriaList}, Path=Filters}"
-                      behaviours:DataGridBehavior.ColumnSettings="{Binding Source={x:Static data:MainWindow.CriteriaList}, Path=ColumnSettings}"
-                      Tag="{Binding MessagesWithFilters, UpdateSourceTrigger=PropertyChanged}" 
-                      behaviours:DataGridBehavior.SelectedItem="{Binding SelectedMessage, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}" 
-                      behaviours:DataGridBehavior.SelectedCellValues="{Binding SelectedMessageCellValues, UpdateSourceTrigger=PropertyChanged}"  
-                      SelectionUnit="Cell" SelectionMode="Extended" ClipboardCopyMode="IncludeHeader">
-                <behaviours:DataGridBehavior.HeaderSettings>
-                    <TextBlock Text="ABC"/>
-                </behaviours:DataGridBehavior.HeaderSettings>
-                <DataGrid.Columns>
-                    <DataGridTextColumn behaviours:DataGridBehavior.ColumnName="Column1" Header="Column 1" SortDirection="Ascending"/>
-                    <DataGridTextColumn behaviours:DataGridBehavior.ColumnName="Column2" Header="Column 2" Width="200"/>
-                    <DataGridTextColumn behaviours:DataGridBehavior.ColumnName="Column3" Header="Column 3"/>
-                    <DataGridTextColumn behaviours:DataGridBehavior.ColumnName="Column4" Header="Column 4" />
-                </DataGrid.Columns>
-            </DataGrid>
+        <!--<Grid Grid.ColumnSpan="2" Grid.RowSpan="4" Margin="0" Background="WhiteSmoke">
+            <controls:PaginationDataGrid Header="ABC"
+                                         Filters="{x:Static data:MainWindow.ColumnFilters}"
+                                         ColumnSettings="{x:Static data:MainWindow.ColumnSettings}">
+                <controls:PaginationDataGrid.HeaderSettings>
+                    <StackPanel>
+                        <GroupBox Header="Message Displays" Margin="0">
+                            <StackPanel>
+                                <CheckBox Style="{StaticResource CheckBox.Normal}" IsChecked="{Binding MessageFilters.DoShowUnreadOnly, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Content="Show Unreads" Margin="5 10 5 0"/>
+                                <TextBlock Style="{StaticResource TextBlock.ContentSmall}" Text="Filters on message source and displays unread messages only" TextWrapping="Wrap" Foreground="DimGray"/>
+                            </StackPanel>
+                        </GroupBox>
+                        <GroupBox Header="Sorting" Margin="0 5 0 0">
+                            <StackPanel>
+                                <CheckBox Style="{StaticResource CheckBox.Normal}" IsChecked="{Binding MessageFilters.UseDefaultSorts, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Content="Use Default Sorting" Margin="5 10 5 0"/>
+                                <TextBlock Style="{StaticResource TextBlock.ContentSmall}" Text="Be careful. Sorting during streaming data can reduce performance." TextWrapping="Wrap" Foreground="DimGray"/>
+                            </StackPanel>
+                        </GroupBox>
+                    </StackPanel>
+                </controls:PaginationDataGrid.HeaderSettings>
+                <controls:PaginationDataGrid.Columns>
+                    <controls:PaginationDataGridTextColumn Name="UTCTimestamp" Header="Timestamp (UTC)"  IsReadOnly="True" MinWidth="100"/>
+                </controls:PaginationDataGrid.Columns>
+            </controls:PaginationDataGrid>
         </Grid>-->
     </Grid>
 </Window>
