@@ -10,7 +10,7 @@ namespace PowerTools.Core.Models
 {
     public class PaginationCollection<T> : BindableBase
     {
-        public static readonly int PAGE_SIZE = 1000;
+        public static readonly int PAGE_SIZE = 500;
 
         private ObservableCollection<CustomAction> _actions;
 
@@ -60,8 +60,10 @@ namespace PowerTools.Core.Models
             }
         }
 
+        private List<T> _previousItems;
         private IEnumerable<T> _itemSource;
-        public List<T> ItemSource => new (_itemSource);
+
+        public List<T> ItemSource => new(_itemSource);
         public List<T> Items => new(_itemSource.Skip(PAGE_SIZE * (Page - 1)).Take(PAGE_SIZE));
 
         /// <summary>
@@ -104,7 +106,9 @@ namespace PowerTools.Core.Models
             get => _page;
             set
             {
+                _previousItems = Items.ToList();
                 _page = value;
+
                 RaisePropertyChanged();
                 RecalculateItems();
             }
@@ -127,6 +131,8 @@ namespace PowerTools.Core.Models
             {
                 throw new Exception("The item source cannot be null");
             }
+
+            _previousItems = new List<T>();
             _itemSource = items;
             _page = 1;
 
@@ -186,12 +192,14 @@ namespace PowerTools.Core.Models
 
         public void MoveNextPage()
         {
+            _previousItems = Items.ToList();
             _page += 1;
             MoveToPage(Page);
         }
 
         public void MovePreviousPage()
         {
+            _previousItems = Items.ToList();
             _page -= 1;
             MoveToPage(Page);
         }
@@ -215,7 +223,13 @@ namespace PowerTools.Core.Models
                 _page = _totalPage;
             }
 
-            RaisePropertyChanged("Items");
+            var currentItems = Items;
+            var diffItems = _previousItems.Except(currentItems);
+            if ((!_previousItems.Any() && currentItems.Any()) || (_previousItems.Any() && !currentItems.Any()) || diffItems.Any())
+            {
+                RaisePropertyChanged("Items");
+            }
+
             RaisePropertyChanged("TotalPage");
             RaisePropertyChanged("TotalItems");
             RaisePropertyChanged("ItemStart");
@@ -231,6 +245,8 @@ namespace PowerTools.Core.Models
             {
                 _itemSource = new List<T>();
             }
+
+            _previousItems = Items.ToList();
             _itemSource.Append(newItem);
 
             RecalculateItems();
@@ -248,6 +264,7 @@ namespace PowerTools.Core.Models
                 _itemSource = new List<T>();
             }
 
+            _previousItems = Items.ToList();
             ((List<T>)_itemSource).AddRange(newItems);
 
             RecalculateItems();
@@ -260,6 +277,7 @@ namespace PowerTools.Core.Models
                 return;
             }
 
+            _previousItems = Items.ToList();
             _itemSource = new List<T>(newItems);
 
             RecalculateItems();

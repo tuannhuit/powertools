@@ -830,7 +830,7 @@
     </ControlTemplate>
 
     <ControlTemplate x:Key="DataGridTemplate.PaginationDataGrid" TargetType="{x:Type controls:PaginationDataGrid}">
-        <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="True">
+        <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}" CornerRadius="5" SnapsToDevicePixels="True">
             <Grid x:Name="gridMain">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
@@ -851,65 +851,67 @@
                                     <RowDefinition Height="*"/>
                                     <RowDefinition Height="Auto"/>
                                 </Grid.RowDefinitions>
-                                <Grid Grid.ColumnSpan="3" Background="WhiteSmoke">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="Auto"/>
-                                    </Grid.ColumnDefinitions>
-                                    <TextBlock Style="{StaticResource TextBlock.ContentSmall}" 
-                                               Text="{Binding RelativeSource={RelativeSource AncestorType={x:Type controls:PaginationDataGrid}}, Path=Header, UpdateSourceTrigger=PropertyChanged}" 
-                                               FontWeight="SemiBold" Margin="5 8 5 8" VerticalAlignment="Center"/>
-                                    <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
-                                        <ToggleButton Style="{StaticResource ToggleButton.Icon}" 
-                                                      Content="{x:Static models:ButtonIcons.Filters}" 
-                                                      IsChecked="{Binding RelativeSource={RelativeSource AncestorType={x:Type controls:PaginationDataGrid}}, Path=IsFiltersVisible, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
-                                                      Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type controls:PaginationDataGrid}}, Path=IsFiltersEnable, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolToVisibilityConverter}}" 
-                                                      FontSize="12" Margin="0 0 0 0" MinWidth="25" MinHeight="25" />
-                                        <ToggleButton x:Name="btnSettings" Style="{StaticResource ToggleButton.Icon}" 
-                                                      Content="{x:Static models:ButtonIcons.Setting}"
-                                                      Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type controls:PaginationDataGrid}}, Path=IsHeaderSettingsEnable, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolToVisibilityConverter}}" 
-                                                      FontSize="12" Margin="0 0 5 0" MinWidth="25" MinHeight="25"/>
-                                        <Popup PlacementTarget="{Binding ElementName=btnSettings}" Placement="Bottom" StaysOpen="False" IsOpen="{Binding IsChecked, ElementName=btnSettings, Mode=TwoWay}">
-                                            <Border Background="White" BorderThickness="1" BorderBrush="LightGray" Width="250">
-                                                <ScrollViewer CanContentScroll="True" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" FontWeight="Normal" Margin="5">
-                                                    <Grid>
-                                                        <Grid.RowDefinitions>
-                                                            <RowDefinition Height="Auto"/>
-                                                            <RowDefinition Height="Auto"/>
-                                                        </Grid.RowDefinitions>
-                                                        <StackPanel Grid.Row="0" Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type controls:PaginationDataGrid}}, Path=ColumnSettings, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource ValueToVisibilityConverter}}">
-                                                            <TextBlock Style="{StaticResource TextBlock.ContentSmall}" Text="Column Display Settings" FontWeight="SemiBold" Margin="5"/>
-                                                            <ItemsControl ItemsSource="{Binding RelativeSource={RelativeSource AncestorType={x:Type controls:PaginationDataGrid}}, Path=ColumnSettings, UpdateSourceTrigger=PropertyChanged}">
-                                                                <ItemsControl.ItemTemplate>
-                                                                    <DataTemplate>
-                                                                        <Grid>
-                                                                            <CheckBox Style="{StaticResource CheckBox.Normal}" Content="{Binding Description}" IsChecked="{Binding Value, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-                                                                        </Grid>
-                                                                    </DataTemplate>
-                                                                </ItemsControl.ItemTemplate>
-                                                            </ItemsControl>
-                                                            <Separator Margin="5 10"/>
-                                                        </StackPanel>
-                                                        <ContentPresenter Grid.Row="1" Content="{Binding RelativeSource={RelativeSource AncestorType={x:Type controls:PaginationDataGrid}}, Path=HeaderSettings, UpdateSourceTrigger=PropertyChanged}" Margin="5" SnapsToDevicePixels="true"/>
-                                                    </Grid>
-                                                </ScrollViewer>
-                                                <Border.Triggers>
-                                                    <EventTrigger RoutedEvent="MouseLeave">
-                                                        <BeginStoryboard>
-                                                            <Storyboard>
-                                                                <BooleanAnimationUsingKeyFrames 
-                                                                        Storyboard.TargetName="btnSettings" 
-                                                                        Storyboard.TargetProperty="IsChecked">
-                                                                    <DiscreteBooleanKeyFrame KeyTime="0:0:0" Value="False" />
-                                                                </BooleanAnimationUsingKeyFrames>
-                                                            </Storyboard>
-                                                        </BeginStoryboard>
-                                                    </EventTrigger>
-                                                </Border.Triggers>
-                                            </Border>
-                                        </Popup>
-                                    </StackPanel>
-                                </Grid>
+                                <Border Grid.ColumnSpan="3" Background="WhiteSmoke" CornerRadius="5 5 0 0">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Style="{StaticResource TextBlock.ContentSmall}" 
+                                                               Text="{Binding RelativeSource={RelativeSource AncestorType={x:Type controls:PaginationDataGrid}}, Path=Header, UpdateSourceTrigger=PropertyChanged}" 
+                                                               FontWeight="SemiBold" Margin="5 8 5 8" VerticalAlignment="Center"/>
+                                        <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                                            <ToggleButton Style="{StaticResource ToggleButton.Icon}" 
+                                                          Content="{x:Static models:ButtonIcons.Filters}" 
+                                                          IsChecked="{Binding RelativeSource={RelativeSource AncestorType={x:Type controls:PaginationDataGrid}}, Path=IsFiltersVisible, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                                          Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type controls:PaginationDataGrid}}, Path=IsFiltersEnable, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolToVisibilityConverter}}" 
+                                                          FontSize="12" Margin="0 0 0 0" MinWidth="25" MinHeight="25" />
+                                            <ToggleButton x:Name="btnSettings" Style="{StaticResource ToggleButton.Icon}" 
+                                                          Content="{x:Static models:ButtonIcons.Setting}"
+                                                          Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type controls:PaginationDataGrid}}, Path=IsHeaderSettingsEnable, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolToVisibilityConverter}}" 
+                                                          FontSize="12" Margin="0 0 5 0" MinWidth="25" MinHeight="25"/>
+                                            <Popup PlacementTarget="{Binding ElementName=btnSettings}" Placement="Bottom" StaysOpen="False" IsOpen="{Binding IsChecked, ElementName=btnSettings, Mode=TwoWay}">
+                                                <Border Background="White" BorderThickness="1" BorderBrush="LightGray" Width="250">
+                                                    <ScrollViewer CanContentScroll="True" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" FontWeight="Normal" Margin="5">
+                                                        <Grid>
+                                                            <Grid.RowDefinitions>
+                                                                <RowDefinition Height="Auto"/>
+                                                                <RowDefinition Height="Auto"/>
+                                                            </Grid.RowDefinitions>
+                                                            <StackPanel Grid.Row="0" Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type controls:PaginationDataGrid}}, Path=ColumnSettings, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource ValueToVisibilityConverter}}">
+                                                                <TextBlock Style="{StaticResource TextBlock.ContentSmall}" Text="Column Display Settings" FontWeight="SemiBold" Margin="5"/>
+                                                                <ItemsControl ItemsSource="{Binding RelativeSource={RelativeSource AncestorType={x:Type controls:PaginationDataGrid}}, Path=ColumnSettings, UpdateSourceTrigger=PropertyChanged}">
+                                                                    <ItemsControl.ItemTemplate>
+                                                                        <DataTemplate>
+                                                                            <Grid>
+                                                                                <CheckBox Style="{StaticResource CheckBox.Normal}" Content="{Binding Description}" IsChecked="{Binding Value, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                                                                            </Grid>
+                                                                        </DataTemplate>
+                                                                    </ItemsControl.ItemTemplate>
+                                                                </ItemsControl>
+                                                                <Separator Margin="5 10"/>
+                                                            </StackPanel>
+                                                            <ContentPresenter Grid.Row="1" Content="{Binding RelativeSource={RelativeSource AncestorType={x:Type controls:PaginationDataGrid}}, Path=HeaderSettings, UpdateSourceTrigger=PropertyChanged}" Margin="5" SnapsToDevicePixels="true"/>
+                                                        </Grid>
+                                                    </ScrollViewer>
+                                                    <Border.Triggers>
+                                                        <EventTrigger RoutedEvent="MouseLeave">
+                                                            <BeginStoryboard>
+                                                                <Storyboard>
+                                                                    <BooleanAnimationUsingKeyFrames 
+                                                                            Storyboard.TargetName="btnSettings" 
+                                                                            Storyboard.TargetProperty="IsChecked">
+                                                                        <DiscreteBooleanKeyFrame KeyTime="0:0:0" Value="False" />
+                                                                    </BooleanAnimationUsingKeyFrames>
+                                                                </Storyboard>
+                                                            </BeginStoryboard>
+                                                        </EventTrigger>
+                                                    </Border.Triggers>
+                                                </Border>
+                                            </Popup>
+                                        </StackPanel>
+                                    </Grid>
+                                </Border>
                                 <Button  Grid.Row="1" Command="{x:Static DataGrid.SelectAllCommand}" Focusable="false" Style="{DynamicResource {ComponentResourceKey ResourceId=DataGridSelectAllButtonStyle, TypeInTargetAssembly={x:Type DataGrid}}}" Visibility="{Binding HeadersVisibility, ConverterParameter={x:Static DataGridHeadersVisibility.All}, Converter={x:Static DataGrid.HeadersVisibilityConverter}, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" Width="{Binding CellsPanelHorizontalOffset, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"/>
                                 <DataGridColumnHeadersPresenter x:Name="PART_ColumnHeadersPresenter" Grid.Column="1" Grid.Row="1" Visibility="{Binding HeadersVisibility, ConverterParameter={x:Static DataGridHeadersVisibility.Column}, Converter={x:Static DataGrid.HeadersVisibilityConverter}, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" Margin="0 0 -1 0"/>
                                 <ScrollContentPresenter x:Name="PART_ScrollContentPresenter" Grid.ColumnSpan="2" Grid.Row="2" CanContentScroll="{TemplateBinding CanContentScroll}" />
@@ -1053,7 +1055,7 @@
     </ControlTemplate>
 
     <DataTemplate DataType="{x:Type models:Criteria}">
-        <Grid Background="{StaticResource Background.WhiteSmoke}" Margin="1">
+        <Grid Background="{StaticResource Background.WhiteSmoke}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
@@ -1069,12 +1071,12 @@
                                       Model="{Binding}"
                                       Text="{Binding Value, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                       PlaceHolder="{Binding Description, UpdateSourceTrigger=PropertyChanged}"
-                                      BorderThickness="0" BorderBrush="Transparent" Margin="1"/>
+                                      BorderThickness="0" BorderBrush="Transparent"/>
         </Grid>
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type models:RangeCriteria}">
-        <Grid Background="{StaticResource Background.WhiteSmoke}" Margin="1">
+        <Grid Background="{StaticResource Background.WhiteSmoke}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
@@ -1101,19 +1103,20 @@
                                       Model="{Binding}"
                                       Text="{Binding Value, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
                                       PlaceHolder="{Binding Description, UpdateSourceTrigger=PropertyChanged}" 
-                                      BorderThickness="0" BorderBrush="Transparent" Margin="1"/>
+                                      BorderThickness="0" BorderBrush="Transparent"/>
             <controls:TextPlaceHolder Grid.Column="1" Grid.Row="1"
                                       Model="{Binding}"
                                       Text="{Binding Value2, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
                                       PlaceHolder="{Binding Description2, UpdateSourceTrigger=PropertyChanged}" 
-                                      BorderThickness="0" BorderBrush="Transparent" Margin="1"/>
+                                      BorderThickness="0" BorderBrush="Transparent"/>
         </Grid>
     </DataTemplate>
 
     <Style x:Key="DataGridColumnHeader.PaginationDataGrid.Normal" TargetType="DataGridColumnHeader">
         <Setter Property="Background" Value="WhiteSmoke"/>
         <Setter Property="BorderBrush" Value="White"/>
-        <Setter Property="BorderThickness" Value="2 2 0 2"/>
+        <Setter Property="BorderThickness" Value="0 1 2 2"/>
+        <Setter Property="Margin" Value="1"/>
         <Setter Property="FontWeight" Value="SemiBold"/>
         <Setter Property="Template">
             <Setter.Value>
@@ -1145,11 +1148,8 @@
                                     </Style>
                                 </Thumb.Style>
                             </Thumb>
-                            <Border x:Name="gFilter" Grid.Row="1" Visibility="Collapsed" BorderBrush="LightGray" BorderThickness="0" Margin="0">
-                                <Grid Background="{TemplateBinding Background}">
-                                    <ContentControl MinHeight="28"
-                                                    Content="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGridColumnHeader}}, Path=Column.FilterModel, UpdateSourceTrigger=PropertyChanged}" />
-                                </Grid>
+                            <Border x:Name="gFilter" Grid.Row="1" Visibility="Collapsed" BorderBrush="LightGray" Background="{TemplateBinding Background}" BorderThickness="0" Margin="1">
+                                <ContentControl MinHeight="28" Content="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGridColumnHeader}}, Path=Column.FilterModel, UpdateSourceTrigger=PropertyChanged}" SnapsToDevicePixels="True"/>
                             </Border>
                         </Grid>
                     </Border>
@@ -1440,6 +1440,9 @@
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="false">
                             <Setter Property="TextElement.Foreground" TargetName="templateRoot" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                        </Trigger>
+                        <Trigger Property="SelectedContent" Value="{x:Null}">
+                            <Setter Property="StrokeThickness" TargetName="rectHeader" Value="0"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

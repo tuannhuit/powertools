@@ -40,8 +40,8 @@
         <GridSplitter Style="{StaticResource GridSplitter.Normal}" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Stretch" Background="Transparent"/>
         <userControls:LogsView Grid.Column="1" Grid.Row="2"/>
         <userControls:StatusBar Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="3" />
-        <!--<Grid Grid.ColumnSpan="2" Grid.RowSpan="4" Margin="0" Background="WhiteSmoke">
-            <controls:PaginationDataGrid Header="ABC"
+        <!--<Grid Grid.ColumnSpan="2" Grid.RowSpan="4" Margin="0" Background="White">
+            <controls:PaginationDataGrid Header="ABC" 
                                          Filters="{x:Static data:MainWindow.ColumnFilters}"
                                          ColumnSettings="{x:Static data:MainWindow.ColumnSettings}">
                 <controls:PaginationDataGrid.HeaderSettings>
@@ -62,6 +62,8 @@
                 </controls:PaginationDataGrid.HeaderSettings>
                 <controls:PaginationDataGrid.Columns>
                     <controls:PaginationDataGridTextColumn Name="UTCTimestamp" Header="Timestamp (UTC)"  IsReadOnly="True" MinWidth="100"/>
+                    <controls:PaginationDataGridTextColumn Name="CustomerId" Header="CustomerId"  IsReadOnly="True" MinWidth="100"/>
+                    <controls:PaginationDataGridTextColumn Name="DocumentId" Header="DocumentId"  IsReadOnly="True" MinWidth="100"/>
                 </controls:PaginationDataGrid.Columns>
             </controls:PaginationDataGrid>
         </Grid>-->
