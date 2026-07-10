@@ -1,18 +1,24 @@
-﻿using Prism.Mvvm;
+﻿using PowerTools.Core.SharedServices;
+using Prism.Commands;
+using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows;
 using System.Windows.Input;
-using Prism.Commands;
 
 namespace PowerTools.Core.Models
 {
     public class PaginationCollection<T> : BindableBase
     {
-        public static readonly int PAGE_SIZE = 500;
+        public static readonly int PAGE_SIZE = 100;
 
         private ObservableCollection<CustomAction> _actions;
+        private CustomAction _action1;
+        private CustomAction _action2;
+        private CustomAction _action3;
+        private List<CustomAction> _nonPageActions;
 
         public ObservableCollection<CustomAction> Actions
         {
@@ -20,51 +26,54 @@ namespace PowerTools.Core.Models
             set
             {
                 _actions = value;
+                CacheActionProperties();
                 RaisePropertyChanged();
+                RaisePropertyChanged(nameof(Action1));
+                RaisePropertyChanged(nameof(Action2));
+                RaisePropertyChanged(nameof(Action3));
             }
         }
 
         public CustomAction Action1
         {
-            get
-            {
-                if (Actions == null) return null;
-
-                var actions = Actions.Where(p => p is not PageAction);
-                if (!actions.Any()) return null;
-                return actions.ElementAt(0);
-            }
+            get => _action1;
+            private set => SetProperty(ref _action1, value);
         }
 
         public CustomAction Action2
         {
-            get
-            {
-                if (Actions == null) return null;
-
-                var actions = Actions.Where(p => p is not PageAction);
-                if (actions.Count() < 2) return null;
-                return actions.ElementAt(1);
-            }
+            get => _action2;
+            private set => SetProperty(ref _action2, value);
         }
 
         public CustomAction Action3
         {
-            get
-            {
-                if (Actions == null) return null;
+            get => _action3;
+            private set => SetProperty(ref _action3, value);
+        }
 
-                var actions = Actions.Where(p => p is not PageAction);
-                if (actions.Count() < 3) return null;
-                return actions.ElementAt(2);
+        private void CacheActionProperties()
+        {
+            if (Actions == null)
+            {
+                _nonPageActions = new List<CustomAction>();
+                _action1 = null;
+                _action2 = null;
+                _action3 = null;
+                return;
             }
+
+            _nonPageActions = Actions.Where(p => p is not PageAction).ToList();
+            _action1 = _nonPageActions.Count > 0 ? _nonPageActions[0] : null;
+            _action2 = _nonPageActions.Count > 1 ? _nonPageActions[1] : null;
+            _action3 = _nonPageActions.Count > 2 ? _nonPageActions[2] : null;
         }
 
         private List<T> _previousItems;
-        private IEnumerable<T> _itemSource;
 
-        public List<T> ItemSource => new(_itemSource);
-        public List<T> Items => new(_itemSource.Skip(PAGE_SIZE * (Page - 1)).Take(PAGE_SIZE));
+        public List<T> ItemSource { get; private set; }
+
+        public ObservableCollection<T> Items { get; private set; }
 
         /// <summary>
         /// Total number of pages
@@ -82,17 +91,17 @@ namespace PowerTools.Core.Models
 
         public int TotalItems
         {
-            get => _itemSource.Count();
+            get => ItemSource.Count();
         }
 
         public int ItemStart
         {
-            get => _itemSource.Any() ? PAGE_SIZE * (Page - 1) + 1 : 0;
+            get => ItemSource.Any() ? PAGE_SIZE * (Page - 1) + 1 : 0;
         }
 
         public int ItemEnd
         {
-            get => _itemSource.Any() ? ItemStart + Items.Count - 1 : 0;
+            get => ItemSource.Any() ? ItemStart + Items.Count - 1 : 0;
         }
 
         public string PageInformation => $"{ItemStart}-{ItemEnd} of {TotalItems}";
@@ -114,8 +123,8 @@ namespace PowerTools.Core.Models
             }
         }
 
-        public bool IsFirstPage => _itemSource.Any() ? _page == 1 : _page == 0;
-        public bool IsLastPage => _itemSource.Any() ? _page == _totalPage : _page == 0;
+        public bool IsFirstPage => ItemSource.Any() ? _page == 1 : _page == 0;
+        public bool IsLastPage => ItemSource.Any() ? _page == _totalPage : _page == 0;
 
         public ICommand InvokeAction { get; set; }
 
@@ -132,9 +141,12 @@ namespace PowerTools.Core.Models
                 throw new Exception("The item source cannot be null");
             }
 
+            Items = new ObservableCollection<T>();
+            ItemSource = new List<T>(items);
+
             _previousItems = new List<T>();
-            _itemSource = items;
             _page = 1;
+
 
             RecalculateItems();
 
@@ -156,6 +168,7 @@ namespace PowerTools.Core.Models
             {
                 Actions.AddRange(actions);
             }
+            CacheActionProperties();
             InvokeAction = new DelegateCommand<string>(OnInvokeAction);
         }
 
@@ -206,10 +219,10 @@ namespace PowerTools.Core.Models
 
         private void RecalculateItems()
         {
-            _totalPage = _itemSource.Count() / PAGE_SIZE;
-            if (_itemSource.Count() > _totalPage * PAGE_SIZE)
+            var itemCount = ItemSource.Count;
+            _totalPage = itemCount / PAGE_SIZE;
+            if (itemCount > _totalPage * PAGE_SIZE)
             {
-                // Calculate total pages and Raise UI event
                 _totalPage += 1;
             }
 
@@ -223,31 +236,105 @@ namespace PowerTools.Core.Models
                 _page = _totalPage;
             }
 
-            var currentItems = Items;
-            var diffItems = _previousItems.Except(currentItems);
-            if ((!_previousItems.Any() && currentItems.Any()) || (_previousItems.Any() && !currentItems.Any()) || diffItems.Any())
+            var newItems = ItemSource.Skip(PAGE_SIZE * (Page - 1)).Take(PAGE_SIZE).ToList();
+
+            if (ShouldUpdateItems(newItems))
             {
-                RaisePropertyChanged("Items");
+                ApplicationService.Instance.InvokeUIAction(() =>
+                {
+                    UpdateItemsCollection(newItems);
+                    RaiseMultiplePropertyChanged();
+                });
+            }
+            else
+            {
+                RaiseMultiplePropertyChanged();
+            }
+        }
+
+        private bool ShouldUpdateItems(List<T> newItems)
+        {
+            if (_previousItems.Count != newItems.Count) return true;
+
+            for (int i = 0; i < newItems.Count; i++)
+            {
+                if (!EqualityComparer<T>.Default.Equals(_previousItems[i], newItems[i]))
+                    return true;
+            }
+            return false;
+        }
+
+        private void UpdateItemsCollection(List<T> newItems)
+        {
+            // If more than 50% of items are different, it's faster to clear and reload
+            int differentCount = 0;
+            int maxCheck = Math.Min(Items.Count, newItems.Count);
+
+            for (int i = 0; i < maxCheck; i++)
+            {
+                if (!EqualityComparer<T>.Default.Equals(Items[i], newItems[i]))
+                    differentCount++;
             }
 
-            RaisePropertyChanged("TotalPage");
-            RaisePropertyChanged("TotalItems");
-            RaisePropertyChanged("ItemStart");
-            RaisePropertyChanged("ItemEnd");
-            RaisePropertyChanged("PageInformation");
-            RaisePropertyChanged("IsFirstPage");
-            RaisePropertyChanged("IsLastPage");
+            bool useClearAndReload = (differentCount > maxCheck / 2) || 
+                                     (Math.Abs(Items.Count - newItems.Count) > newItems.Count / 2);
+
+            if (useClearAndReload)
+            {
+                Items.Clear();
+                foreach (var item in newItems)
+                {
+                    Items.Add(item);
+                }
+            }
+            else
+            {
+                // Update in-place for small changes
+                if (Items.Count > newItems.Count)
+                {
+                    for (int i = Items.Count - 1; i >= newItems.Count; i--)
+                    {
+                        Items.RemoveAt(i);
+                    }
+                }
+
+                for (int i = 0; i < newItems.Count; i++)
+                {
+                    if (i < Items.Count)
+                    {
+                        if (!EqualityComparer<T>.Default.Equals(Items[i], newItems[i]))
+                        {
+                            Items[i] = newItems[i];
+                        }
+                    }
+                    else
+                    {
+                        Items.Add(newItems[i]);
+                    }
+                }
+            }
+        }
+
+        private void RaiseMultiplePropertyChanged()
+        {
+            RaisePropertyChanged(nameof(TotalPage));
+            RaisePropertyChanged(nameof(TotalItems));
+            RaisePropertyChanged(nameof(ItemStart));
+            RaisePropertyChanged(nameof(ItemEnd));
+            RaisePropertyChanged(nameof(PageInformation));
+            RaisePropertyChanged(nameof(IsFirstPage));
+            RaisePropertyChanged(nameof(IsLastPage));
         }
 
         public void AddItem(T newItem)
         {
-            if (_itemSource == null)
+            if (ItemSource == null)
             {
-                _itemSource = new List<T>();
+                ItemSource = new List<T>();
             }
 
             _previousItems = Items.ToList();
-            _itemSource.Append(newItem);
+            ItemSource.Append(newItem);
 
             RecalculateItems();
         }
@@ -259,13 +346,13 @@ namespace PowerTools.Core.Models
                 return;
             }
 
-            if (_itemSource == null)
+            if (ItemSource == null)
             {
-                _itemSource = new List<T>();
+                ItemSource = new List<T>();
             }
 
             _previousItems = Items.ToList();
-            ((List<T>)_itemSource).AddRange(newItems);
+            ItemSource.AddRange(newItems);
 
             RecalculateItems();
         }
@@ -278,7 +365,8 @@ namespace PowerTools.Core.Models
             }
 
             _previousItems = Items.ToList();
-            _itemSource = new List<T>(newItems);
+
+            ItemSource = new List<T>(newItems);
 
             RecalculateItems();
         }
