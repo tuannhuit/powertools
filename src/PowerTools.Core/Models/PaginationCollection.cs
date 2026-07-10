@@ -5,14 +5,13 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Windows;
 using System.Windows.Input;
 
 namespace PowerTools.Core.Models
 {
     public class PaginationCollection<T> : BindableBase
     {
-        public static readonly int PAGE_SIZE = 100;
+        public static readonly int PAGE_SIZE = 200;
 
         private ObservableCollection<CustomAction> _actions;
         private CustomAction _action1;
