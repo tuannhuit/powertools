@@ -66,6 +66,9 @@
                     <controls:PaginationDataGridTextColumn Name="DocumentId" Header="DocumentId"  IsReadOnly="True" MinWidth="100"/>
                 </controls:PaginationDataGrid.Columns>
             </controls:PaginationDataGrid>
+            <TabControl Style="{StaticResource TabControl.Normal}">
+                <TabItem Style="{StaticResource TabItem.Normal}" Header="ABC"/>
+            </TabControl>
         </Grid>-->
     </Grid>
 </Window>

@@ -14,6 +14,7 @@
     <converters:BoolToReverseConverter x:Key="BoolToReverseConverter"/>
     <converters:MultiValueToVisibilityConverter x:Key="MultiValueToVisibilityConverter"/>
     <converters:BooleanToGridSizeConverter x:Key="BooleanToGridSizeConverter"/>
+    <converters:BoolToStringConverter x:Key="BoolToStringConverter"/>
 
     <SolidColorBrush x:Key="Background.LightGray" Color="#DDDDDD"/>
     <SolidColorBrush x:Key="Background.WhiteSmoke" Color="#FFFFFF"/>
@@ -861,11 +862,11 @@
                                                                Text="{Binding RelativeSource={RelativeSource AncestorType={x:Type controls:PaginationDataGrid}}, Path=Header, UpdateSourceTrigger=PropertyChanged}" 
                                                                FontWeight="SemiBold" Margin="5 8 5 8" VerticalAlignment="Center"/>
                                         <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
-                                            <ToggleButton Style="{StaticResource ToggleButton.Icon}" 
+                                            <ToggleButton x:Name="btnFilters" Style="{StaticResource ToggleButton.Icon}" 
                                                           Content="{x:Static models:ButtonIcons.Filters}" 
-                                                          IsChecked="{Binding RelativeSource={RelativeSource AncestorType={x:Type controls:PaginationDataGrid}}, Path=IsFiltersVisible, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                                          IsChecked="{Binding RelativeSource={RelativeSource AncestorType={x:Type controls:PaginationDataGrid}}, Path=IsFiltersVisible, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                           Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type controls:PaginationDataGrid}}, Path=IsFiltersEnable, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolToVisibilityConverter}}" 
-                                                          FontSize="12" Margin="0 0 0 0" MinWidth="25" MinHeight="25" />
+                                                          FontSize="12" Margin="0 0 0 0" MinWidth="25" MinHeight="25" BorderThickness="1" BorderBrush="{Binding RelativeSource={RelativeSource AncestorType={x:Type controls:PaginationDataGrid}}, Path=IsFiltersVisible, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolToStringConverter}, ConverterParameter='True:LightGray:Transparent'}"/>
                                             <ToggleButton x:Name="btnSettings" Style="{StaticResource ToggleButton.Icon}" 
                                                           Content="{x:Static models:ButtonIcons.Setting}"
                                                           Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type controls:PaginationDataGrid}}, Path=IsHeaderSettingsEnable, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolToVisibilityConverter}}" 
@@ -1377,7 +1378,7 @@
                         <ScrollViewer x:Name="headerPanel" Grid.Column="0" Grid.Row="0" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
                             <TabPanel Background="Transparent" IsItemsHost="true" Margin="0" KeyboardNavigation.TabIndex="1" Panel.ZIndex="1"/>
                         </ScrollViewer>
-                        <Rectangle x:Name="rectHeader" Grid.Column="0" Grid.Row="1" Stroke="{StaticResource TabItem.Selected.Border}" StrokeThickness="2" VerticalAlignment="Top" HorizontalAlignment="Stretch"/>
+                        <Rectangle x:Name="rectHeader" Grid.Column="0" Grid.Row="1" Stroke="{StaticResource TabItem.Selected.Border}" StrokeThickness="1" VerticalAlignment="Top" HorizontalAlignment="Stretch"/>
                         <TextBlock x:Name="tblIcon" Style="{StaticResource TextBlock.Header}" Grid.Column="0" Grid.Row="1" FontFamily="Segoe UI Symbol" Text="&#xE154;" FontSize="40" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="LightGray" Visibility="{TemplateBinding SelectedContent, Converter={StaticResource NullToVisibilityConverter}}"/>
                         <Border x:Name="contentPanel" Grid.Column="0" Grid.Row="1" Background="{TemplateBinding Background}" Margin="{TemplateBinding Padding}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}"  KeyboardNavigation.DirectionalNavigation="Contained"  KeyboardNavigation.TabIndex="2" KeyboardNavigation.TabNavigation="Local">
                             <ContentPresenter x:Name="PART_SelectedContentHost" ContentSource="SelectedContent" Margin="0" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
@@ -1451,9 +1452,10 @@
     <Style x:Key="TabItem.Normal" TargetType="{x:Type TabItem}">
         <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
         <Setter Property="Foreground" Value="Black"/>
-        <Setter Property="Background" Value="{StaticResource TabItem.Static.Background}"/>
+        <Setter Property="Background" Value="WhiteSmoke"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
         <Setter Property="Margin" Value="0"/>
-        <Setter Property="Padding" Value="5 4 5 4"/>
+        <Setter Property="Padding" Value="6 5 6 5"/>
         <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
         <Setter Property="VerticalContentAlignment" Value="Stretch"/>
         <Setter Property="FontWeight" Value="Normal"/>
@@ -1465,9 +1467,9 @@
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
-                        <Border x:Name="mainBorder" Grid.Column="0" Grid.ColumnSpan="2" Background="{TemplateBinding Background}" BorderBrush="Transparent" BorderThickness="0" Margin="0"/>
+                        <Border x:Name="mainBorder" Grid.Column="0" Grid.ColumnSpan="2" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1 1 1 0" Margin="0"/>
                         <ContentPresenter x:Name="contentPresenter" Grid.Column="0" ContentSource="Header" Focusable="False" HorizontalAlignment="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
-                        <Button Style="{StaticResource Button.Icon}" Grid.Column="1" Content="&#xE0A4;" Command="{Binding CmdCloseTab}" VerticalAlignment="Center" HorizontalAlignment="Right" FontSize="11" Foreground="{TemplateBinding Foreground}" Margin="0 0 2 0" Visibility="{TemplateBinding IsSelected, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter='Hidden'}" MinHeight="20" Height="20" MinWidth="20" Width="20" />
+                        <Button Style="{StaticResource Button.Icon}" Grid.Column="1" Content="&#xE0A4;" Command="{Binding CmdCloseTab}" VerticalAlignment="Center" HorizontalAlignment="Right" FontSize="11" Foreground="{TemplateBinding Foreground}" Margin="2" Visibility="{TemplateBinding IsSelected, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter='Hidden'}" MinHeight="20" Height="20" MinWidth="20" Width="20" />
                     </Grid>
                     <ControlTemplate.Triggers>
                         <MultiDataTrigger>
@@ -1482,8 +1484,15 @@
                             </MultiDataTrigger.Conditions>
                             <Setter Property="Panel.ZIndex" Value="1"/>
                             <Setter Property="FontWeight" Value="SemiBold"/>
-                            <Setter Property="Foreground" Value="White"/>
-                            <Setter Property="Background" Value="{StaticResource TabItem.Selected.Background}"/>
+                            <Setter Property="BorderBrush" Value="{StaticResource TabItem.Selected.Background}"/>
+                            <Setter Property="Background" Value="White"/>
+                            <Setter Property="CornerRadius" TargetName="mainBorder" Value="5 5 0 0"/>
+                        </MultiDataTrigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource Mode=Self}}" Value="false"/>
+                            </MultiDataTrigger.Conditions>
+                            <Setter Property="CornerRadius" TargetName="mainBorder" Value="0"/>
                         </MultiDataTrigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
