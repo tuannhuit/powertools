@@ -10,7 +10,7 @@ namespace PowerTools.Core.Models
 {
     public class PaginationCollection<T> : BindableBase
     {
-        public static readonly int PAGE_SIZE = 1000;
+        public static readonly int PAGE_SIZE = 500;
 
         private ObservableCollection<CustomAction> _actions;
         private CustomAction _action1;
@@ -248,9 +248,12 @@ namespace PowerTools.Core.Models
                 }
             }
 
-            Items = new ObservableCollection<T>(newItems);
+            if (!_previousItems.Any() && newItems.Any() || _previousItems.Any() && !newItems.Any() || newItems.Except(_previousItems).Any())
+            {
+                Items = new ObservableCollection<T>(newItems);
+                RaisePropertyChanged(nameof(Items));
+            }
 
-            RaisePropertyChanged(nameof(Items));
             RaisePropertyChanged(nameof(TotalPage));
             RaisePropertyChanged(nameof(TotalItems));
             RaisePropertyChanged(nameof(ItemStart));
