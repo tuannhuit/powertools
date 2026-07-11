@@ -1,5 +1,4 @@
-﻿using PowerTools.Core.SharedServices;
-using Prism.Commands;
+﻿using Prism.Commands;
 using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
@@ -11,7 +10,7 @@ namespace PowerTools.Core.Models
 {
     public class PaginationCollection<T> : BindableBase
     {
-        public static readonly int PAGE_SIZE = 200;
+        public static readonly int PAGE_SIZE = 1000;
 
         private ObservableCollection<CustomAction> _actions;
         private CustomAction _action1;
@@ -237,85 +236,21 @@ namespace PowerTools.Core.Models
 
             var newItems = ItemSource.Skip(PAGE_SIZE * (Page - 1)).Take(PAGE_SIZE).ToList();
 
-            if (ShouldUpdateItems(newItems))
+            if (newItems.Any())
             {
-                ApplicationService.Instance.InvokeUIAction(() =>
+                var firstItem = newItems.First();
+                if (firstItem is ITransformableObject)
                 {
-                    UpdateItemsCollection(newItems);
-                    RaiseMultiplePropertyChanged();
-                });
-            }
-            else
-            {
-                RaiseMultiplePropertyChanged();
-            }
-        }
-
-        private bool ShouldUpdateItems(List<T> newItems)
-        {
-            if (_previousItems.Count != newItems.Count) return true;
-
-            for (int i = 0; i < newItems.Count; i++)
-            {
-                if (!EqualityComparer<T>.Default.Equals(_previousItems[i], newItems[i]))
-                    return true;
-            }
-            return false;
-        }
-
-        private void UpdateItemsCollection(List<T> newItems)
-        {
-            // If more than 50% of items are different, it's faster to clear and reload
-            int differentCount = 0;
-            int maxCheck = Math.Min(Items.Count, newItems.Count);
-
-            for (int i = 0; i < maxCheck; i++)
-            {
-                if (!EqualityComparer<T>.Default.Equals(Items[i], newItems[i]))
-                    differentCount++;
-            }
-
-            bool useClearAndReload = (differentCount > maxCheck / 2) || 
-                                     (Math.Abs(Items.Count - newItems.Count) > newItems.Count / 2);
-
-            if (useClearAndReload)
-            {
-                Items.Clear();
-                foreach (var item in newItems)
-                {
-                    Items.Add(item);
-                }
-            }
-            else
-            {
-                // Update in-place for small changes
-                if (Items.Count > newItems.Count)
-                {
-                    for (int i = Items.Count - 1; i >= newItems.Count; i--)
+                    foreach (var item in newItems)
                     {
-                        Items.RemoveAt(i);
-                    }
-                }
-
-                for (int i = 0; i < newItems.Count; i++)
-                {
-                    if (i < Items.Count)
-                    {
-                        if (!EqualityComparer<T>.Default.Equals(Items[i], newItems[i]))
-                        {
-                            Items[i] = newItems[i];
-                        }
-                    }
-                    else
-                    {
-                        Items.Add(newItems[i]);
+                        ((ITransformableObject)item).Transform();
                     }
                 }
             }
-        }
 
-        private void RaiseMultiplePropertyChanged()
-        {
+            Items = new ObservableCollection<T>(newItems);
+
+            RaisePropertyChanged(nameof(Items));
             RaisePropertyChanged(nameof(TotalPage));
             RaisePropertyChanged(nameof(TotalItems));
             RaisePropertyChanged(nameof(ItemStart));
@@ -372,7 +307,22 @@ namespace PowerTools.Core.Models
 
         public void Clear()
         {
-            SetItems(new List<T>());
+            if (_previousItems != null)
+            {
+                _previousItems.Clear();
+            }
+
+            if (ItemSource != null)
+            {
+                ItemSource.Clear();
+            }
+
+            if (Items != null)
+            {
+                Items.Clear();
+            }
+
+            RecalculateItems();
         }
     }
 }
