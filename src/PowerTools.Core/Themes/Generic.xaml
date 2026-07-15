@@ -17,7 +17,7 @@
     <converters:BoolToStringConverter x:Key="BoolToStringConverter"/>
 
     <SolidColorBrush x:Key="Background.LightGray" Color="#DDDDDD"/>
-    <SolidColorBrush x:Key="Background.WhiteSmoke" Color="#FFFFFF"/>
+    <SolidColorBrush x:Key="Background.WhiteSmoke" Color="WhiteSmoke"/>
     <SolidColorBrush x:Key="Background.Default" Color="#F8F8F8"/>
     <SolidColorBrush x:Key="Background.Black" Color="#2C2C2C"/>
 
