@@ -52,5 +52,20 @@
         {
 
         }
+
+        public override void ClearValue(bool doNotify)
+        {
+            base.ClearValue(doNotify);
+
+            if (doNotify)
+            {
+                Value2 = null;
+            }
+            else
+            {
+                _value2 = null;
+                RaisePropertyChanged(nameof(Value2));
+            }
+        }
     }
 }

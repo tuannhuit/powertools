@@ -118,5 +118,18 @@ namespace PowerTools.Core.Models
 
             ValueChangedHandler?.Invoke(valueChangedParameter);
         }
+
+        public virtual void ClearValue(bool doNotify)
+        {
+            if (doNotify)
+            {
+                Value = null;
+            }
+            else
+            {
+                _value = null;
+                RaisePropertyChanged(nameof(Value));
+            }
+        }
     }
 }
