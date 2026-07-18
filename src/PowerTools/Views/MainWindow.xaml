@@ -6,14 +6,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:configurations="clr-namespace:PowerTools.Core.Configurations;assembly=PowerTools.Core"
         xmlns:userControls="clr-namespace:PowerTools.Views.UserControls"
-        xmlns:controls="clr-namespace:PowerTools.Core.Controls;assembly=PowerTools.Core"
-        xmlns:behaviours="clr-namespace:PowerTools.Core.Behaviours;assembly=PowerTools.Core"
         prism:ViewModelLocator.AutoWireViewModel="True"
-        xmlns:data="clr-namespace:PowerTools.Views"
         mc:Ignorable="d"
         d:DesignHeight="450" d:DesignWidth="800"
-        Background="{StaticResource Background.WhiteSmoke}"
         Title="PowerTools"
+        Background="WhiteSmoke"
         WindowStartupLocation="CenterScreen" 
         MinWidth="{Binding Source={x:Static configurations:ModuleGlobalSettings.Instance}, Path=WindowSettings.MinWidth}"
         MaxWidth="{Binding Source={x:Static configurations:ModuleGlobalSettings.Instance}, Path=WindowSettings.MaxWidth}"
@@ -33,10 +30,14 @@
             <RowDefinition Height="22"/>
         </Grid.RowDefinitions>
         <userControls:SideBar Grid.Column="0" Grid.Row="0" Grid.RowSpan="3"/>
-        <ContentControl Grid.Column="1" Grid.Row="0" prism:RegionManager.RegionName="{x:Static configurations:Constants.ModuleRegionName}"
-                        Focusable="False"
-                        IsEnabled="{Binding IsFree, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
-        <userControls:WindowLoading Grid.Column="1" Grid.Row="0"/>
+        <Border Grid.Column="1" Grid.Row="0" Margin="0 5 5 0" Background="White" BorderBrush="LightGray" BorderThickness="1" CornerRadius="5">
+            <Grid>
+                <ContentControl prism:RegionManager.RegionName="{x:Static configurations:Constants.ModuleRegionName}"
+                                Focusable="False"
+                                IsEnabled="{Binding IsFree, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
+                <userControls:WindowLoading/>
+            </Grid>
+        </Border>
         <GridSplitter Style="{StaticResource GridSplitter.Normal}" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Stretch" Background="Transparent"/>
         <userControls:LogsView Grid.Column="1" Grid.Row="2"/>
         <userControls:StatusBar Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="3" />

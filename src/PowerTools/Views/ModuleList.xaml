@@ -16,7 +16,7 @@
             <ColumnDefinition Width="4" />
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <Grid Grid.Column="0" Background="{StaticResource Background.Default}">
+        <Grid Grid.Column="0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
@@ -82,7 +82,7 @@
             </Expander>
         </Grid>
         <GridSplitter Style="{StaticResource GridSplitter.Normal}" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-        <Grid Grid.Column="2" Background="{StaticResource Background.WhiteSmoke}" Visibility="{Binding SelectedModule, Converter={StaticResource ValueToVisibilityConverter}}">
+        <Grid Grid.Column="2" Visibility="{Binding SelectedModule, Converter={StaticResource ValueToVisibilityConverter}}">
             <Grid Margin="40 0">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>

@@ -5,15 +5,15 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:sharedServices="clr-namespace:PowerTools.Core.SharedServices;assembly=PowerTools.Core"
              xmlns:models="clr-namespace:PowerTools.Core.Models;assembly=PowerTools.Core"
-             mc:Ignorable="d" 
+             mc:Ignorable="d"
+             Background="{StaticResource Background.Black}"
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid Background="{StaticResource Background.WhiteSmoke}">
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <Rectangle Grid.Row="0" Stroke="Black" StrokeThickness="0.25"/>
-        <TextBox Grid.Row="1" Text="{Binding Source={x:Static sharedServices:LoggingService.Instance}, Path=Message, Mode=OneWay}" BorderBrush="Transparent" Background="Transparent" BorderThickness="0" FontSize="12" FontFamily="Consolas" IsReadOnly="True" TextWrapping="Wrap" Padding="2 5" TextChanged="txbLogs_TextChanged"/>
+        <TextBox Grid.Row="1" Text="{Binding Source={x:Static sharedServices:LoggingService.Instance}, Path=Message, Mode=OneWay}" BorderBrush="Transparent" Background="Transparent" Foreground="White" BorderThickness="0" FontSize="12" FontFamily="Consolas" IsReadOnly="True" TextWrapping="Wrap" Padding="2 5" TextChanged="txbLogs_TextChanged"/>
         <StackPanel  Grid.Row="1" Orientation="Horizontal" Background="White" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="5">
             <Button Style="{StaticResource Button.IconActive}" Command="{Binding CmdClearLogs}" Content="{x:Static models:ButtonIcons.Delete}" ToolTip="Clear logs" VerticalAlignment="Center" HorizontalContentAlignment="Left" FontSize="12" Margin="0"/>
         </StackPanel>

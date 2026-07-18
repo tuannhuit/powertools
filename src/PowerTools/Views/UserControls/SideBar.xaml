@@ -9,7 +9,7 @@
              x:Name="userControlSideBar"
              d:DesignHeight="450" d:DesignWidth="250"
              IsEnabled="{Binding IsFree, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
-    <Border HorizontalAlignment="Left" BorderThickness="0 0 1 0" BorderBrush="LightGray" Background="{StaticResource Background.LightGray}">
+    <Border HorizontalAlignment="Left" BorderThickness="0 0 1 0">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
