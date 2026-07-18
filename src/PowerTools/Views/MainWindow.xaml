@@ -30,13 +30,13 @@
             <RowDefinition Height="22"/>
         </Grid.RowDefinitions>
         <userControls:SideBar Grid.Column="0" Grid.Row="0" Grid.RowSpan="3"/>
-        <Grid Grid.Column="1" Grid.Row="0" Margin="0 5 5 0" >
-            <Border Background="LightGray" CornerRadius="5">
+        <Grid Grid.Column="1" Grid.Row="0" Margin="5 5 10 0" >
+            <Border Background="LightGray" BorderBrush="LightGray" BorderThickness="1" CornerRadius="5">
                 <Border.Effect>
                     <BlurEffect Radius="5" KernelType="Gaussian" RenderingBias="Performance"/>
                 </Border.Effect>
             </Border>
-            <Border Margin="1" Background="White" CornerRadius="5">
+            <Border Margin="1" Background="White" BorderBrush="White" BorderThickness="1" CornerRadius="5">
                 <Grid>
                     <ContentControl prism:RegionManager.RegionName="{x:Static configurations:Constants.ModuleRegionName}"
                                         Focusable="False"
