@@ -25,19 +25,26 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="4"/>
+            <RowDefinition Height="5"/>
             <RowDefinition Height="{Binding ViewLogGridLength, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MaxHeight="500"/>
             <RowDefinition Height="22"/>
         </Grid.RowDefinitions>
         <userControls:SideBar Grid.Column="0" Grid.Row="0" Grid.RowSpan="3"/>
-        <Border Grid.Column="1" Grid.Row="0" Margin="0 5 5 0" Background="White" BorderBrush="LightGray" BorderThickness="1" CornerRadius="5">
-            <Grid>
-                <ContentControl prism:RegionManager.RegionName="{x:Static configurations:Constants.ModuleRegionName}"
-                                Focusable="False"
-                                IsEnabled="{Binding IsFree, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
-                <userControls:WindowLoading/>
-            </Grid>
-        </Border>
+        <Grid Grid.Column="1" Grid.Row="0" Margin="0 5 5 0" >
+            <Border Background="LightGray" CornerRadius="5">
+                <Border.Effect>
+                    <BlurEffect Radius="5" KernelType="Gaussian" RenderingBias="Performance"/>
+                </Border.Effect>
+            </Border>
+            <Border Margin="1" Background="White" CornerRadius="5">
+                <Grid>
+                    <ContentControl prism:RegionManager.RegionName="{x:Static configurations:Constants.ModuleRegionName}"
+                                        Focusable="False"
+                                        IsEnabled="{Binding IsFree, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <userControls:WindowLoading/>
+                </Grid>
+            </Border>
+        </Grid>
         <GridSplitter Style="{StaticResource GridSplitter.Normal}" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Stretch" Background="Transparent"/>
         <userControls:LogsView Grid.Column="1" Grid.Row="2"/>
         <userControls:StatusBar Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="3" />
