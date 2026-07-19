@@ -13,6 +13,7 @@ namespace PowerTools.Core.Models
         public static readonly int PAGE_SIZE = 500;
 
         private ObservableCollection<CustomAction> _actions;
+        private List<CustomAction> _additionalActions;
         private CustomAction _action1;
         private CustomAction _action2;
         private CustomAction _action3;
@@ -29,6 +30,7 @@ namespace PowerTools.Core.Models
                 RaisePropertyChanged(nameof(Action1));
                 RaisePropertyChanged(nameof(Action2));
                 RaisePropertyChanged(nameof(Action3));
+                RaisePropertyChanged(nameof(AdditionalActions));
             }
         }
 
@@ -50,6 +52,12 @@ namespace PowerTools.Core.Models
             private set => SetProperty(ref _action3, value);
         }
 
+        public List<CustomAction> AdditionalActions
+        {
+            get => _additionalActions;
+            private set => SetProperty(ref _additionalActions, value);
+        }
+
         private void CacheActionProperties()
         {
             if (Actions == null)
@@ -58,6 +66,7 @@ namespace PowerTools.Core.Models
                 _action1 = null;
                 _action2 = null;
                 _action3 = null;
+                _additionalActions = null;
                 return;
             }
 
@@ -65,6 +74,12 @@ namespace PowerTools.Core.Models
             _action1 = _nonPageActions.Count > 0 ? _nonPageActions[0] : null;
             _action2 = _nonPageActions.Count > 1 ? _nonPageActions[1] : null;
             _action3 = _nonPageActions.Count > 2 ? _nonPageActions[2] : null;
+
+            var moreActions = _nonPageActions.Where(p => p != _action1 && p != _action2 && p != _action3).ToList();
+            if(moreActions!=null && moreActions.Any())
+            {
+                _additionalActions = moreActions;
+            }
         }
 
         private List<T> _previousItems;
@@ -248,7 +263,7 @@ namespace PowerTools.Core.Models
                 }
             }
 
-            if (!_previousItems.Any() && newItems.Any() || _previousItems.Any() && !newItems.Any() || newItems.Except(_previousItems).Any()|| _previousItems.Except(newItems).Any())
+            if (!_previousItems.Any() && newItems.Any() || _previousItems.Any() && !newItems.Any() || newItems.Except(_previousItems).Any() || _previousItems.Except(newItems).Any())
             {
                 Items = new ObservableCollection<T>(newItems);
                 RaisePropertyChanged(nameof(Items));

@@ -30,7 +30,7 @@
             <RowDefinition Height="22"/>
         </Grid.RowDefinitions>
         <userControls:SideBar Grid.Column="0" Grid.Row="0" Grid.RowSpan="3"/>
-        <Grid Grid.Column="1" Grid.Row="0" Margin="5 5 10 0" >
+        <Grid Grid.Column="1" Grid.Row="0" Margin="5 10 10 0" >
             <Border Background="LightGray" BorderBrush="LightGray" BorderThickness="1" CornerRadius="5">
                 <Border.Effect>
                     <BlurEffect Radius="5" KernelType="Gaussian" RenderingBias="Performance"/>
@@ -49,7 +49,7 @@
         <userControls:LogsView Grid.Column="1" Grid.Row="2"/>
         <userControls:StatusBar Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="3" />
         <!--<Grid Grid.ColumnSpan="2" Grid.RowSpan="4" Margin="0" Background="White">
-            <controls:PaginationDataGrid Header="ABC" 
+            --><!--<controls:PaginationDataGrid Header="ABC" 
                                          Filters="{x:Static data:MainWindow.ColumnFilters}"
                                          ColumnSettings="{x:Static data:MainWindow.ColumnSettings}">
                 <controls:PaginationDataGrid.HeaderSettings>
@@ -76,7 +76,7 @@
             </controls:PaginationDataGrid>
             <TabControl Style="{StaticResource TabControl.Normal}">
                 <TabItem Style="{StaticResource TabItem.Normal}" Header="ABC"/>
-            </TabControl>
+            </TabControl>--><!--
         </Grid>-->
     </Grid>
 </Window>
