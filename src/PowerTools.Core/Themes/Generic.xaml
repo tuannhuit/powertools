@@ -1323,7 +1323,7 @@
                     <Style.Triggers>
                         <!-- Highlight a grid row as the mouse passes over -->
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" Value="{StaticResource Button.Background}" />
+                            <Setter Property="Background" Value="{StaticResource Button.MouseOver.Background}" />
                         </Trigger>
                     </Style.Triggers>
                 </Style>
@@ -1352,7 +1352,7 @@
                     <Style.Triggers>
                         <!-- Highlight a grid row as the mouse passes over -->
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" Value="{StaticResource Button.Background}" />
+                            <Setter Property="Background" Value="{StaticResource Button.MouseOver.Background}" />
                         </Trigger>
                     </Style.Triggers>
                 </Style>
@@ -1383,7 +1383,7 @@
                     <Style.Triggers>
                         <!-- Highlight a grid row as the mouse passes over -->
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" Value="{StaticResource Button.Background}" />
+                            <Setter Property="Background" Value="{StaticResource Button.MouseOver.Background}" />
                         </Trigger>
                     </Style.Triggers>
                 </Style>
