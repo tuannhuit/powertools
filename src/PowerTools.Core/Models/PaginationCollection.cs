@@ -286,7 +286,7 @@ namespace PowerTools.Core.Models
             }
 
             _previousItems = Items.ToList();
-            ItemSource.Append(newItem);
+            ItemSource.Add(newItem);
 
             RecalculateItems();
         }
