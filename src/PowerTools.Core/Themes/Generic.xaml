@@ -514,7 +514,7 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="true">
-                            <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Background}"/>
+                            <Setter Property="Background" TargetName="border" Value="{StaticResource Button.MouseOver.Background}"/>
                             <!--<Setter Property="Foreground" TargetName="textblock" Value="Black"/>
                             <Setter Property="Foreground" TargetName="textblockText" Value="Black"/>-->
                         </Trigger>
@@ -541,8 +541,8 @@
         <Setter Property="VerticalAlignment" Value="Top"/>
         <Setter Property="HorizontalAlignment" Value="Left"/>
         <Setter Property="Foreground" Value="Black"/>
-        <Setter Property="Background" Value="{StaticResource Button.MouseOver.Background}"/>
-        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="Background" Value="{StaticResource Background.WhiteSmoke}"/>
+        <Setter Property="BorderBrush" Value="LightGray"/>
         <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="FontSize" Value="18"/>
         <Setter Property="FontWeight" Value="Normal"/>
@@ -557,7 +557,7 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="true">
-                            <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Background}"/>
+                            <Setter Property="Background" TargetName="border" Value="{StaticResource Button.MouseOver.Background}"/>
                             <!--<Setter Property="Foreground" TargetName="textblock" Value="Black"/>
                             <Setter Property="Foreground" TargetName="textblockText" Value="Black"/>-->
                         </Trigger>
@@ -584,19 +584,21 @@
         <Setter Property="VerticalAlignment" Value="Top"/>
         <Setter Property="HorizontalAlignment" Value="Left"/>
         <Setter Property="Foreground" Value="Black"/>
-        <Setter Property="Background" Value="{StaticResource Button.MouseOver.Background}"/>
+        <Setter Property="BorderBrush" Value="LightGray"/>
+        <Setter Property="Background" Value="WhiteSmoke"/>
+        <!--<Setter Property="Background" Value="{StaticResource Button.MouseOver.Background}"/>-->
         <Setter Property="FontSize" Value="12"/>
         <Setter Property="FontWeight" Value="Normal"/>
         <Setter Property="Padding" Value="5"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
-                    <Border x:Name="border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding Background}" BorderThickness="0.5" SnapsToDevicePixels="true" CornerRadius="2">
+                    <Border x:Name="border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="0.5" SnapsToDevicePixels="true" CornerRadius="5">
                         <TextBlock x:Name="textblock" FontFamily="Segoe UI" Foreground="{TemplateBinding Foreground}" FontSize="{TemplateBinding FontSize}" Text="{TemplateBinding Content}" Margin="{TemplateBinding Padding}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="true">
-                            <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Background}"/>
+                            <Setter Property="Background" TargetName="border" Value="{StaticResource Button.MouseOver.Background}"/>
                         </Trigger>
                         <Trigger Property="IsPressed" Value="true">
                             <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Pressed.Background}"/>
@@ -996,7 +998,7 @@
                                                             Tag="{Binding Name}"
                                                             Command="{Binding Command}"
                                                             MinWidth="100"
-                                                            MinHeight="25" Height="25" FontSize="13" btn:ButtonBehavior.CornerRadius="0"/>
+                                                            MinHeight="25" Height="25" FontSize="13"/>
                                                 </DataTemplate>
                                             </ItemsControl.ItemTemplate>
                                         </ItemsControl>
@@ -1017,7 +1019,7 @@
                                 </Border>
                             </Popup>
                         </StackPanel>
-                        <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" Margin="50 0 0 0">
+                        <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" Margin="25 0 0 0">
                             <TextBlock Style="{StaticResource TextBlock.ContentSmall}" Text="{Binding Metadata.PageInformation, RelativeSource={RelativeSource AncestorType=controls:PaginationDataGrid}}" HorizontalAlignment="Right" Margin="10 5"/>
                             <TextBlock Style="{StaticResource TextBlock.ContentSmall}" HorizontalAlignment="Right" Margin="10 5" Visibility="{Binding Metadata.PageInformation, RelativeSource={RelativeSource AncestorType=controls:PaginationDataGrid}, Converter={StaticResource NullToVisibilityConverter}}">
                                 <TextBlock.Text>
