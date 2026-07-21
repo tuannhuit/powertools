@@ -11,12 +11,11 @@ namespace PowerTools.Core.Models
     public class PaginationCollection<T> : BindableBase
     {
         public static readonly int PAGE_SIZE = 500;
+        public static readonly int ACTIVE_ACTION_SIZE = 3;
 
         private ObservableCollection<CustomAction> _actions;
+        private List<CustomAction> _activeActions;
         private List<CustomAction> _additionalActions;
-        private CustomAction _action1;
-        private CustomAction _action2;
-        private CustomAction _action3;
         private List<CustomAction> _nonPageActions;
 
         public ObservableCollection<CustomAction> Actions
@@ -27,29 +26,15 @@ namespace PowerTools.Core.Models
                 _actions = value;
                 CacheActionProperties();
                 RaisePropertyChanged();
-                RaisePropertyChanged(nameof(Action1));
-                RaisePropertyChanged(nameof(Action2));
-                RaisePropertyChanged(nameof(Action3));
+                RaisePropertyChanged(nameof(ActiveActions));
                 RaisePropertyChanged(nameof(AdditionalActions));
             }
         }
 
-        public CustomAction Action1
+        public List<CustomAction> ActiveActions
         {
-            get => _action1;
-            private set => SetProperty(ref _action1, value);
-        }
-
-        public CustomAction Action2
-        {
-            get => _action2;
-            private set => SetProperty(ref _action2, value);
-        }
-
-        public CustomAction Action3
-        {
-            get => _action3;
-            private set => SetProperty(ref _action3, value);
+            get => _activeActions;
+            private set => SetProperty(ref _activeActions, value);
         }
 
         public List<CustomAction> AdditionalActions
@@ -63,19 +48,17 @@ namespace PowerTools.Core.Models
             if (Actions == null)
             {
                 _nonPageActions = new List<CustomAction>();
-                _action1 = null;
-                _action2 = null;
-                _action3 = null;
+                _activeActions = null;
                 _additionalActions = null;
                 return;
             }
 
-            _nonPageActions = Actions.Where(p => p is not PageAction).ToList();
-            _action1 = _nonPageActions.Count > 0 ? _nonPageActions[0] : null;
-            _action2 = _nonPageActions.Count > 1 ? _nonPageActions[1] : null;
-            _action3 = _nonPageActions.Count > 2 ? _nonPageActions[2] : null;
+            _nonPageActions = Actions.Where(p => p is not PageAction).ToList().OrderBy(p => p.Name).ToList();
 
-            var moreActions = _nonPageActions.Where(p => p != _action1 && p != _action2 && p != _action3).ToList();
+            var activeActionCount = Math.Min(ACTIVE_ACTION_SIZE, _nonPageActions.Count);
+            _activeActions = _nonPageActions.Take(activeActionCount).ToList();
+
+            var moreActions = _nonPageActions.Skip(activeActionCount).ToList();
             if(moreActions!=null && moreActions.Any())
             {
                 _additionalActions = moreActions;

@@ -950,42 +950,22 @@
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
                         <StackPanel Grid.Column="0" Orientation="Horizontal" Margin="0">
-                            <Button Style="{StaticResource Button.Icon}" Margin="5" 
-                                Content="{Binding Metadata.Action1.Icon, RelativeSource={RelativeSource AncestorType=controls:PaginationDataGrid}}"
-                                Tag="{Binding Metadata.Action1.Name, RelativeSource={RelativeSource AncestorType=controls:PaginationDataGrid}}"
-                                Command="{Binding Metadata.Action1.Command, RelativeSource={RelativeSource AncestorType=controls:PaginationDataGrid}}"
-                                MinHeight="25" Height="25" FontSize="13">
-                                <Button.Visibility>
-                                    <MultiBinding Converter="{StaticResource MultiValueToVisibilityConverter}">
-                                        <Binding Path="Metadata" RelativeSource="{RelativeSource AncestorType=controls:PaginationDataGrid}"/>
-                                        <Binding Path="Metadata.Action1" RelativeSource="{RelativeSource AncestorType=controls:PaginationDataGrid}"/>
-                                    </MultiBinding>
-                                </Button.Visibility>
-                            </Button>
-                            <Button Style="{StaticResource Button.Icon}" Margin="0 5 5 5" 
-                                Content="{Binding Metadata.Action2.Icon, RelativeSource={RelativeSource AncestorType=controls:PaginationDataGrid}}"
-                                Tag="{Binding Metadata.Action2.Name, RelativeSource={RelativeSource AncestorType=controls:PaginationDataGrid}}"
-                                Command="{Binding Metadata.Action2.Command, RelativeSource={RelativeSource AncestorType=controls:PaginationDataGrid}}"
-                                MinHeight="25" Height="25" FontSize="13">
-                                <Button.Visibility>
-                                    <MultiBinding Converter="{StaticResource MultiValueToVisibilityConverter}">
-                                        <Binding Path="Metadata" RelativeSource="{RelativeSource AncestorType=controls:PaginationDataGrid}"/>
-                                        <Binding Path="Metadata.Action2" RelativeSource="{RelativeSource AncestorType=controls:PaginationDataGrid}"/>
-                                    </MultiBinding>
-                                </Button.Visibility>
-                            </Button>
-                            <Button Style="{StaticResource Button.Icon}" Margin="0 5 5 5" 
-                                Content="{Binding Metadata.Action3.Icon, RelativeSource={RelativeSource AncestorType=controls:PaginationDataGrid}}"
-                                Tag="{Binding Metadata.Action3.Name, RelativeSource={RelativeSource AncestorType=controls:PaginationDataGrid}}"
-                                Command="{Binding Metadata.Action3.Command, RelativeSource={RelativeSource AncestorType=controls:PaginationDataGrid}}"
-                                MinHeight="25" Height="25" FontSize="13">
-                                <Button.Visibility>
-                                    <MultiBinding Converter="{StaticResource MultiValueToVisibilityConverter}">
-                                        <Binding Path="Metadata" RelativeSource="{RelativeSource AncestorType=controls:PaginationDataGrid}"/>
-                                        <Binding Path="Metadata.Action3" RelativeSource="{RelativeSource AncestorType=controls:PaginationDataGrid}"/>
-                                    </MultiBinding>
-                                </Button.Visibility>
-                            </Button>
+                            <ItemsControl ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=controls:PaginationDataGrid}, Path=Metadata.ActiveActions}" Margin="5 0 0 0">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Orientation="Horizontal"/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Button Style="{StaticResource Button.Icon}" Margin="0 5 0 5" 
+                                                Content="{Binding Icon}"
+                                                Tag="{Binding Name}"
+                                                Command="{Binding Command}"
+                                                MinHeight="25" Height="25" FontSize="13"/>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
                             <ToggleButton x:Name="btnAdditionalActions" Style="{StaticResource ToggleButton.Icon}" 
                                   Content="{x:Static models:ButtonIcons.MoreInfo}"
                                   Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type controls:PaginationDataGrid}}, Path=Metadata.AdditionalActions, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource ValueToVisibilityConverter}}" 
