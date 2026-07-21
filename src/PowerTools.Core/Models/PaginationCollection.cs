@@ -263,7 +263,10 @@ namespace PowerTools.Core.Models
                 }
             }
 
-            if (!_previousItems.Any() && newItems.Any() || _previousItems.Any() && !newItems.Any() || newItems.Except(_previousItems).Any() || _previousItems.Except(newItems).Any())
+            var diffNewItems = newItems.Except(_previousItems);
+            var diffPreviousItems = _previousItems.Except(newItems);
+
+            if (!_previousItems.Any() && newItems.Any() || _previousItems.Any() && !newItems.Any() || diffNewItems.Any() || diffPreviousItems.Any())
             {
                 Items = new ObservableCollection<T>(newItems);
                 RaisePropertyChanged(nameof(Items));
