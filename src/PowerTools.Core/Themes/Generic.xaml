@@ -891,8 +891,9 @@
                                                             <Grid.RowDefinitions>
                                                                 <RowDefinition Height="Auto"/>
                                                                 <RowDefinition Height="Auto"/>
+                                                                <RowDefinition Height="Auto"/>
                                                             </Grid.RowDefinitions>
-                                                            <GroupBox Header="Column Display Settings">
+                                                            <GroupBox Grid.Row="0" Header="Column Display Settings">
                                                                 <ItemsControl ItemsSource="{Binding RelativeSource={RelativeSource AncestorType={x:Type controls:PaginationDataGrid}}, Path=ColumnSettings, UpdateSourceTrigger=PropertyChanged}">
                                                                     <ItemsControl.ItemTemplate>
                                                                         <DataTemplate>
@@ -903,7 +904,13 @@
                                                                     </ItemsControl.ItemTemplate>
                                                                 </ItemsControl>
                                                             </GroupBox>
-                                                            <ContentPresenter Grid.Row="1" 
+                                                            <GroupBox Grid.Row="1" Header="Paging">
+                                                                <StackPanel>
+                                                                    <controls:TextPlaceHolder Text="{Binding RelativeSource={RelativeSource AncestorType=controls:PaginationDataGrid}, Path=Metadata.PageSize, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PlaceHolder="{Binding RelativeSource={RelativeSource AncestorType=controls:PaginationDataGrid}, Path= Metadata.PageSizeDefault}" Margin="5 10 5 0"/>
+                                                                    <TextBlock Style="{StaticResource TextBlock.ContentSmall}" Text="Adjust the number of items per page" TextWrapping="Wrap" Foreground="Gray"/>
+                                                                </StackPanel>
+                                                            </GroupBox>
+                                                            <ContentPresenter Grid.Row="2" 
                                                                               Content="{Binding RelativeSource={RelativeSource AncestorType={x:Type controls:PaginationDataGrid}}, Path=HeaderSettings, UpdateSourceTrigger=PropertyChanged}" 
                                                                               Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type controls:PaginationDataGrid}}, Path=HeaderSettings, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource ValueToVisibilityConverter}}"
                                                                               SnapsToDevicePixels="true" Margin="0 5 0 0"/>

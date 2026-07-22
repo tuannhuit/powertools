@@ -119,6 +119,23 @@ namespace PowerTools.Core.Models
             }
         }
 
+        public int PageSizeDefault => PAGE_SIZE;
+
+        /// <summary>
+        /// The index of current page
+        /// </summary>
+        private int? _pageSize;
+        public int? PageSize
+        {
+            get => _pageSize;
+            set
+            {
+                _pageSize = value;
+                RaisePropertyChanged();
+                RecalculateItems();
+            }
+        }
+
         public bool IsFirstPage => ItemSource.Any() ? _page == 1 : _page == 0;
         public bool IsLastPage => ItemSource.Any() ? _page == _totalPage : _page == 0;
 
@@ -213,11 +230,17 @@ namespace PowerTools.Core.Models
             MoveToPage(Page);
         }
 
+        private int GetPageSize()
+        {
+            return _pageSize.GetValueOrDefault() > 0 ? _pageSize.GetValueOrDefault() : PageSizeDefault;
+        }
+
         private void RecalculateItems()
         {
+            var pageSize = GetPageSize();
             var itemCount = ItemSource.Count;
-            _totalPage = itemCount / PAGE_SIZE;
-            if (itemCount > _totalPage * PAGE_SIZE)
+            _totalPage = itemCount / pageSize;
+            if (itemCount > _totalPage * pageSize)
             {
                 _totalPage += 1;
             }
@@ -232,7 +255,7 @@ namespace PowerTools.Core.Models
                 _page = _totalPage;
             }
 
-            var newItems = ItemSource.Skip(PAGE_SIZE * (Page - 1)).Take(PAGE_SIZE).ToList();
+            var newItems = ItemSource.Skip(pageSize * (Page - 1)).Take(pageSize).ToList();
 
             if (newItems.Any())
             {
@@ -251,8 +274,10 @@ namespace PowerTools.Core.Models
 
             if (!_previousItems.Any() && newItems.Any() || _previousItems.Any() && !newItems.Any() || diffNewItems.Any() || diffPreviousItems.Any())
             {
-                Items = new ObservableCollection<T>(newItems);
-                RaisePropertyChanged(nameof(Items));
+                Items.Clear();
+                Items.AddRange(newItems);
+                //Items = new ObservableCollection<T>(newItems);
+                //RaisePropertyChanged(nameof(Items));
             }
 
             RaisePropertyChanged(nameof(TotalPage));
