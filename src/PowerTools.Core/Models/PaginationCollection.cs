@@ -274,10 +274,8 @@ namespace PowerTools.Core.Models
 
             if (!_previousItems.Any() && newItems.Any() || _previousItems.Any() && !newItems.Any() || diffNewItems.Any() || diffPreviousItems.Any())
             {
-                Items.Clear();
-                Items.AddRange(newItems);
-                //Items = new ObservableCollection<T>(newItems);
-                //RaisePropertyChanged(nameof(Items));
+                Items = new ObservableCollection<T>(newItems);
+                RaisePropertyChanged(nameof(Items));
             }
 
             RaisePropertyChanged(nameof(TotalPage));
