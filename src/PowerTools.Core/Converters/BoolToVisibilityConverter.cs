@@ -9,7 +9,17 @@ namespace PowerTools.Core.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var val = (bool)value;
+            var val = false;
+
+            if (value is bool?)
+            {
+                val = ((bool?)value).GetValueOrDefault();
+            }
+            else if (value is bool)
+            {
+                val = (bool)value;
+            }
+
             return (val) ? Visibility.Visible : (parameter?.ToString() == "Hidden" ? Visibility.Hidden : Visibility.Collapsed);
         }
 
