@@ -265,16 +265,21 @@ namespace PowerTools.Core.Configurations
 
         public string GetModuleConfigurationsByKey(string keyName)
         {
+            return GetModuleConfigurationsByKey<string>(keyName);
+        }
+
+        public T GetModuleConfigurationsByKey<T>(string keyName)
+        {
             var appConfigurations = LoadModuleConfigurations();
 
             if (appConfigurations == null)
-                return null;
+                return default(T);
 
             var item = appConfigurations!["appsettings"]![keyName];
             if (item != null)
-                return item.GetValue<string>();
+                return item.GetValue<T>();
 
-            return null;
+            return default(T);
         }
 
         public string GetModuleConfigurationsByKey(string keyName, string defaultValue)
