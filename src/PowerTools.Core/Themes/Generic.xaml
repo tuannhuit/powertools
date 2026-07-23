@@ -82,7 +82,7 @@
         <GradientStop Color="#FFDCECFC" Offset="1.0"/>
     </LinearGradientBrush>-->
     <SolidColorBrush x:Key="ComboBox.MouseOver.Background" Color="#FFBEE6FD"/>
-    <SolidColorBrush x:Key="ComboBox.MouseOver.Border" Color="LightGray"/>
+    <SolidColorBrush x:Key="ComboBox.MouseOver.Border" Color="#FF5AC0FB"/>
     <SolidColorBrush x:Key="ComboBox.MouseOver.Glyph" Color="#FF000000"/>
     <SolidColorBrush x:Key="ComboBox.MouseOver.Editable.Background" Color="#FFFFFFFF"/>
     <SolidColorBrush x:Key="ComboBox.MouseOver.Editable.Border" Color="LightGray"/>
@@ -124,7 +124,7 @@
                 <Setter Property="BorderBrush" Value="{StaticResource ComboBox.Pressed.Border}" />
             </Trigger>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="BorderBrush" Value="{StaticResource ComboBox.Pressed.Border}" />
+                <Setter Property="BorderBrush" Value="{StaticResource ComboBox.MouseOver.Border}" />
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -358,6 +358,9 @@
             <Trigger Property="HasItems" Value="false">
                 <Setter Property="Height" TargetName="dropDownBorder" Value="25"/>
             </Trigger>
+            <Trigger Property="IsEnabled" Value="false">
+                <Setter Property="Opacity" Value="0.56"/>
+            </Trigger>
             <MultiTrigger>
                 <MultiTrigger.Conditions>
                     <Condition Property="IsGrouping" Value="true"/>
@@ -484,6 +487,7 @@
         <Setter Property="Margin" Value="5 5 5 0"/>
         <Setter Property="FontSize" Value="11"/>
         <Setter Property="FontWeight" Value="Normal"/>
+        <Setter Property="BorderBrush" Value="Gray"/>
     </Style>
 
     <Style x:Key="RadioButton.Normal" TargetType="{x:Type RadioButton}">
@@ -605,6 +609,7 @@
                         </Trigger>
                         <Trigger Property="IsPressed" Value="true">
                             <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Pressed.Background}"/>
+                            <Setter Property="Foreground" TargetName="textblock" Value="White"/>
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="false">
                             <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Disabled.Background}"/>
@@ -673,7 +678,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ListViewItem}">
-                    <Border x:Name="Bd" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="true">
+                    <Border x:Name="Bd" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}" CornerRadius="5" SnapsToDevicePixels="true">
                         <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
                     </Border>
                     <ControlTemplate.Triggers>
@@ -1599,7 +1604,7 @@
                                 <Border BorderBrush="White" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="4"/>
                             </Border>
                         </Border>
-                        <Border x:Name="Header" Grid.Column="1" Padding="5 0 5 2" Grid.RowSpan="2" Grid.Row="0" Background="{TemplateBinding BorderBrush}" BorderBrush="Transparent" BorderThickness="0" CornerRadius="4">
+                        <Border x:Name="Header" Grid.Column="1" Padding="2" Grid.RowSpan="2" Grid.Row="0" Background="{TemplateBinding BorderBrush}" BorderBrush="Transparent" BorderThickness="0" CornerRadius="4">
                             <ContentPresenter ContentSource="Header" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
                         </Border>
                         <ContentPresenter Grid.Column="1" Grid.ColumnSpan="2" Margin="{TemplateBinding Padding}" Grid.Row="2" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
