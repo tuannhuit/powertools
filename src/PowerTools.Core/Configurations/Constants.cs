@@ -11,5 +11,10 @@
         /// The module name file extension *.mdl standing for "module"
         /// </summary>
         public static readonly string ModuleExtensionFileName = "mdl";
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public static readonly string DialogRegionName = "DialogContentRegion";
     }
 }

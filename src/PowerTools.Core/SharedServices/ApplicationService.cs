@@ -1,9 +1,12 @@
-﻿using System;
+﻿using PowerTools.Core.Models;
+using Prism.Ioc;
+using Prism.Mvvm;
+using Prism.Services.Dialogs;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Windows;
-using Prism.Mvvm;
 
 namespace PowerTools.Core.SharedServices
 {
@@ -11,8 +14,24 @@ namespace PowerTools.Core.SharedServices
     {
         private static ApplicationService _instance;
         private static List<Action> _disposedActions = new List<Action>();
+        public IDialogService DialogService { get; set; }
+        public IContainerExtension ContainerExtension { get; set; }
+        public Window MainWindow { get; set; }
+        //public Action<bool> DoBusy;
+        public bool IsFree => !_isBusy;
 
-        public Action<bool> DoBusy;
+        private bool _isBusy;
+        public bool IsBusy
+        {
+            get => _isBusy;
+            set
+            {
+                _isBusy = value;
+                RaisePropertyChanged();
+                RaisePropertyChanged("IsFree");
+            }
+        }
+
         public Func<string, string, MessageBoxButton, MessageBoxResult> DoShowMessageBox;
 
         public static ApplicationService Instance
@@ -38,11 +57,6 @@ namespace PowerTools.Core.SharedServices
                 _waitMessage = value;
                 RaisePropertyChanged();
             }
-        }
-
-        private ApplicationService()
-        {
-
         }
 
         public void Restart()
@@ -94,7 +108,8 @@ namespace PowerTools.Core.SharedServices
             InvokeUIAction(() =>
             {
                 WaitMessage = waitMessage;
-                DoBusy?.Invoke(true);
+                IsBusy=true;
+                //DoBusy?.Invoke(true);
             });
         }
 
@@ -102,7 +117,8 @@ namespace PowerTools.Core.SharedServices
         {
             InvokeUIAction(() =>
             {
-                DoBusy?.Invoke(false);
+                IsBusy=false;
+                //DoBusy?.Invoke(false);
             });
         }
 
@@ -116,6 +132,34 @@ namespace PowerTools.Core.SharedServices
             {
                 return DoShowMessageBox.Invoke(message, caption, button);
             }
+        }
+
+        public void ShowDialog<TView>(string title, object viewModel, Action<IDialogResult> callback, IList<DialogAction> actions = null, double width = 0, double height = 0)
+        {
+            var viewType = typeof(TView);
+            var viewName = viewType.Name;
+            if (!ContainerExtension.IsRegistered(viewType, viewName))
+            {
+                ContainerExtension.RegisterForNavigation(viewType, viewName);
+            }
+
+            var parameters = new DialogInformation
+            {
+                Title = title,
+                ViewType = viewType,
+                Actions = actions ?? new List<DialogAction>(),
+                Callback = callback,
+                ViewModel = viewModel,
+                Width = width,
+                Height = height
+            };
+
+            var dialogParameters = new DialogParameters
+            {
+                {"dialogInformation", parameters}
+            };
+
+            DialogService.ShowDialog("DialogView", dialogParameters, parameters.Callback);
         }
 
         public string GetOrCreateTempFolder()

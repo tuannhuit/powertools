@@ -93,7 +93,11 @@ namespace PowerTools.Core.SharedServices
                 finally
                 {
                     ApplicationService.Instance.Free();
-                    _taskStatuses[taskName] = false;
+
+                    lock (_lock)
+                    {
+                        _taskStatuses[taskName] = false;
+                    }
                 }
             });
         }

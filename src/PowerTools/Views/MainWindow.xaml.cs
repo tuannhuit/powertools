@@ -4,6 +4,10 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
+using System.Windows.Input;
+using PowerTools.Core.SharedServices;
+using PowerTools.Views.UserControls;
+using Prism.Commands;
 
 namespace PowerTools.Views
 {
@@ -33,6 +37,7 @@ namespace PowerTools.Views
         public MainWindow()
         {
             InitializeComponent();
+            ApplicationService.Instance.MainWindow = this;
         }
 
         public static ObservableCollection<Criteria> ColumnFilters = new ObservableCollection<Criteria>
@@ -67,7 +72,35 @@ namespace PowerTools.Views
                         return;
                     } 
                 })
-            }; 
+            };
+
+        public static ObservableCollection<CustomAction> CustomActions = new ObservableCollection<CustomAction>
+        {
+            new CustomAction
+            {
+                Icon = ButtonIcons.Setting,
+                Name = "Settings"
+            },
+            new CustomAction
+            {
+                Icon = ButtonIcons.Add,
+                Name = "Add"
+            }
+        };
+
+        public static ICommand TestButtonCommand { get; set; } = new DelegateCommand(OnShowDialog);
+
+        private static void OnShowDialog()
+        {
+            var dialogActions = new List<CustomAction>
+            {
+                new CustomAction
+                {
+                    Icon = ButtonIcons.Add,
+                    Name = "Add"
+                }
+            };
+        }
 
         public static ObservableCollection<Criteria> ColumnSettings = new ObservableCollection<Criteria>
             {

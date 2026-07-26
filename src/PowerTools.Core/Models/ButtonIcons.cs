@@ -7,6 +7,7 @@
         public static string Download = "\ue118";
         public static string Refresh = "🔃";
         public static string Delete = "\ue107";
+        public static string Cancel = "\ue10A";
         public static string Stop = "\uE103";
         public static string Setting = "\ue115";
         public static string Module = "\ue14e";

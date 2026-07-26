@@ -1,16 +1,15 @@
-﻿using PowerTools.Helpers;
+﻿using PowerTools.Core.Configurations;
+using PowerTools.Core.SharedServices;
+using PowerTools.Helpers;
 using PowerTools.ViewModels.UserControls;
 using PowerTools.Views;
 using PowerTools.Views.UserControls;
 using Prism.Ioc;
 using Prism.Unity;
-using System.Windows;
-using Prism.Regions;
+using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
-using System;
-using PowerTools.Core.Configurations;
-using PowerTools.Core.SharedServices;
+using System.Windows;
 
 namespace PowerTools
 {
@@ -25,6 +24,7 @@ namespace PowerTools
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
             containerRegistry.RegisterDialog<ModuleSettingsView, ModuleSettingsViewModel>();
+            containerRegistry.RegisterDialog<DialogView, DialogViewModel>();
         }
 
         public static Action RegisteredUserUnHandledException;

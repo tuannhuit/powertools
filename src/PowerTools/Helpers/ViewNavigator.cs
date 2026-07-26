@@ -4,6 +4,7 @@ using Prism.Ioc;
 using Prism.Regions;
 using System;
 using System.Linq;
+using System.Windows;
 using PowerTools.Core.Models;
 
 namespace PowerTools.Helpers
@@ -27,8 +28,9 @@ namespace PowerTools.Helpers
             }
         }
 
-        public void NavigateToModuleView(IContainerProvider container,  ToolModule module)
+        public void NavigateToModuleView(ToolModule module)
         {
+            var container = ModuleLoader.Container;
             var region = container.Resolve<IRegionManager>();
             if (region == null) return;
 
@@ -48,8 +50,9 @@ namespace PowerTools.Helpers
             region.RequestNavigate(Constants.ModuleRegionName, viewType.FullName);
         }
 
-        public void NavigateToModuleLoaderView(IContainerProvider container)
+        public void NavigateToModuleLoaderView()
         {
+            var container = ModuleLoader.Container;
             var region = container.Resolve<IRegionManager>();
             if (region == null) return;
 
@@ -59,6 +62,20 @@ namespace PowerTools.Helpers
             }
 
             region.RequestNavigate(Constants.ModuleRegionName, new Uri("ModuleList", UriKind.Relative));
+        }
+
+        public void NavigateToDialogView(Type dialogViewType, DialogInformation dialogInformation)
+        {
+            var container = ModuleLoader.Container;
+            var region = container.Resolve<IRegionManager>();
+            if (region == null) return;
+
+            if (!IsExistedNavigation(region, Constants.DialogRegionName, dialogViewType))
+            {
+                region.RegisterViewWithRegion(Constants.DialogRegionName, dialogViewType);
+            }
+
+            region.RequestNavigate(Constants.DialogRegionName, dialogViewType.FullName);
         }
 
         private bool IsExistedNavigation(IRegionManager regionManager, string regionName, Type viewType)

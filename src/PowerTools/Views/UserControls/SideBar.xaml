@@ -4,11 +4,12 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:models="clr-namespace:PowerTools.Core.Models;assembly=PowerTools.Core"
+             xmlns:appModels="clr-namespace:PowerTools.Core.SharedServices;assembly=PowerTools.Core"
              xmlns:behaviours="clr-namespace:PowerTools.Core.Behaviours;assembly=PowerTools.Core"
              mc:Ignorable="d" 
              x:Name="userControlSideBar"
              d:DesignHeight="450" d:DesignWidth="250"
-             IsEnabled="{Binding IsFree, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+             IsEnabled="{Binding Source={x:Static appModels:ApplicationService.Instance}, Path=IsFree, UpdateSourceTrigger=PropertyChanged}">
     <Border HorizontalAlignment="Left" BorderThickness="0 0 1 0">
         <Grid>
             <Grid.RowDefinitions>

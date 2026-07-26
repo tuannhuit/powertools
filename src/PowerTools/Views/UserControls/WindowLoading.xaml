@@ -4,10 +4,11 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:models="clr-namespace:PowerTools.Core.Models;assembly=PowerTools.Core"
+             xmlns:appModels="clr-namespace:PowerTools.Core.SharedServices;assembly=PowerTools.Core"
              xmlns:sharedServices="clr-namespace:PowerTools.Core.SharedServices;assembly=PowerTools.Core"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid Visibility="{Binding IsBusy, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}">
+    <Grid Visibility="{Binding Source={x:Static appModels:ApplicationService.Instance}, Path=IsBusy, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}">
         <Rectangle Fill="WhiteSmoke" Opacity="0.2"/>
         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" >
             <TextBlock Style="{StaticResource TextBlock.Icon}" Text="{x:Static models:ButtonIcons.Loading}" VerticalAlignment="Center" HorizontalAlignment="Center"  FontWeight="SemiBold" Margin="5"/>

@@ -1,11 +1,10 @@
 ﻿using Prism.Mvvm;
 using System;
 using System.Linq.Expressions;
-using System.Windows.Input;
 
 namespace PowerTools.Core.Models
 {
-    public class CustomAction : BindableBase
+    public class DialogAction : BindableBase
     {
         private string _name;
         public string Name
@@ -29,18 +28,18 @@ namespace PowerTools.Core.Models
             }
         }
 
-        private ICommand _command;
-        public ICommand Command
+        private bool _doCloseWhenInvoked;
+        public bool DoCloseWhenInvoked
         {
-            get => _command;
+            get => _doCloseWhenInvoked;
             set
             {
-                _command = value;
+                _doCloseWhenInvoked = value;
                 RaisePropertyChanged();
             }
         }
 
-        public Action Action { get; set; }
+        public Action<ActionParams> Action { get; set; }
         public Expression<Func<bool>> CanExecuteExpression { get; set; }
     }
 }

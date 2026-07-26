@@ -20,7 +20,6 @@ namespace PowerTools.ViewModels
 {
     public class MainWindowViewModel : BindableBase
     {
-        private readonly IContainerProvider _container;
         private IDialogService _dialogService;
 
         private GridLength _viewLogGridLength;
@@ -32,19 +31,6 @@ namespace PowerTools.ViewModels
                 _viewLogGridLength = value;
                 LoggingService.Instance.DoShowLog = ViewLogGridLength.Value >= 10;
                 RaisePropertyChanged();
-            }
-        }
-        public bool IsFree => !_isBusy;
-
-        private bool _isBusy;
-        public bool IsBusy
-        {
-            get => _isBusy;
-            set
-            {
-                _isBusy = value;
-                RaisePropertyChanged();
-                RaisePropertyChanged("IsFree");
             }
         }
 
@@ -70,7 +56,7 @@ namespace PowerTools.ViewModels
 
         #endregion
 
-        public MainWindowViewModel(IContainerProvider container, IRegionManager regionManager, IDialogService dialogService)
+        public MainWindowViewModel(IContainerProvider container, IRegionManager regionManager, IDialogService dialogService, IContainerExtension containerExtension)
         {
             //var localFile = @"C:\Temp\test.json";
             //using (var webClient = new WebClient())
@@ -78,12 +64,13 @@ namespace PowerTools.ViewModels
             //    webClient.DownloadFile("file://hsnicx-fg01/icxteamcitybucket/Teams/Delta/Tools/PowerTool/modules/repository-v3.0.0.0-PREVIEW.json", localFile);
             //}
 
-            _container = container;
             _dialogService = dialogService;
 
             LoggingService.Instance.DoShowLogCallback = DoShowLogCallback;
-            ApplicationService.Instance.DoBusy = DoBusy;
+            //ApplicationService.Instance.DoBusy = DoBusy;
             ApplicationService.Instance.DoShowMessageBox = DoShowMessageBox;
+            ApplicationService.Instance.DialogService = dialogService;
+            ApplicationService.Instance.ContainerExtension = containerExtension;
 
             ViewLogGridLength = new GridLength(0);
 
@@ -94,7 +81,7 @@ namespace PowerTools.ViewModels
             CmdClearLogs = new DelegateCommand(OnCmdClearLogs);
 
             Repositories.RepositoryLocal.Load(false);
-            ModuleLoader.Container = _container;
+            ModuleLoader.Container = containerExtension;
             foreach (var toolModule in Repositories.RepositoryLocal.ModuleList)
             {
                 if (toolModule.IsActive)
@@ -160,10 +147,10 @@ namespace PowerTools.ViewModels
             }
         }
 
-        private void DoBusy(bool doBusy)
-        {
-            IsBusy = doBusy;
-        }
+        //private void DoBusy(bool doBusy)
+        //{
+        //    IsBusy = doBusy;
+        //}
 
         private void DoShowLogCallback(bool doShowLogs)
         {
@@ -217,7 +204,7 @@ namespace PowerTools.ViewModels
         private void OnCmdSelectModuleList()
         {
             IsActiveModuleList = true;
-            ViewNavigator.Instance.NavigateToModuleLoaderView(_container);
+            ViewNavigator.Instance.NavigateToModuleLoaderView();
             Repositories.RepositoryLocal.ModuleList.ForEach(p => p.IsSelected = false);
         }
 
@@ -229,7 +216,7 @@ namespace PowerTools.ViewModels
             {
                 try
                 {
-                    ViewNavigator.Instance.NavigateToModuleView(_container, module);
+                    ViewNavigator.Instance.NavigateToModuleView(module);
                 }
                 catch (Exception e)
                 {
