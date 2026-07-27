@@ -7,6 +7,7 @@
              xmlns:configurations="clr-namespace:PowerTools.Core.Configurations;assembly=PowerTools.Core"
              xmlns:models="clr-namespace:PowerTools.Core.Models;assembly=PowerTools.Core"
              xmlns:sharedServices="clr-namespace:PowerTools.Core.SharedServices;assembly=PowerTools.Core"
+             xmlns:helpers="clr-namespace:PowerTools.Helpers"
              prism:ViewModelLocator.AutoWireViewModel="True"
              mc:Ignorable="d"
              IsEnabled="{Binding Source={x:Static sharedServices:ApplicationService.Instance}, Path=IsFree, UpdateSourceTrigger=PropertyChanged}">
@@ -134,7 +135,7 @@
                     </Button.Triggers>
                 </Button>
                 <Rectangle Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" VerticalAlignment="Top" Stroke="WhiteSmoke" StrokeThickness="1"/>
-                <ContentControl Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3"
+                <ContentControl x:Name="DialogContentHost" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3"
                                 prism:RegionManager.RegionName="{x:Static configurations:Constants.DialogRegionName}"
                                 Margin="1"
                                 DataContext="{Binding ViewModel, UpdateSourceTrigger=PropertyChanged}"

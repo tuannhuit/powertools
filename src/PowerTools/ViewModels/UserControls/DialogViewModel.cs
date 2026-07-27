@@ -13,8 +13,6 @@ namespace PowerTools.ViewModels.UserControls
 {
     public class DialogViewModel : BindableBase, IDialogAware
     {
-        private readonly IRegionManager _regionManager;
-
         private string _title;
         public string Title
         {
@@ -58,9 +56,8 @@ namespace PowerTools.ViewModels.UserControls
 
         public event Action<IDialogResult>? RequestClose;
 
-        public DialogViewModel(IRegionManager regionManager)
+        public DialogViewModel()
         {
-            _regionManager = regionManager;
             CloseCommand = new DelegateCommand(() => RequestClose?.Invoke(new DialogResult(ButtonResult.Cancel)));
         }
 
@@ -68,11 +65,7 @@ namespace PowerTools.ViewModels.UserControls
 
         public void OnDialogClosed()
         {
-            //if(_regionManager.Regions.ContainsRegionWithName(PowerTools.Core.Configurations.Constants.DialogRegionName))
-            //{
-            //    var region = _regionManager.Regions[PowerTools.Core.Configurations.Constants.DialogRegionName];
-            //    region.RemoveAll();
-            //}
+
         }
 
         public void OnDialogOpened(IDialogParameters parameters)

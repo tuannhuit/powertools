@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using PowerTools.Core.SharedServices;
+using PowerTools.Helpers;
 
 namespace PowerTools.Views.UserControls
 {
