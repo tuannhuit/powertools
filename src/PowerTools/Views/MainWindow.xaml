@@ -11,7 +11,7 @@
         mc:Ignorable="d"
         d:DesignHeight="450" d:DesignWidth="800"
         Title="PowerTools"
-        Background="WhiteSmoke"
+        Background="{StaticResource Background.Default}"
         WindowStartupLocation="CenterScreen" 
         MinWidth="{Binding Source={x:Static configurations:ModuleGlobalSettings.Instance}, Path=WindowSettings.MinWidth}"
         MaxWidth="{Binding Source={x:Static configurations:ModuleGlobalSettings.Instance}, Path=WindowSettings.MaxWidth}"
@@ -32,9 +32,9 @@
         </Grid.RowDefinitions>
         <userControls:SideBar Grid.Column="0" Grid.Row="0" Grid.RowSpan="3"/>
         <Grid Grid.Column="1" Grid.Row="0" Margin="5 10 10 0" >
-            <Border Background="LightGray" BorderBrush="LightGray" BorderThickness="1" CornerRadius="5">
+            <Border Background="DarkGray" BorderBrush="Transparent" BorderThickness="0" CornerRadius="5">
                 <Border.Effect>
-                    <BlurEffect Radius="5" KernelType="Gaussian" RenderingBias="Performance"/>
+                    <BlurEffect Radius="10" KernelType="Gaussian" RenderingBias="Performance"/>
                 </Border.Effect>
             </Border>
             <Border Margin="1" Background="White" BorderBrush="White" BorderThickness="1" CornerRadius="5">
