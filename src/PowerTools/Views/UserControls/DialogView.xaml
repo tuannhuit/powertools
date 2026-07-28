@@ -135,9 +135,9 @@
                     </Button.Triggers>
                 </Button>
                 <Rectangle Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" VerticalAlignment="Top" Stroke="WhiteSmoke" StrokeThickness="1"/>
-                <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Margin="1" MinWidth="0" MinHeight="0">
-                    <ContentControl x:Name="DialogContentHost"/>
-                </Grid>
+                <ContentControl x:Name="DialogContentHost"
+                                DataContext="{Binding ViewModel, UpdateSourceTrigger=PropertyChanged}"
+                                Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Margin="1" MinWidth="0" MinHeight="0"/>
             </Grid>
         </Border>
     </Grid>
