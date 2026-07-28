@@ -72,46 +72,51 @@ namespace PowerTools.ViewModels.UserControls
         {
             if (parameters.ContainsKey("dialogInformation"))
             {
-                var dialogParameters = parameters.GetValue<DialogInformation>("dialogInformation");
+                var dialogInformation = parameters.GetValue<DialogInformation>("dialogInformation");
 
                 var dialogActions = new List<CustomAction>();
-                if (dialogParameters.Actions != null && dialogParameters.Actions.Any())
+                if (dialogInformation.Actions != null && dialogInformation.Actions.Any())
                 {
-                    foreach (var action in dialogParameters.Actions)
+                    foreach (var action in dialogInformation.Actions)
                     {
-                        var invokeAndCloseAction = new CustomAction
-                        {
-                            Name = action.Name,
-                            Icon = action.Icon,
-                        };
-
-                        invokeAndCloseAction.Command = new DelegateCommand(() =>
+                        var delegateCommand = new DelegateCommand(() =>
                         {
                             var actionParams = new ActionParams
                             {
                                 // By default, we assume the action is not handled. The action itself can set this to true if it handles the action.
                                 // This allows the action to control whether the dialog should close or not.
-                                IsHandled = false
+                                IsHandled = false,
+                                Data = dialogInformation.ViewModel
                             };
                             action.Action?.Invoke(actionParams);
-                            
+
                             if (!actionParams.IsHandled && action.DoCloseWhenInvoked)
                             {
                                 RequestClose?.Invoke(new DialogResult(ButtonResult.OK));
                             }
-                        }).ObservesCanExecute(action.CanExecuteExpression);
+                        });
 
-                        dialogActions.Add(invokeAndCloseAction);
+                        if (action.CanExecuteExpression != null)
+                        {
+                            delegateCommand.ObservesCanExecute(action.CanExecuteExpression);
+                        }
+
+                        dialogActions.Add(new CustomAction
+                        {
+                            Name = action.Name,
+                            Icon = action.Icon,
+                            Command = delegateCommand
+                        });
                     }
                 }
 
-                Title = dialogParameters.Title;
-                Width = dialogParameters.Width;
-                Height = dialogParameters.Height;
+                Title = dialogInformation.Title;
+                Width = dialogInformation.Width;
+                Height = dialogInformation.Height;
                 Actions = new ObservableCollection<CustomAction>(dialogActions);
-                ViewModel = dialogParameters.ViewModel;
+                ViewModel = dialogInformation.ViewModel;
 
-                ViewNavigator.Instance.NavigateToDialogView(dialogParameters.ViewType, dialogParameters);
+                ViewNavigator.Instance.NavigateToDialogView(dialogInformation.ViewType, dialogInformation);
             }
         }
     }

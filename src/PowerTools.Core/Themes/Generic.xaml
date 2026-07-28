@@ -19,12 +19,13 @@
     <converters:BoolToStringConverter x:Key="BoolToStringConverter"/>
 
     <SolidColorBrush x:Key="Background.Gray" Color="#CCCCCC"/>
-    <SolidColorBrush x:Key="Background.LightGray" Color="#DDDDDD"/>
+    <SolidColorBrush x:Key="Background.LightGray" Color="#E6E6E6"/>
     <SolidColorBrush x:Key="Background.WhiteSmoke" Color="WhiteSmoke"/>
     <SolidColorBrush x:Key="Background.Default" Color="#F8F8F8"/>
     <SolidColorBrush x:Key="Background.Black" Color="#2C2C2C"/>
 
     <SolidColorBrush x:Key="TextBox.Background.Black" Color="#0C0C0C"/>
+    <SolidColorBrush x:Key="TextBox.Foreground.Gray" Color="#FF585858"/>
     <SolidColorBrush x:Key="TextBox.Foreground.Grey" Color="#CCCCCC"/>
     <SolidColorBrush x:Key="TextBox.Static.Background" Color="#FFFFFFFF"/>
     <SolidColorBrush x:Key="ScrollBar.Static.Background" Color="WhiteSmoke"/>
@@ -143,7 +144,7 @@
         <Setter Property="MinHeight" Value="30"/>
         <Setter Property="VerticalAlignment" Value="Top"/>
         <Setter Property="HorizontalAlignment" Value="Left"/>
-        <Setter Property="Foreground" Value="#FF585858"/>
+        <Setter Property="Foreground" Value="{StaticResource TextBox.Foreground.Gray}"/>
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="BorderBrush" Value="Transparent"/>
         <Setter Property="BorderThickness" Value="1"/>
@@ -490,7 +491,7 @@
         <Setter Property="Margin" Value="5 5 5 0"/>
         <Setter Property="FontSize" Value="11"/>
         <Setter Property="FontWeight" Value="Normal"/>
-        <Setter Property="BorderBrush" Value="Gray"/>
+        <Setter Property="Foreground" Value="{StaticResource TextBox.Foreground.Gray}"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="HorizontalContentAlignment" Value="Left"/>
         <Setter Property="FontSize" Value="12"/>
@@ -510,7 +511,7 @@
         <Setter Property="MinHeight" Value="30"/>
         <Setter Property="VerticalAlignment" Value="Top"/>
         <Setter Property="HorizontalAlignment" Value="Left"/>
-        <Setter Property="Foreground" Value="Black"/>
+        <Setter Property="Foreground" Value="{StaticResource TextBox.Foreground.Gray}"/>
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="BorderBrush" Value="Transparent"/>
         <Setter Property="BorderThickness" Value="0"/>
@@ -553,7 +554,7 @@
         <Setter Property="Height" Value="30"/>
         <Setter Property="VerticalAlignment" Value="Top"/>
         <Setter Property="HorizontalAlignment" Value="Left"/>
-        <Setter Property="Foreground" Value="Black"/>
+        <Setter Property="Foreground" Value="{StaticResource TextBox.Foreground.Gray}"/>
         <Setter Property="Background" Value="{StaticResource Background.LightGray}"/>
         <Setter Property="BorderBrush" Value="Transparent"/>
         <Setter Property="BorderThickness" Value="0"/>
@@ -596,12 +597,11 @@
         <Setter Property="MinHeight" Value="30"/>
         <Setter Property="VerticalAlignment" Value="Top"/>
         <Setter Property="HorizontalAlignment" Value="Left"/>
-        <Setter Property="Foreground" Value="Black"/>
-        <Setter Property="BorderBrush" Value="LightGray"/>
-        <Setter Property="Background" Value="WhiteSmoke"/>
+        <Setter Property="Foreground" Value="{StaticResource TextBox.Foreground.Gray}"/>
+        <Setter Property="Background" Value="{StaticResource Background.LightGray}"/>
         <!--<Setter Property="Background" Value="{StaticResource Button.MouseOver.Background}"/>-->
-        <Setter Property="FontSize" Value="12"/>
-        <Setter Property="FontWeight" Value="Normal"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="Padding" Value="5"/>
         <Setter Property="Template">
             <Setter.Value>
