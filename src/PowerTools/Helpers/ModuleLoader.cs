@@ -4,18 +4,30 @@ using Prism.Ioc;
 using Prism.Modularity;
 using Prism.Regions;
 using System;
-using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text.RegularExpressions;
-using PowerTools.Core.Configurations;
 
 namespace PowerTools.Helpers
 {
     public static class ModuleLoader
     {
-        public static IContainerProvider Container;
+        private static IContainerProvider _container;
+
+        public static IContainerProvider Container
+        {
+            get=> _container;
+            set
+            {
+                _container = value;
+                RegionManager = _container.Resolve<IRegionManager>();
+                DialogRegionManager = RegionManager.CreateRegionManager();
+            }
+        }
+
+        public static IRegionManager RegionManager { get; private set; }
+        public static IRegionManager DialogRegionManager { get; private set; }
+
         public static void LoadModule(ToolModule module)
         {
             if (module.IsLoaded)

@@ -5,6 +5,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:configurations="clr-namespace:PowerTools.Core.Configurations;assembly=PowerTools.Core"
+        xmlns:helpers="clr-namespace:PowerTools.Helpers"
         xmlns:userControls="clr-namespace:PowerTools.Views.UserControls"
         xmlns:models="clr-namespace:PowerTools.Core.SharedServices;assembly=PowerTools.Core"
         prism:ViewModelLocator.AutoWireViewModel="True"
@@ -48,6 +49,13 @@
         </Grid>
         <GridSplitter Style="{StaticResource GridSplitter.Normal}" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Stretch" Background="Transparent"/>
         <userControls:LogsView Grid.Column="1" Grid.Row="2"/>
+        <Grid Grid.Column="1" Grid.Row="2" Background="White" Visibility="Collapsed">
+            <ContentControl x:Name="ContentControlDialogView"
+                            prism:RegionManager.RegionName="{x:Static configurations:Constants.DialogRegionName}"
+                            prism:RegionManager.RegionManager="{x:Static helpers:ModuleLoader.DialogRegionManager}"
+                            DataContext="{Binding ViewModel, UpdateSourceTrigger=PropertyChanged}"
+                            Focusable="False"/>
+        </Grid>
         <userControls:StatusBar Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="3" />
         <!--<Grid Grid.ColumnSpan="2" Grid.RowSpan="4" Margin="0" Background="White">
             <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">

@@ -1,15 +1,10 @@
 ﻿using PowerTools.Core.Configurations;
+using PowerTools.Core.Models;
 using PowerTools.Views;
-using Prism.Ioc;
+using Prism.Mvvm;
 using Prism.Regions;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
-using System.Windows;
-using System.Windows.Documents;
-using PowerTools.Core.Models;
-using Prism.Mvvm;
 
 namespace PowerTools.Helpers
 {
@@ -32,22 +27,9 @@ namespace PowerTools.Helpers
             }
         }
 
-        private IRegionManager _dialogRegionManager;
-        public IRegionManager DialogRegionManager
-        {
-            get => _dialogRegionManager;
-            set
-            {
-                _dialogRegionManager = value;
-                RaisePropertyChanged(nameof(DialogRegionManager));
-            }
-        }
-
         public void NavigateToModuleView(ToolModule module)
         {
-            var container = ModuleLoader.Container;
-            var region = container.Resolve<IRegionManager>();
-            if (region == null) return;
+            var region = ModuleLoader.RegionManager;
 
             ModuleGlobalSettings.Instance.CurrentModule = module;
 
@@ -67,9 +49,7 @@ namespace PowerTools.Helpers
 
         public void NavigateToModuleLoaderView()
         {
-            var container = ModuleLoader.Container;
-            var region = container.Resolve<IRegionManager>();
-            if (region == null) return;
+            var region = ModuleLoader.RegionManager;
 
             if (!IsExistedNavigation(region, Constants.ModuleRegionName, typeof(ModuleList)))
             {
@@ -81,45 +61,14 @@ namespace PowerTools.Helpers
 
         public void NavigateToDialogView(Type dialogViewType, DialogInformation dialogInformation)
         {
-            var container = ModuleLoader.Container;
-            var region = container.Resolve<IRegionManager>();
-            if (region == null) return;
+            var region = ModuleLoader.DialogRegionManager;
 
-            var retryTimes = 10;
-            while (retryTimes-- >= 0)
+            if (!IsExistedNavigation(region, Constants.DialogRegionName, dialogViewType))
             {
-                if (DialogRegionManager == null)
-                {
-                    DialogRegionManager = region.CreateRegionManager();
-                }
-
-                if (!DoRegisteredDialogView(dialogViewType))
-                {
-                    DialogRegionManager.RegisterViewWithRegion(Constants.DialogRegionName, dialogViewType);
-                }
-
-                try
-                {
-                    DialogRegionManager.RequestNavigate(Constants.DialogRegionName, dialogViewType.FullName);
-                }
-                catch (Exception e)
-                {
-                    _registeredDialogViews.Clear();
-                    DialogRegionManager = null;
-                }
-            }
-        }
-
-        private List<Type> _registeredDialogViews = new List<Type>();
-        private bool DoRegisteredDialogView(Type dialogView)
-        {
-            if (_registeredDialogViews.Contains(dialogView))
-            {
-                return true;
+                region.RegisterViewWithRegion(Constants.DialogRegionName, dialogViewType);
             }
 
-            _registeredDialogViews.Add(dialogView);
-            return false;
+            region.RequestNavigate(Constants.DialogRegionName, dialogViewType.FullName);
         }
 
         private bool IsExistedNavigation(IRegionManager regionManager, string regionName, Type viewType)

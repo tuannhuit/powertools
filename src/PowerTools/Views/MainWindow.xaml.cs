@@ -1,13 +1,11 @@
 ﻿using PowerTools.Core.Models;
-using System;
+using PowerTools.Core.SharedServices;
+using Prism.Commands;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
-using PowerTools.Core.SharedServices;
-using PowerTools.Views.UserControls;
-using Prism.Commands;
 
 namespace PowerTools.Views
 {
@@ -38,6 +36,7 @@ namespace PowerTools.Views
         {
             InitializeComponent();
             ApplicationService.Instance.MainWindow = this;
+            ApplicationService.Instance.DialogView = ContentControlDialogView;
         }
 
         public static ObservableCollection<Criteria> ColumnFilters = new ObservableCollection<Criteria>

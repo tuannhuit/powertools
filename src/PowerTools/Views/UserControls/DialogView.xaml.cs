@@ -1,8 +1,7 @@
-﻿using Prism.Services.Dialogs;
+﻿using PowerTools.Core.SharedServices;
+using Prism.Services.Dialogs;
 using System.Windows;
 using System.Windows.Controls;
-using PowerTools.Core.SharedServices;
-using PowerTools.Helpers;
 
 namespace PowerTools.Views.UserControls
 {
@@ -19,6 +18,8 @@ namespace PowerTools.Views.UserControls
 
         private void OnUserControlLoaded(object sender, RoutedEventArgs e)
         {
+            this.DialogContentHost.Content = ApplicationService.Instance.DialogView.Content;
+
             // 1. Grab Prism's dynamically generated Window wrapper host instance
             Window parentWindow = Window.GetWindow(this);
             if (parentWindow == null) return;

@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace PowerTools.Core.SharedServices
 {
@@ -17,6 +18,7 @@ namespace PowerTools.Core.SharedServices
         public IDialogService DialogService { get; set; }
         public IContainerExtension ContainerExtension { get; set; }
         public Window MainWindow { get; set; }
+        public ContentControl DialogView { get; set; }
         //public Action<bool> DoBusy;
         public bool IsFree => !_isBusy;
 
