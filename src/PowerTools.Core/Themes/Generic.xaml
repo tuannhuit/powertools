@@ -18,6 +18,7 @@
     <converters:BooleanToGridSizeConverter x:Key="BooleanToGridSizeConverter"/>
     <converters:BoolToStringConverter x:Key="BoolToStringConverter"/>
 
+    <SolidColorBrush x:Key="Background.Gray" Color="#CCCCCC"/>
     <SolidColorBrush x:Key="Background.LightGray" Color="#DDDDDD"/>
     <SolidColorBrush x:Key="Background.WhiteSmoke" Color="WhiteSmoke"/>
     <SolidColorBrush x:Key="Background.Default" Color="#F8F8F8"/>
@@ -509,7 +510,7 @@
         <Setter Property="MinHeight" Value="30"/>
         <Setter Property="VerticalAlignment" Value="Top"/>
         <Setter Property="HorizontalAlignment" Value="Left"/>
-        <Setter Property="Foreground" Value="#FF585858"/>
+        <Setter Property="Foreground" Value="Black"/>
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="BorderBrush" Value="Transparent"/>
         <Setter Property="BorderThickness" Value="0"/>
@@ -553,8 +554,8 @@
         <Setter Property="VerticalAlignment" Value="Top"/>
         <Setter Property="HorizontalAlignment" Value="Left"/>
         <Setter Property="Foreground" Value="Black"/>
-        <Setter Property="Background" Value="{StaticResource Background.WhiteSmoke}"/>
-        <Setter Property="BorderBrush" Value="LightGray"/>
+        <Setter Property="Background" Value="{StaticResource Background.LightGray}"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
         <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="FontSize" Value="12"/>
         <Setter Property="FontWeight" Value="Normal"/>

@@ -4,10 +4,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:configurations="clr-namespace:PowerTools.Core.Configurations;assembly=PowerTools.Core"
              xmlns:models="clr-namespace:PowerTools.Core.Models;assembly=PowerTools.Core"
              xmlns:sharedServices="clr-namespace:PowerTools.Core.SharedServices;assembly=PowerTools.Core"
-             xmlns:helpers="clr-namespace:PowerTools.Helpers"
              prism:ViewModelLocator.AutoWireViewModel="True"
              mc:Ignorable="d"
              IsEnabled="{Binding Source={x:Static sharedServices:ApplicationService.Instance}, Path=IsFree, UpdateSourceTrigger=PropertyChanged}">
@@ -104,7 +102,7 @@
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                <Border Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Background="WhiteSmoke" CornerRadius="5 5 0 0"/>
+                <Border Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Background="{StaticResource Background.Default}" CornerRadius="5 5 0 0"/>
                 <TextBlock Style="{StaticResource TextBlock.ContentSmall}" Grid.Row="0" Grid.Column="0" Text="{Binding Title, UpdateSourceTrigger=PropertyChanged}" FontWeight="Medium" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Left"/>
                 <ItemsControl Grid.Row="0" Grid.Column="1" ItemsSource="{Binding Actions}" Margin="0" VerticalAlignment="Center" HorizontalAlignment="Right">
                     <ItemsControl.ItemsPanel>
