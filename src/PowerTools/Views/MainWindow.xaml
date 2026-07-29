@@ -56,16 +56,18 @@
                             Focusable="False"/>
         </Grid>
         <userControls:StatusBar Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="3" />
-        <!--<Grid Grid.ColumnSpan="2" Grid.RowSpan="4" Margin="0" Background="White">
+        <!--<Grid Grid.Row="0" Grid.RowSpan="4" Grid.Column="0" Grid.ColumnSpan="2" Margin="0" Background="White">
             <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                <Button Style="{StaticResource Button.Normal}" Content="Button" Command="{x:Static local:MainWindow.TestButtonCommand}"/>
-                <Button Style="{StaticResource Button.Normal}" Content="Button" IsEnabled="False"/>
-                <Button Style="{StaticResource Button.Icon}" Content="{x:Static models:ButtonIcons.Add}"/>
-                <Button Style="{StaticResource Button.Icon}" Content="{x:Static models:ButtonIcons.Add}" IsEnabled="False"/>
-                <Button Style="{StaticResource Button.IconActive}" Content="{x:Static models:ButtonIcons.Add}"/>
-                <Button Style="{StaticResource Button.IconActive}" Content="{x:Static models:ButtonIcons.Add}" IsEnabled="False"/>
-                <CheckBox Style="{StaticResource CheckBox.Normal}" Content="Checkbox"/>
-                <Expander Style="{StaticResource Expander.Normal}" Header="Expander" behaviours1:ExpanderBehavior.Actions="{x:Static local:MainWindow.CustomActions}"/>
+                <ComboBox Style="{StaticResource ComboBox.Flat}" IsDropDownOpen="True">
+                    <ComboBoxItem>abc</ComboBoxItem>
+                    <ComboBoxItem>abc</ComboBoxItem>
+                    <ComboBoxItem>abc</ComboBoxItem>
+                </ComboBox> 
+                <ComboBox Style="{StaticResource ComboBox.Flat}" IsEditable="True" IsDropDownOpen="True">
+                    <ComboBoxItem>abc</ComboBoxItem>
+                    <ComboBoxItem>abc</ComboBoxItem>
+                    <ComboBoxItem>abc</ComboBoxItem>
+                </ComboBox>
             </StackPanel> 
         </Grid>-->
     </Grid>
