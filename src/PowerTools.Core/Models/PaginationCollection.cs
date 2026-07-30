@@ -92,7 +92,7 @@ namespace PowerTools.Core.Models
 
         public int ItemStart
         {
-            get => ItemSource.Any() ? PAGE_SIZE * (Page - 1) + 1 : 0;
+            get => ItemSource.Any() ? PageSize.GetValueOrDefault() * (Page - 1) + 1 : 0;
         }
 
         public int ItemEnd
@@ -237,10 +237,11 @@ namespace PowerTools.Core.Models
 
         private void RecalculateItems()
         {
-            var pageSize = GetPageSize();
+            _pageSize = GetPageSize();
+
             var itemCount = ItemSource.Count;
-            _totalPage = itemCount / pageSize;
-            if (itemCount > _totalPage * pageSize)
+            _totalPage = itemCount / _pageSize.GetValueOrDefault();
+            if (itemCount > _totalPage * _pageSize.GetValueOrDefault())
             {
                 _totalPage += 1;
             }
@@ -255,7 +256,7 @@ namespace PowerTools.Core.Models
                 _page = _totalPage;
             }
 
-            var newItems = ItemSource.Skip(pageSize * (Page - 1)).Take(pageSize).ToList();
+            var newItems = ItemSource.Skip(_pageSize.GetValueOrDefault() * (Page - 1)).Take(_pageSize.GetValueOrDefault()).ToList();
 
             if (newItems.Any())
             {
