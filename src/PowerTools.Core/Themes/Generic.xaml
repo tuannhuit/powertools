@@ -1430,7 +1430,7 @@
                             <TabPanel Background="Transparent" IsItemsHost="true" Margin="0" KeyboardNavigation.TabIndex="1" Panel.ZIndex="1"/>
                         </ScrollViewer>
                         <Rectangle x:Name="rectHeader" Grid.Column="0" Grid.Row="1" Stroke="{StaticResource TabItem.Selected.Border}" StrokeThickness="1" VerticalAlignment="Top" HorizontalAlignment="Stretch"/>
-                        <TextBlock x:Name="tblIcon" Style="{StaticResource TextBlock.Header}" Grid.Column="0" Grid.Row="1" FontFamily="Segoe UI Symbol" Text="&#xE154;" FontSize="40" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="LightGray" Visibility="{TemplateBinding SelectedContent, Converter={StaticResource NullToVisibilityConverter}}"/>
+                        <TextBlock x:Name="tblIcon" Style="{StaticResource TextBlock.Header}" Grid.Column="0" Grid.Row="1" FontFamily="Segoe UI Symbol" Text="&#xE154;" FontSize="40" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="WhiteSmoke" Visibility="{TemplateBinding SelectedContent, Converter={StaticResource NullToVisibilityConverter}}"/>
                         <Border x:Name="contentPanel" Grid.Column="0" Grid.Row="1" Background="{TemplateBinding Background}" Margin="{TemplateBinding Padding}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}"  KeyboardNavigation.DirectionalNavigation="Contained"  KeyboardNavigation.TabIndex="2" KeyboardNavigation.TabNavigation="Local">
                             <ContentPresenter x:Name="PART_SelectedContentHost" ContentSource="SelectedContent" Margin="0" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
                         </Border>
