@@ -39,6 +39,12 @@ namespace PowerTools.Core.Controls
             set { SetValue(HeaderSettingsProperty, value); }
         }
 
+        public object HeaderExtendContent
+        {
+            get { return (object)GetValue(HeaderExtendContentProperty); }
+            set { SetValue(HeaderExtendContentProperty, value); }
+        }
+
         public bool IsFiltersVisible
         {
             get { return (bool)GetValue(IsFiltersVisibleProperty); }
@@ -62,6 +68,7 @@ namespace PowerTools.Core.Controls
         public static readonly DependencyProperty ColumnSettingsProperty = DependencyProperty.Register("ColumnSettings", typeof(IList), typeof(PaginationDataGrid), new FrameworkPropertyMetadata(null, OnColumnSettingsChanged));
         public static readonly DependencyProperty ButtonActionsProperty = DependencyProperty.Register("ButtonActions", typeof(IList), typeof(PaginationDataGrid), new FrameworkPropertyMetadata(null, null));
         public static readonly DependencyProperty HeaderSettingsProperty = DependencyProperty.Register("HeaderSettings", typeof(object), typeof(PaginationDataGrid), new PropertyMetadata(null));
+        public static readonly DependencyProperty HeaderExtendContentProperty = DependencyProperty.Register("HeaderExtendContent", typeof(object), typeof(PaginationDataGrid), new PropertyMetadata(null));
         public static readonly DependencyProperty IsFiltersVisibleProperty = DependencyProperty.Register("IsFiltersVisible", typeof(bool), typeof(PaginationDataGrid), new PropertyMetadata(null));
         public static readonly DependencyProperty IsHeaderSettingsEnableProperty = DependencyProperty.Register("IsHeaderSettingsEnable", typeof(bool), typeof(PaginationDataGrid), new PropertyMetadata(null));
         public static readonly DependencyProperty IsFiltersEnableProperty = DependencyProperty.Register("IsFiltersEnable", typeof(bool), typeof(PaginationDataGrid), new PropertyMetadata(null));
