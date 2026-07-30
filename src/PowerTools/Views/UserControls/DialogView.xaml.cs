@@ -35,24 +35,32 @@ namespace PowerTools.Views.UserControls
 
             // 3. FORCE RE-CENTERING COMPILATION LOOP
             // Check if the dialog has an active application Owner window set
-            if (ApplicationService.Instance.MainWindow != null)
+            var mainWindow = ApplicationService.Instance.MainWindow;
+            if (mainWindow != null)
             {
                 // Check if the application background dashboard is maximized
-                if (ApplicationService.Instance.MainWindow.WindowState == WindowState.Maximized)
+                if (mainWindow.WindowState == WindowState.Maximized)
                 {
-                    // Use the precise physical monitor work area bounds (ignores negative overflow coordinates)
-                    Rect workArea = SystemParameters.WorkArea;
+                    var presentationSource = PresentationSource.FromVisual(mainWindow);
+                    if (presentationSource != null && presentationSource.CompositionTarget != null)
+                    {
+                        // 3. Extract the active DPI scaling matrix from the target secondary monitor
+                        var transformMatrix = presentationSource.CompositionTarget.TransformFromDevice;
 
-                    parentWindow.Left = workArea.Left + (workArea.Width - parentWindow.Width) / 2;
-                    parentWindow.Top = workArea.Top + (workArea.Height - parentWindow.Height) / 2;
+                        // 6. Center your custom dialog window frame matching the calculated screen values
+                        // Because the Owner is set, setting Left and Top positions it relative to that secondary monitor screen!
+                        parentWindow.Left = mainWindow.Left + ((mainWindow.Width - parentWindow.Width) * transformMatrix.M11) / (2 * transformMatrix.M11);
+                        parentWindow.Top = mainWindow.Top + ((mainWindow.Height - parentWindow.Height) * transformMatrix.M22) / (2 * transformMatrix.M22);
+                    }
+
                 }
                 else
                 {
                     // Use standard bounding box logic if the parent is floating/normal size
-                    double ownerWidth = ApplicationService.Instance.MainWindow.ActualWidth;
-                    double ownerHeight = ApplicationService.Instance.MainWindow.ActualHeight;
-                    double ownerLeft = ApplicationService.Instance.MainWindow.Left;
-                    double ownerTop = ApplicationService.Instance.MainWindow.Top;
+                    double ownerWidth = mainWindow.ActualWidth;
+                    double ownerHeight = mainWindow.ActualHeight;
+                    double ownerLeft = mainWindow.Left;
+                    double ownerTop = mainWindow.Top;
 
                     parentWindow.Left = ownerLeft + (ownerWidth - parentWindow.Width) / 2;
                     parentWindow.Top = ownerTop + (ownerHeight - parentWindow.Height) / 2;
