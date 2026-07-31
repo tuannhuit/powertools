@@ -7,6 +7,7 @@
         xmlns:configurations="clr-namespace:PowerTools.Core.Configurations;assembly=PowerTools.Core"
         xmlns:helpers="clr-namespace:PowerTools.Helpers"
         xmlns:userControls="clr-namespace:PowerTools.Views.UserControls"
+        xmlns:controls="clr-namespace:PowerTools.Core.Controls;assembly=PowerTools.Core"
         xmlns:models="clr-namespace:PowerTools.Core.SharedServices;assembly=PowerTools.Core"
         prism:ViewModelLocator.AutoWireViewModel="True"
         mc:Ignorable="d"
@@ -62,13 +63,21 @@
                     <ComboBoxItem>abc</ComboBoxItem>
                     <ComboBoxItem>abc</ComboBoxItem>
                     <ComboBoxItem>abc</ComboBoxItem>
-                </ComboBox> 
+                </ComboBox>
                 <ComboBox Style="{StaticResource ComboBox.Flat}" IsEditable="True" IsDropDownOpen="True">
                     <ComboBoxItem>abc</ComboBoxItem>
                     <ComboBoxItem>abc</ComboBoxItem>
                     <ComboBoxItem>abc</ComboBoxItem>
                 </ComboBox>
-            </StackPanel> 
+                <controls:PaginationDataGrid Width="500" Height="300">
+                    <controls:PaginationDataGrid.Columns>
+                        <controls:PaginationDataGridTextColumn Name="ConsumerGroupId" Header="Consumer Group" Binding="{Binding ConsumerGroupId}" IsReadOnly="True" MinWidth="100"/>
+                        <controls:PaginationDataGridTextColumn Name="ConsumerId" Header="Consumer ID" Binding="{Binding ConsumerId}" IsReadOnly="True" MinWidth="100"/>
+                        <controls:PaginationDataGridTextColumn Name="Partition" Header="Partition" Binding="{Binding Partition.Value}" IsReadOnly="True" MinWidth="85"/>
+                        <controls:PaginationDataGridTextColumn Name="CurrentOffset" Header="Current Offset" Binding="{Binding CurrentOffset, Converter={StaticResource OffsetFormatter}}" IsReadOnly="True" MinWidth="100"/>
+                    </controls:PaginationDataGrid.Columns>
+                </controls:PaginationDataGrid>
+            </StackPanel>
         </Grid>-->
     </Grid>
 </Window>

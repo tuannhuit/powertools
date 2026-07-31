@@ -857,7 +857,6 @@
             </Grid>
         </Border>
     </ControlTemplate>
-
     <ControlTemplate x:Key="DataGridTemplate.PaginationDataGrid" TargetType="{x:Type controls:PaginationDataGrid}">
         <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}" CornerRadius="5" SnapsToDevicePixels="True">
             <Grid x:Name="gridMain">
@@ -865,7 +864,7 @@
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
-                <ScrollViewer x:Name="DG_ScrollViewer" Focusable="false" Grid.Row="0" Grid.RowSpan="2" CanContentScroll="True" HorizontalScrollBarVisibility="Auto">
+                <ScrollViewer x:Name="DG_ScrollViewer" Focusable="false" Grid.Row="0" CanContentScroll="True" HorizontalScrollBarVisibility="Auto">
                     <ScrollViewer.Template>
                         <ControlTemplate TargetType="{x:Type ScrollViewer}">
                             <Grid>
@@ -956,7 +955,7 @@
                                 </Border>
                                 <Button  Grid.Row="1" Command="{x:Static DataGrid.SelectAllCommand}" Focusable="false" Style="{DynamicResource {ComponentResourceKey ResourceId=DataGridSelectAllButtonStyle, TypeInTargetAssembly={x:Type DataGrid}}}" Visibility="{Binding HeadersVisibility, ConverterParameter={x:Static DataGridHeadersVisibility.All}, Converter={x:Static DataGrid.HeadersVisibilityConverter}, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" Width="{Binding CellsPanelHorizontalOffset, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"/>
                                 <DataGridColumnHeadersPresenter x:Name="PART_ColumnHeadersPresenter" Grid.Column="1" Grid.Row="1" Visibility="{Binding HeadersVisibility, ConverterParameter={x:Static DataGridHeadersVisibility.Column}, Converter={x:Static DataGrid.HeadersVisibilityConverter}, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" Margin="0 0 -1 0"/>
-                                <ScrollContentPresenter x:Name="PART_ScrollContentPresenter" Grid.ColumnSpan="2" Grid.Row="2" CanContentScroll="{TemplateBinding CanContentScroll}" />
+                                <ScrollContentPresenter x:Name="PART_ScrollContentPresenter" Grid.ColumnSpan="2" Grid.Row="2" CanContentScroll="{TemplateBinding CanContentScroll}"/>
                                 <ScrollBar x:Name="PART_VerticalScrollBar" Grid.Column="2" Grid.Row="2"  Maximum="{TemplateBinding ScrollableHeight}" Orientation="Vertical" Value="{Binding VerticalOffset, Mode=OneWay, RelativeSource={RelativeSource Mode=TemplatedParent}}" ViewportSize="{TemplateBinding ViewportHeight}" Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}"/>
                                 <Grid Grid.Column="1" Grid.Row="3">
                                     <Grid.ColumnDefinitions>
@@ -968,12 +967,12 @@
                             </Grid>
                         </ControlTemplate>
                     </ScrollViewer.Template>
-                    <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" Margin="0 0 0 33"/>
+                    <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
                 </ScrollViewer>
-                <Border Grid.Row="1" Background="WhiteSmoke" BorderBrush="LightGray" BorderThickness="1" CornerRadius="5" HorizontalAlignment="Right" Margin="5 5 13 13">
+                <Border Grid.Row="1" Background="{StaticResource Background.Default}" BorderBrush="Transparent" BorderThickness="0" CornerRadius="0 0 5 5">
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
                         <StackPanel Grid.Column="0" Orientation="Horizontal" Margin="0">
