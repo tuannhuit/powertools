@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
+using PowerTools.Core.SharedServices;
 
 namespace PowerTools.Core.Models
 {
@@ -59,7 +60,7 @@ namespace PowerTools.Core.Models
             _activeActions = _nonPageActions.Take(activeActionCount).ToList();
 
             var moreActions = _nonPageActions.Skip(activeActionCount).ToList();
-            if(moreActions!=null && moreActions.Any())
+            if (moreActions != null && moreActions.Any())
             {
                 _additionalActions = moreActions;
             }
@@ -139,15 +140,15 @@ namespace PowerTools.Core.Models
         public bool IsFirstPage => ItemSource.Any() ? _page == 1 : _page == 0;
         public bool IsLastPage => ItemSource.Any() ? _page == _totalPage : _page == 0;
 
-        public ICommand InvokeAction { get; set; }
+        public ICommand InvokeAction { get; private set; }
 
-        public PaginationCollection(IEnumerable<CustomAction> actions = null)
-            : this(new List<T>(), actions)
+        public PaginationCollection(IEnumerable<CustomAction> actions = null, ICommand refreshItemsCommand = null)
+            : this(new List<T>(), actions, refreshItemsCommand)
         {
 
         }
 
-        public PaginationCollection(IEnumerable<T> items, IEnumerable<CustomAction> actions = null)
+        public PaginationCollection(IEnumerable<T> items, IEnumerable<CustomAction> actions = null, ICommand refreshItemsCommand = null)
         {
             if (items == null)
             {
@@ -174,6 +175,11 @@ namespace PowerTools.Core.Models
                 {
                     Name = "MovePreviousPage",
                     Command = new DelegateCommand(OnMovePrevious)
+                },
+                new PageAction
+                {
+                    Name = "RefreshItems",
+                    Command = refreshItemsCommand
                 }
             };
 
@@ -181,6 +187,7 @@ namespace PowerTools.Core.Models
             {
                 Actions.AddRange(actions);
             }
+
             CacheActionProperties();
             InvokeAction = new DelegateCommand<string>(OnInvokeAction);
         }
@@ -198,7 +205,19 @@ namespace PowerTools.Core.Models
         private void OnInvokeAction(string actionName)
         {
             var foundAction = Actions.FirstOrDefault(p => p.Name == actionName);
-            foundAction?.Command.Execute(null);
+            if(foundAction==null)
+            {
+                LoggingService.Instance.Info($"Action '{actionName}' not found.");
+                return;
+            }
+
+            if(foundAction.Command == null)
+            {
+                LoggingService.Instance.Info($"Action '{actionName}' does not have a command.");
+                return;
+            }
+
+            foundAction.Command.Execute(null);
         }
 
         public void MoveToPage(int movePage)
