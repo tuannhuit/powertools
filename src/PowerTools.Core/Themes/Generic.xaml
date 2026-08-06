@@ -1448,9 +1448,9 @@
                                     <TabPanel Background="Transparent" IsItemsHost="true" Margin="0 " KeyboardNavigation.TabIndex="1" Panel.ZIndex="1"/>
                                 </Border>
                             </ScrollViewer>
-                            <TextBlock x:Name="tblIcon" Style="{StaticResource TextBlock.Header}" Grid.Column="0" Grid.Row="1" FontFamily="Segoe UI Symbol" Text="&#xE154;" FontSize="40" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="WhiteSmoke" Visibility="{TemplateBinding SelectedContent, Converter={StaticResource NullToVisibilityConverter}}"/>
+                            <!--<TextBlock x:Name="tblIcon" Style="{StaticResource TextBlock.Header}" Background="Yellow" Grid.Column="0" Grid.Row="1" FontFamily="Segoe UI Symbol" Text="&#xE154;" FontSize="40" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="WhiteSmoke" Visibility="{TemplateBinding SelectedContent, Converter={StaticResource NullToVisibilityConverter}}"/>-->
                             <Border x:Name="contentPanel" Grid.Column="0" Grid.Row="1" Margin="{TemplateBinding Padding}"  KeyboardNavigation.DirectionalNavigation="Contained" KeyboardNavigation.TabIndex="2" KeyboardNavigation.TabNavigation="Local">
-                                <ContentPresenter x:Name="PART_SelectedContentHost" ContentSource="SelectedContent" Margin="1" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                <ContentPresenter x:Name="PART_SelectedContentHost" ContentSource="SelectedContent" Margin="2" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
                             </Border>
                         </Grid>
                     </Border>
@@ -1458,17 +1458,17 @@
                         <Trigger Property="TabStripPlacement" Value="Bottom">
                             <Setter Property="Grid.Row" TargetName="headerPanel" Value="1"/>
                             <Setter Property="Grid.Row" TargetName="contentPanel" Value="0"/>
-                            <Setter Property="Grid.Row" TargetName="tblIcon" Value="0"/>
+                            <!--<Setter Property="Grid.Row" TargetName="tblIcon" Value="0"/>-->
                             <Setter Property="Height" TargetName="RowDefinition0" Value="*"/>
                             <Setter Property="Height" TargetName="RowDefinition1" Value="Auto"/>
                         </Trigger>
                         <Trigger Property="TabStripPlacement" Value="Left">
                             <Setter Property="Grid.Row" TargetName="headerPanel" Value="0"/>
                             <Setter Property="Grid.Row" TargetName="contentPanel" Value="0"/>
-                            <Setter Property="Grid.Row" TargetName="tblIcon" Value="0"/>
+                            <!--<Setter Property="Grid.Row" TargetName="tblIcon" Value="0"/>-->
                             <Setter Property="Grid.Column" TargetName="headerPanel" Value="0"/>
                             <Setter Property="Grid.Column" TargetName="contentPanel" Value="1"/>
-                            <Setter Property="Grid.Column" TargetName="tblIcon" Value="1"/>
+                            <!--<Setter Property="Grid.Column" TargetName="tblIcon" Value="1"/>-->
                             <Setter Property="Width" TargetName="ColumnDefinition0" Value="Auto"/>
                             <Setter Property="Width" TargetName="ColumnDefinition1" Value="*"/>
                             <Setter Property="Height" TargetName="RowDefinition0" Value="*"/>
@@ -1477,10 +1477,10 @@
                         <Trigger Property="TabStripPlacement" Value="Right">
                             <Setter Property="Grid.Row" TargetName="headerPanel" Value="0"/>
                             <Setter Property="Grid.Row" TargetName="contentPanel" Value="0"/>
-                            <Setter Property="Grid.Row" TargetName="tblIcon" Value="0"/>
+                            <!--<Setter Property="Grid.Row" TargetName="tblIcon" Value="0"/>-->
                             <Setter Property="Grid.Column" TargetName="headerPanel" Value="1"/>
                             <Setter Property="Grid.Column" TargetName="contentPanel" Value="0"/>
-                            <Setter Property="Grid.Column" TargetName="tblIcon" Value="0"/>
+                            <!--<Setter Property="Grid.Column" TargetName="tblIcon" Value="0"/>-->
                             <Setter Property="Width" TargetName="ColumnDefinition0" Value="*"/>
                             <Setter Property="Width" TargetName="ColumnDefinition1" Value="Auto"/>
                             <Setter Property="Height" TargetName="RowDefinition0" Value="*"/>
@@ -1503,10 +1503,10 @@
     <Style x:Key="TabItem.Normal" TargetType="{x:Type TabItem}">
         <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
         <Setter Property="Foreground" Value="Black"/>
-        <Setter Property="Background" Value="{StaticResource Background.Gray}"/>
+        <Setter Property="Background" Value="{StaticResource Background.LightGray}"/>
         <Setter Property="BorderBrush" Value="Transparent"/>
         <Setter Property="Margin" Value="0"/>
-        <Setter Property="Padding" Value="5"/>
+        <Setter Property="Padding" Value=" 2 2 0 2"/>
         <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
         <Setter Property="VerticalContentAlignment" Value="Stretch"/>
         <Setter Property="FontWeight" Value="Normal"/>
@@ -1518,16 +1518,16 @@
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
-                        <Border x:Name="mainBorder" Grid.Column="0" Grid.ColumnSpan="2" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="0" Margin="1" CornerRadius="5"/>
-                        <ContentPresenter x:Name="contentPresenter" Grid.Column="0" ContentSource="Header" Focusable="False" HorizontalAlignment="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
-                        <Button Style="{StaticResource Button.Icon}" Grid.Column="1" Content="&#xE0A4;" Command="{Binding CmdCloseTab}" VerticalAlignment="Center" HorizontalAlignment="Right" FontSize="11" Foreground="{TemplateBinding Foreground}" Margin="1" Visibility="{TemplateBinding IsSelected, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter='Hidden'}" MinHeight="20" Height="20" MinWidth="20" Width="20" />
+                        <Border x:Name="mainBorder" Grid.Column="0" Grid.ColumnSpan="2" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="0" Margin="{TemplateBinding Padding}" CornerRadius="5"/>
+                        <ContentPresenter x:Name="contentPresenter" Grid.Column="0" ContentSource="Header" Focusable="False" HorizontalAlignment="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" Margin="8 6 0 6" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
+                        <Button Style="{StaticResource Button.Icon}" Grid.Column="1" Content="&#xE0A4;" Command="{Binding CmdCloseTab}" VerticalAlignment="Center" HorizontalAlignment="Right" FontSize="11" Foreground="{TemplateBinding Foreground}" Margin="4 0" Visibility="{TemplateBinding IsSelected, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter='Hidden'}" MinHeight="20" Height="20" MinWidth="20" Width="20" />
                     </Grid>
                     <ControlTemplate.Triggers>
                         <MultiDataTrigger>
                             <MultiDataTrigger.Conditions>
                                 <Condition Binding="{Binding IsEnabled, RelativeSource={RelativeSource Mode=Self}}" Value="false"/>
                             </MultiDataTrigger.Conditions>
-                            <Setter Property="Background" TargetName="mainBorder" Value="{StaticResource Background.LightGray}"/>
+                            <Setter Property="Opacity" TargetName="templateRoot" Value="0.5"/>
                         </MultiDataTrigger>
                         <MultiDataTrigger>
                             <MultiDataTrigger.Conditions>
@@ -1541,13 +1541,22 @@
                             <MultiDataTrigger.Conditions>
                                 <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource Mode=Self}}" Value="false"/>
                             </MultiDataTrigger.Conditions>
-                            <Setter Property="Background" TargetName="mainBorder" Value="Transparent"/>
-                            <Setter Property="Opacity" TargetName="contentPresenter" Value="0.7"/>
+                            <!--<Setter Property="Background" TargetName="mainBorder" Value="{StaticResource Background.WhiteSmoke}"/>-->
+                            <Setter Property="Opacity" TargetName="mainBorder" Value="0.5"/>
+                            <Setter Property="Opacity" TargetName="contentPresenter" Value="0.5"/>
                         </MultiDataTrigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=TabControl}, Path=TabStripPlacement}" Value="Right">
+                <Setter Property="Padding" Value="2 2 2 0" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=TabControl}, Path=TabStripPlacement}" Value="Left">
+                <Setter Property="Padding" Value="2 2 2 0" />
+            </DataTrigger>
+        </Style.Triggers>
     </Style>
     <!--End TabItem.Normal-->
 
