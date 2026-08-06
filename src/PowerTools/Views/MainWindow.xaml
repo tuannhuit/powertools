@@ -9,6 +9,7 @@
         xmlns:userControls="clr-namespace:PowerTools.Views.UserControls"
         xmlns:controls="clr-namespace:PowerTools.Core.Controls;assembly=PowerTools.Core"
         xmlns:models="clr-namespace:PowerTools.Core.SharedServices;assembly=PowerTools.Core"
+        xmlns:behaviors="clr-namespace:PowerTools.Core.Behaviours;assembly=PowerTools.Core"
         prism:ViewModelLocator.AutoWireViewModel="True"
         mc:Ignorable="d"
         d:DesignHeight="1200" d:DesignWidth="800"
@@ -89,7 +90,7 @@
                     <TabItem Style="{StaticResource TabItem.Normal}" Header="Header">ABC</TabItem>
                     <TabItem Style="{StaticResource TabItem.Normal}" Header="Header">ABC</TabItem>
                 </TabControl>
-                <TabControl Style="{StaticResource TabControl.Normal}" Height="150" TabStripPlacement="Left">
+                <TabControl Style="{StaticResource TabControl.Normal}" Height="150" TabStripPlacement="Left" behaviors:TabControlBehavior.CanCloseTabItem="False">
                     <TabItem Style="{StaticResource TabItem.Normal}" Header="Header">ABC</TabItem>
                     <TabItem Style="{StaticResource TabItem.Normal}" Header="Header">ABC</TabItem>
                 </TabControl>
