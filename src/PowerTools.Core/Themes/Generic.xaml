@@ -1416,13 +1416,11 @@
     <!--End DataGrid.Normal-->
 
     <!--TabControl.Normal-->
-    <SolidColorBrush x:Key="TabControl.Background" Color="Transparent"/>
-    <SolidColorBrush x:Key="TabItem.Selected.Border" Color="#006CBE"/>
     <Style x:Key="TabControl.Normal" TargetType="{x:Type TabControl}">
         <Setter Property="Padding" Value="0"/>
         <Setter Property="HorizontalContentAlignment" Value="Center"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
-        <Setter Property="Background" Value="{StaticResource TabControl.Background}"/>
+        <Setter Property="Background" Value="Transparent"/>
         <Setter Property="BorderBrush" Value="LightGray"/>
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="Margin" Value="5"/>
@@ -1442,7 +1440,7 @@
                                 <RowDefinition x:Name="RowDefinition1" Height="*"/>
                             </Grid.RowDefinitions>
                             <ScrollViewer x:Name="headerPanel" Grid.Column="0" Grid.Row="0" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
-                                <Border Background="{StaticResource Background.Default}" CornerRadius="5 5 0 0">
+                                <Border x:Name="border" Background="{StaticResource Background.Default}" CornerRadius="5 5 0 0">
                                     <TabPanel Background="Transparent" IsItemsHost="true" Margin="0 " KeyboardNavigation.TabIndex="1" Panel.ZIndex="1"/>
                                 </Border>
                             </ScrollViewer>
@@ -1459,6 +1457,7 @@
                             <!--<Setter Property="Grid.Row" TargetName="tblIcon" Value="0"/>-->
                             <Setter Property="Height" TargetName="RowDefinition0" Value="*"/>
                             <Setter Property="Height" TargetName="RowDefinition1" Value="Auto"/>
+                            <Setter Property="CornerRadius" TargetName="border" Value="0 0 5 5"/>
                         </Trigger>
                         <Trigger Property="TabStripPlacement" Value="Left">
                             <Setter Property="Grid.Row" TargetName="headerPanel" Value="0"/>
@@ -1471,6 +1470,7 @@
                             <Setter Property="Width" TargetName="ColumnDefinition1" Value="*"/>
                             <Setter Property="Height" TargetName="RowDefinition0" Value="*"/>
                             <Setter Property="Height" TargetName="RowDefinition1" Value="0"/>
+                            <Setter Property="CornerRadius" TargetName="border" Value="5 0 0 5"/>
                         </Trigger>
                         <Trigger Property="TabStripPlacement" Value="Right">
                             <Setter Property="Grid.Row" TargetName="headerPanel" Value="0"/>
@@ -1483,6 +1483,7 @@
                             <Setter Property="Width" TargetName="ColumnDefinition1" Value="Auto"/>
                             <Setter Property="Height" TargetName="RowDefinition0" Value="*"/>
                             <Setter Property="Height" TargetName="RowDefinition1" Value="0"/>
+                            <Setter Property="CornerRadius" TargetName="border" Value="0 5 5 0"/>
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="false">
                             <Setter Property="TextElement.Foreground" TargetName="templateRoot" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
@@ -1495,12 +1496,8 @@
     <!--End TabControl.Normal-->
 
     <!--TabItem.Normal-->
-    <SolidColorBrush x:Key="TabItem.Static.Background" Color="#E2E2E2"/>
-    <SolidColorBrush x:Key="TabItem.Selected.Background" Color="#006CBE"/>
-    <SolidColorBrush x:Key="TabItem.Disabled.Background" Color="#F0F0F0"/>
     <Style x:Key="TabItem.Normal" TargetType="{x:Type TabItem}">
         <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
-        <Setter Property="Foreground" Value="Black"/>
         <Setter Property="Background" Value="{StaticResource Background.LightGray}"/>
         <Setter Property="BorderBrush" Value="Transparent"/>
         <Setter Property="Margin" Value="0"/>
@@ -1517,8 +1514,8 @@
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
                         <Border x:Name="mainBorder" Grid.Column="0" Grid.ColumnSpan="2" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="0" Margin="{TemplateBinding Padding}" CornerRadius="5"/>
-                        <ContentPresenter x:Name="contentPresenter" Grid.Column="0" ContentSource="Header" Focusable="False" HorizontalAlignment="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" Margin="8 6 0 6" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
-                        <Button x:Name="btnClose" Style="{StaticResource Button.Icon}" Grid.Column="1" Content="&#xE0A4;" Command="{Binding CmdCloseTab}" VerticalAlignment="Center" HorizontalAlignment="Right" FontSize="11" Foreground="{TemplateBinding Foreground}" Margin="4 0" MinHeight="20" Height="20" MinWidth="20" Width="20" />
+                        <ContentPresenter x:Name="contentPresenter" Grid.Column="0" ContentSource="Header" Focusable="False" HorizontalAlignment="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" Margin="8 6 6 6" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
+                        <Button x:Name="btnClose" Style="{StaticResource Button.Icon}" Grid.Column="1" Content="&#xE0A4;" Command="{Binding CmdCloseTab}" VerticalAlignment="Center" HorizontalAlignment="Right" FontSize="11" Foreground="{TemplateBinding Foreground}" Margin="0 0 3 0" MinHeight="20" Height="20" MinWidth="20" Width="20" />
                     </Grid>
                     <ControlTemplate.Triggers>
                         <MultiDataTrigger>
@@ -1546,7 +1543,6 @@
                             <MultiDataTrigger.Conditions>
                                 <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource Mode=Self}}" Value="false"/>
                             </MultiDataTrigger.Conditions>
-                            <!--<Setter Property="Background" TargetName="mainBorder" Value="{StaticResource Background.WhiteSmoke}"/>-->
                             <Setter Property="Opacity" TargetName="mainBorder" Value="0.5"/>
                             <Setter Property="Opacity" TargetName="contentPresenter" Value="0.5"/>
                             <Setter Property="Visibility" TargetName="btnClose" Value="Hidden"/>
@@ -1572,11 +1568,106 @@
                         </MultiDataTrigger>
                         <MultiDataTrigger>
                             <MultiDataTrigger.Conditions>
-                                <Condition Binding="{Binding IsEnabled, RelativeSource={RelativeSource Mode=Self}}" Value="True"/>
-                                <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource Mode=Self}}" Value="True"/>
                                 <Condition Binding="{Binding Path=(behaviors:TabControlBehavior.CanCloseTabItem), RelativeSource={RelativeSource AncestorType={x:Type TabControl}}}" Value="False"/>
                             </MultiDataTrigger.Conditions>
+                            <Setter Property="Visibility" TargetName="btnClose" Value="Collapsed"/>
+                        </MultiDataTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=TabControl}, Path=TabStripPlacement}" Value="Right">
+                <Setter Property="Padding" Value="2 2 2 0" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=TabControl}, Path=TabStripPlacement}" Value="Left">
+                <Setter Property="Padding" Value="2 2 2 0" />
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+    <!--End TabItem.Normal-->
+
+    <!--TabItem.Normal-->
+    <Style x:Key="TabItem.Simple" TargetType="{x:Type TabItem}">
+        <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
+        <Setter Property="Foreground" Value="Black"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderBrush" Value="Black"/>
+        <Setter Property="BorderThickness" Value="0 0 0 1"/>
+        <Setter Property="Margin" Value="0"/>
+        <Setter Property="Padding" Value=" 2 2 0 2"/>
+        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+        <Setter Property="VerticalContentAlignment" Value="Stretch"/>
+        <Setter Property="FontWeight" Value="Normal"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type TabItem}">
+                    <Grid x:Name="templateRoot" SnapsToDevicePixels="true">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Border x:Name="mainBorder" Grid.Column="0" Grid.ColumnSpan="2" Background="{TemplateBinding Background}" BorderBrush="Transparent" BorderThickness="0" CornerRadius="0"/>
+                        <Border x:Name="bottomBorder" Grid.Column="0" Background="Transparent" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="0" Margin="8 6 6 1"/>
+                        <ContentPresenter x:Name="contentPresenter" Grid.Column="0" ContentSource="Header" Focusable="False" HorizontalAlignment="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" Margin="8 6 6 6" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
+                        <Button x:Name="btnClose" Style="{StaticResource Button.Icon}" Grid.Column="1" Content="&#xE0A4;" Command="{Binding CmdCloseTab}" VerticalAlignment="Center" HorizontalAlignment="Right" FontSize="11" Foreground="{TemplateBinding Foreground}" Margin="0 0 3 0" MinHeight="20" Height="20" MinWidth="20" Width="20" />
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding IsEnabled, RelativeSource={RelativeSource Mode=Self}}" Value="false"/>
+                            </MultiDataTrigger.Conditions>
+                            <Setter Property="Opacity" TargetName="templateRoot" Value="0.5"/>
+                            <Setter Property="Visibility" TargetName="bottomBorder" Value="Hidden"/>
+                        </MultiDataTrigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource Mode=Self}}" Value="true"/>
+                            </MultiDataTrigger.Conditions>
+                            <Setter Property="Panel.ZIndex" Value="1"/>
+                            <Setter Property="FontWeight" Value="SemiBold"/>
+                            <Setter Property="Visibility" TargetName="bottomBorder" Value="Visible"/>
+                        </MultiDataTrigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource Mode=Self}}" Value="true"/>
+                                <Condition Binding="{Binding Path=(behaviors:TabControlBehavior.CanCloseTabItem), RelativeSource={RelativeSource AncestorType={x:Type TabControl}}}" Value="True"/>
+                            </MultiDataTrigger.Conditions>
+                            <Setter Property="Visibility" TargetName="btnClose" Value="Visible"/>
+                        </MultiDataTrigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource Mode=Self}}" Value="false"/>
+                            </MultiDataTrigger.Conditions>
+                            <Setter Property="Opacity" TargetName="mainBorder" Value="0.5"/>
+                            <Setter Property="Opacity" TargetName="contentPresenter" Value="0.5"/>
                             <Setter Property="Visibility" TargetName="btnClose" Value="Hidden"/>
+                            <Setter Property="Visibility" TargetName="bottomBorder" Value="Hidden"/>
+                        </MultiDataTrigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Mode=Self}}" Value="True"/>
+                                <Condition Binding="{Binding IsEnabled, RelativeSource={RelativeSource Mode=Self}}" Value="True"/>
+                                <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource Mode=Self}}" Value="false"/>
+                            </MultiDataTrigger.Conditions>
+                            <Setter Property="Opacity" TargetName="mainBorder" Value="0.7"/>
+                            <Setter Property="Opacity" TargetName="contentPresenter" Value="0.7"/>
+                            <Setter Property="Opacity" TargetName="btnClose" Value="0.7"/>
+                        </MultiDataTrigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Mode=Self}}" Value="True"/>
+                                <Condition Binding="{Binding IsEnabled, RelativeSource={RelativeSource Mode=Self}}" Value="True"/>
+                                <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource Mode=Self}}" Value="false"/>
+                                <Condition Binding="{Binding Path=(behaviors:TabControlBehavior.CanCloseTabItem), RelativeSource={RelativeSource AncestorType={x:Type TabControl}}}" Value="True"/>
+                            </MultiDataTrigger.Conditions>
+                            <Setter Property="Visibility" TargetName="btnClose" Value="Visible"/>
+                        </MultiDataTrigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding Path=(behaviors:TabControlBehavior.CanCloseTabItem), RelativeSource={RelativeSource AncestorType={x:Type TabControl}}}" Value="False"/>
+                            </MultiDataTrigger.Conditions>
+                            <Setter Property="Visibility" TargetName="btnClose" Value="Collapsed"/>
                         </MultiDataTrigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

@@ -78,25 +78,29 @@
                         <controls:PaginationDataGridTextColumn Name="CurrentOffset" Header="Current Offset" Binding="{Binding CurrentOffset, Converter={StaticResource OffsetFormatter}}" IsReadOnly="True" MinWidth="100"/>
                     </controls:PaginationDataGrid.Columns>
                 </controls:PaginationDataGrid>--><!--
-                <TabControl Style="{StaticResource TabControl.Normal}" Height="150">
-                    <TabItem Style="{StaticResource TabItem.Normal}" Header="Header">ABC</TabItem>
-                    <TabItem Style="{StaticResource TabItem.Normal}" Header="Header">ABC</TabItem>
+                <TabControl Style="{StaticResource TabControl.Normal}"  ItemContainerStyle="{StaticResource TabItem.Normal}" Height="150">
+                    <TabItem Header="Header">ABC</TabItem>
+                    <TabItem Header="Header">ABC</TabItem>
                 </TabControl>
-                <TabControl Style="{StaticResource TabControl.Normal}" Height="150" IsEnabled="False">
-                    <TabItem Style="{StaticResource TabItem.Normal}" Header="Header">ABC</TabItem>
-                    <TabItem Style="{StaticResource TabItem.Normal}" Header="Header">ABC</TabItem>
+                <TabControl Style="{StaticResource TabControl.Normal}" Height="150" ItemContainerStyle="{StaticResource TabItem.Simple}">
+                    <TabItem Header="Header">ABC</TabItem>
+                    <TabItem Header="Header">ABC</TabItem>
                 </TabControl>
-                <TabControl Style="{StaticResource TabControl.Normal}" Height="150" TabStripPlacement="Bottom">
-                    <TabItem Style="{StaticResource TabItem.Normal}" Header="Header">ABC</TabItem>
-                    <TabItem Style="{StaticResource TabItem.Normal}" Header="Header">ABC</TabItem>
+                <TabControl Style="{StaticResource TabControl.Normal}" Height="150" IsEnabled="False" ItemContainerStyle="{StaticResource TabItem.Simple}">
+                    <TabItem Header="Header">ABC</TabItem>
+                    <TabItem Header="Header">ABC</TabItem>
                 </TabControl>
-                <TabControl Style="{StaticResource TabControl.Normal}" Height="150" TabStripPlacement="Left" behaviors:TabControlBehavior.CanCloseTabItem="False">
-                    <TabItem Style="{StaticResource TabItem.Normal}" Header="Header">ABC</TabItem>
-                    <TabItem Style="{StaticResource TabItem.Normal}" Header="Header">ABC</TabItem>
+                <TabControl Style="{StaticResource TabControl.Normal}" Height="150" TabStripPlacement="Bottom" ItemContainerStyle="{StaticResource TabItem.Simple}">
+                    <TabItem Header="Header">ABC</TabItem>
+                    <TabItem Header="Header">ABC</TabItem>
                 </TabControl>
-                <TabControl Style="{StaticResource TabControl.Normal}" Height="150" TabStripPlacement="Right">
-                    <TabItem Style="{StaticResource TabItem.Normal}" Header="Header">ABC</TabItem>
-                    <TabItem Style="{StaticResource TabItem.Normal}" Header="Header">ABC</TabItem>
+                <TabControl Style="{StaticResource TabControl.Normal}" Height="150" TabStripPlacement="Left" behaviors:TabControlBehavior.CanCloseTabItem="False" ItemContainerStyle="{StaticResource TabItem.Simple}">
+                    <TabItem Header="Header">ABC</TabItem>
+                    <TabItem Header="Header">ABC</TabItem>
+                </TabControl>
+                <TabControl Style="{StaticResource TabControl.Normal}" Height="150" TabStripPlacement="Right" ItemContainerStyle="{StaticResource TabItem.Simple}">
+                    <TabItem Header="Header">ABC</TabItem>
+                    <TabItem Header="Header">ABC</TabItem>
                 </TabControl>
             </StackPanel>
         </Grid>-->
