@@ -666,8 +666,8 @@
         </Setter>
     </Style>
 
-    <SolidColorBrush x:Key="Item.MouseOver.Background" Color="#1F26A0DA"/>
-    <SolidColorBrush x:Key="Item.SelectedActive.Background" Color="#3D26A0DA"/>
+    <SolidColorBrush x:Key="Item.MouseOver.Background" Color="WhiteSmoke"/>
+    <SolidColorBrush x:Key="Item.SelectedActive.Background" Color="LightGray"/>
     <SolidColorBrush x:Key="Item.SelectedInactive.Background" Color="#3DDADADA"/>
     <Style x:Key="ListViewItem.Normal" TargetType="{x:Type ListViewItem}">
         <Setter Property="SnapsToDevicePixels" Value="True"/>
@@ -1968,7 +1968,7 @@
                                 </Grid.ColumnDefinitions>
                                 <ToggleButton Grid.Column="0" ContentTemplate="{TemplateBinding HeaderTemplate}" Content="{TemplateBinding Header}" ContentTemplateSelector="{TemplateBinding HeaderTemplateSelector}" FontStretch="{TemplateBinding FontStretch}" Foreground="{TemplateBinding Foreground}" FocusVisualStyle="{StaticResource ExpanderHeaderFocusVisual}" FontStyle="{TemplateBinding FontStyle}" FontFamily="{TemplateBinding FontFamily}" FontWeight="{TemplateBinding FontWeight}" FontSize="11" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" IsChecked="{Binding IsExpanded, Mode=TwoWay, RelativeSource={RelativeSource Mode=TemplatedParent}}" Margin="1" MinWidth="0" MinHeight="0" Padding="{TemplateBinding Padding}" Style="{StaticResource ExpanderDownHeaderStyle}" VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>
                                 <TextBlock Style="{StaticResource TextBlock.ContentSmall}" Grid.Column="1" Text="{TemplateBinding Tag}" Margin="5 0 0 0" Foreground="DimGray"/>
-                                <ItemsControl ItemsSource="{Binding RelativeSource={RelativeSource AncestorType={x:Type Expander}}, Path=(behaviors:ExpanderBehavior.Actions)}" Grid.Column="2" Margin="0" VerticalAlignment="Center" HorizontalAlignment="Right">
+                                <ItemsControl ItemsSource="{Binding RelativeSource={RelativeSource AncestorType={x:Type Expander}}, Path=(behaviors:ExpanderBehavior.Actions)}" Grid.Column="2" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right">
                                     <ItemsControl.ItemsPanel>
                                         <ItemsPanelTemplate>
                                             <StackPanel Orientation="Horizontal"/>
@@ -1980,7 +1980,7 @@
                                                     Content="{Binding Icon}"
                                                     Tag="{Binding Name}"
                                                     Command="{Binding Command}"
-                                                    MinHeight="0" MinWidth="0" Padding="2" Margin="5 0 0 0" FontSize="12"/>
+                                                    MinHeight="0" MinWidth="0" Padding="2" Margin="0" FontSize="12"/>
                                         </DataTemplate>
                                     </ItemsControl.ItemTemplate>
                                 </ItemsControl>
