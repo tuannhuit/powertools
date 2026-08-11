@@ -1529,7 +1529,7 @@
                                 <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource Mode=Self}}" Value="true"/>
                             </MultiDataTrigger.Conditions>
                             <Setter Property="Panel.ZIndex" Value="1"/>
-                            <Setter Property="FontWeight" Value="SemiBold"/>
+                            <Setter Property="TextElement.FontWeight" TargetName="contentPresenter" Value="SemiBold"/>
                             <Setter Property="CornerRadius" TargetName="mainBorder" Value="5"/>
                         </MultiDataTrigger>
                         <MultiDataTrigger>
@@ -1625,7 +1625,7 @@
                                 <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource Mode=Self}}" Value="true"/>
                             </MultiDataTrigger.Conditions>
                             <Setter Property="Panel.ZIndex" Value="1"/>
-                            <Setter Property="FontWeight" Value="SemiBold"/>
+                            <Setter Property="TextElement.FontWeight" TargetName="contentPresenter" Value="SemiBold"/>
                             <Setter Property="Visibility" TargetName="bottomBorder" Value="Visible"/>
                         </MultiDataTrigger>
                         <MultiDataTrigger>
