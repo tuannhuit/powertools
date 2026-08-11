@@ -1980,7 +1980,7 @@
                                                     Content="{Binding Icon}"
                                                     Tag="{Binding Name}"
                                                     Command="{Binding Command}"
-                                                    MinHeight="0" MinWidth="0" Padding="2" Margin="0" FontSize="12"/>
+                                                    MinHeight="0" MinWidth="0" Width="20" Height="20" Padding="2" Margin="0" FontSize="12"/>
                                         </DataTemplate>
                                     </ItemsControl.ItemTemplate>
                                 </ItemsControl>
