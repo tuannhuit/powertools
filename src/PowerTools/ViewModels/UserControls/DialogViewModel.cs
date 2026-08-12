@@ -27,14 +27,14 @@ namespace PowerTools.ViewModels.UserControls
         private double _width;
         public double Width
         {
-            get => _width <= 0 ? 500 : _width;
+            get => _width <= 0 ? WindowSettings.MIN_WIDTH : _width;
             set => SetProperty(ref _width, value);
         }
 
         private double _height;
         public double Height
         {
-            get => _height <= 0 ? 400 : _height;
+            get => _height <= 0 ? WindowSettings.MIN_HEIGHT : _height;
             set => SetProperty(ref _height, value);
         }
 

@@ -128,11 +128,21 @@ namespace PowerTools.Core.Controls
 
         public static object GetColumnName(DependencyObject obj)
         {
-            return (object)obj.GetValue(PaginationDataGridTextColumn.NameProperty);
+            if(obj is PaginationDataGridTextColumn)
+                return (object)obj.GetValue(PaginationDataGridTextColumn.NameProperty);
+
+            if(obj is PaginationDataGridTemplateColumn)
+                return (object)obj.GetValue(PaginationDataGridTemplateColumn.NameProperty);
+
+            return null;
         }
         public static void SetFilterModel(DependencyObject obj, Criteria value)
         {
-            obj.SetValue(PaginationDataGridTextColumn.FilterModelProperty, value);
+            if(obj is PaginationDataGridTextColumn)
+                obj.SetValue(PaginationDataGridTextColumn.FilterModelProperty, value);
+
+            if(obj is PaginationDataGridTemplateColumn)
+                obj.SetValue(PaginationDataGridTemplateColumn.FilterModelProperty, value);
         }
 
         private static void OnColumnSettingsChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)

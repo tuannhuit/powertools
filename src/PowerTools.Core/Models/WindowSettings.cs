@@ -4,8 +4,8 @@ namespace PowerTools.Core.Models
 {
     public class WindowSettings: BindableBase
     {
-        public static readonly double MIN_WIDTH = 600;
-        public static readonly double MIN_HEIGHT = 400;
+        public static readonly double MIN_WIDTH = 50;
+        public static readonly double MIN_HEIGHT = 50;
 
         private double _width;
         public double Width

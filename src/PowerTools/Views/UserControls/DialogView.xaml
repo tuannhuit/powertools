@@ -17,8 +17,8 @@
             <Setter Property="prism:Dialog.WindowStartupLocation" Value="CenterOwner"/>
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="SizeToContent" Value="Manual"/>
-            <Setter Property="MinWidth" Value="350"/>
-            <Setter Property="MinHeight" Value="200"/>
+            <Setter Property="MinWidth" Value="{Binding Source={x:Static models:WindowSettings.MIN_WIDTH}}"/>
+            <Setter Property="MinHeight" Value="{Binding Source={x:Static models:WindowSettings.MIN_HEIGHT}}"/>
 
             <!-- Define the custom drag and resize behavior -->
             <Setter Property="WindowChrome.WindowChrome">
