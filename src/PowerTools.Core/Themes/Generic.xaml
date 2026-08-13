@@ -272,6 +272,10 @@
         </Setter>
     </Style>
 
+    <Style x:Key="ComboBoxItem.Normal" TargetType="{x:Type ComboBoxItem}">
+        <Setter Property="MinHeight" Value="25"/>
+    </Style>
+
     <ControlTemplate x:Key="ComboBoxEditableTemplate" TargetType="{x:Type ComboBox}">
         <Grid x:Name="templateRoot" SnapsToDevicePixels="true">
             <Grid.ColumnDefinitions>
@@ -397,6 +401,7 @@
         <Setter Property="ScrollViewer.PanningMode" Value="Both"/>
         <Setter Property="Stylus.IsFlicksEnabled" Value="False"/>
         <Setter Property="FontWeight" Value="Normal"/>
+        <Setter Property="ItemContainerStyle" Value="{StaticResource ComboBoxItem.Normal}"/>
         <Setter Property="Template" Value="{StaticResource ComboBoxTemplate}"/>
         <Style.Triggers>
             <Trigger Property="IsEditable" Value="true">

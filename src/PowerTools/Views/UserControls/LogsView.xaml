@@ -12,9 +12,26 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <TextBox Grid.Row="1" Text="{Binding Source={x:Static sharedServices:LoggingService.Instance}, Path=Message, Mode=OneWay}" BorderBrush="Transparent" Background="Transparent" Foreground="{StaticResource TextBox.Foreground.Gray}" FontFamily="Consolas" BorderThickness="0" FontSize="12" IsReadOnly="True" TextWrapping="Wrap" Padding="2 5" TextChanged="txbLogs_TextChanged"/>
-        <StackPanel  Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="5">
-            <Button Style="{StaticResource Button.IconActive}" Command="{Binding CmdClearLogs}" Content="{x:Static models:ButtonIcons.Delete}" ToolTip="Clear logs" VerticalAlignment="Center" HorizontalContentAlignment="Left" FontSize="12" Margin="0"/>
+        <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0 5 0 0">
+            <Button Style="{StaticResource Button.Icon}" Command="{Binding CmdClearLogs}" Content="{x:Static models:ButtonIcons.Delete}" Tag="Clear All" ToolTip="Clear logs" VerticalAlignment="Center" HorizontalContentAlignment="Left" FontSize="12" Margin="5 0 5 0" Height="25" MinHeight="25"/>
+            <ToggleButton Style="{StaticResource ToggleButton.Icon}" 
+                          Content="" Tag="Text Wrapping"
+                          IsChecked="{Binding Source={x:Static sharedServices:LoggingService.Instance}, Path=DoTextWrapping, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                          FontSize="12" Margin="0 0 5 0" MinWidth="25" MinHeight="25" Height="25"
+                          BorderBrush="{Binding Source={x:Static sharedServices:LoggingService.Instance}, Path=DoTextWrapping, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolToStringConverter}, ConverterParameter='True:LightGray:Transparent'}"
+                          VerticalAlignment="Center"/>  
+            <ToggleButton Style="{StaticResource ToggleButton.Icon}" 
+                          Content="" Tag="Show Time"
+                          IsChecked="{Binding Source={x:Static sharedServices:LoggingService.Instance}, Path=DoShowTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                          FontSize="12" Margin="0 0 5 0" MinWidth="25" MinHeight="25" Height="25"
+                          BorderBrush="{Binding Source={x:Static sharedServices:LoggingService.Instance}, Path=DoShowTime, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolToStringConverter}, ConverterParameter='True:LightGray:Transparent'}"
+                          VerticalAlignment="Center"/>
         </StackPanel>
+        <TextBox Grid.Row="1" 
+                 Text="{Binding Source={x:Static sharedServices:LoggingService.Instance}, Path=Message, Mode=OneWay}"
+                 TextWrapping="{Binding Source={x:Static sharedServices:LoggingService.Instance}, Path=DoTextWrapping, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolToStringConverter}, ConverterParameter='True:Wrap:NoWrap'}"
+                 BorderBrush="Transparent" Background="Transparent" Foreground="{StaticResource TextBox.Foreground.Gray}" 
+                 FontFamily="Consolas" BorderThickness="0" FontSize="12" IsReadOnly="True" 
+                 Padding="2 5" TextChanged="txbLogs_TextChanged"/>
     </Grid>
 </UserControl>

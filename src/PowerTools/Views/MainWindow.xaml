@@ -55,7 +55,9 @@
                 <TabItem Header="Logs">
                     <userControls:LogsView/>
                 </TabItem>
-                <TabItem Header="Background Jobs"></TabItem>
+                <TabItem Header="Background Jobs">
+                    <userControls:BackgroundJobsView/>
+                </TabItem>
             </TabControl>
         </Border>
         <Grid Grid.Column="1" Grid.Row="2" Background="White" Visibility="Collapsed" Focusable="False" IsEnabled="False">

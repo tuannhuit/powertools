@@ -2,6 +2,7 @@
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows;
 
 namespace PowerTools.Core.SharedServices
 {
@@ -55,6 +56,28 @@ namespace PowerTools.Core.SharedServices
             }
         }
 
+        private bool _doTextWrapping;   
+        public bool DoTextWrapping
+        {
+            get => _doTextWrapping;
+            set
+            {
+                _doTextWrapping = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private bool _doShowTime;   
+        public bool DoShowTime
+        {
+            get => _doShowTime;
+            set
+            {
+                _doShowTime = value;
+                RaisePropertyChanged();
+            }
+        }
+
         private string _status;
         public string Status
         {
@@ -84,6 +107,9 @@ namespace PowerTools.Core.SharedServices
             _messageList = new ObservableCollection<string>();
             _message = "Logging started";
             _status = string.Empty;
+
+            DoTextWrapping = false;
+            DoShowTime = false;
 
             WriteLog("Ready");
         }
@@ -122,12 +148,13 @@ namespace PowerTools.Core.SharedServices
                 return;
             }
 
+            var dateTimeMessage = DoShowTime ? $"{DateTime.Now} " : string.Empty;
             var indexOfNewLine = message.IndexOf(Environment.NewLine, StringComparison.Ordinal);
-            var newMessage = $"> {DateTime.Now} " + (indexOfNewLine == -1 ? message : message.Substring(0, indexOfNewLine + 1));
+            var newMessage = $"> {dateTimeMessage}" + (indexOfNewLine == -1 ? message : message.Substring(0, indexOfNewLine + 1));
 
             ApplicationService.Instance.InvokeUIAction(() =>
             {
-                AddMessageIntoList($"> {DateTime.Now} " + message);
+                AddMessageIntoList($"> {dateTimeMessage}" + message);
                 Message = string.Join(Environment.NewLine, MessageList);
 
                 if (!DoShowLog)
