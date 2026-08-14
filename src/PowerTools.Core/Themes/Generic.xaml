@@ -1445,8 +1445,8 @@
                                 <RowDefinition x:Name="RowDefinition1" Height="*"/>
                             </Grid.RowDefinitions>
                             <ScrollViewer x:Name="headerPanel" Grid.Column="0" Grid.Row="0" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
-                                <Border x:Name="border" Background="{StaticResource Background.Default}" CornerRadius="5 5 0 0">
-                                    <TabPanel Background="Transparent" IsItemsHost="true" Margin="0 " KeyboardNavigation.TabIndex="1" Panel.ZIndex="1"/>
+                                <Border x:Name="border" Background="{TemplateBinding Background}" CornerRadius="5 5 0 0">
+                                    <TabPanel IsItemsHost="true" Margin="0 " KeyboardNavigation.TabIndex="1" Panel.ZIndex="1"/>
                                 </Border>
                             </ScrollViewer>
                             <!--<TextBlock x:Name="tblIcon" Style="{StaticResource TextBlock.Header}" Background="Yellow" Grid.Column="0" Grid.Row="1" FontFamily="Segoe UI Symbol" Text="&#xE154;" FontSize="40" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="WhiteSmoke" Visibility="{TemplateBinding SelectedContent, Converter={StaticResource NullToVisibilityConverter}}"/>-->

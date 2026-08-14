@@ -12,7 +12,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0 5 0 0">
+        <StackPanel Grid.Row="0" Orientation="Horizontal" VerticalAlignment="Top" Margin="0 5 0 0" Background="White">
             <Button Style="{StaticResource Button.Icon}" Command="{Binding CmdClearLogs}" Content="{x:Static models:ButtonIcons.Delete}" Tag="Clear All" ToolTip="Clear logs" VerticalAlignment="Center" HorizontalContentAlignment="Left" FontSize="12" Margin="5 0 5 0" Height="25" MinHeight="25"/>
             <ToggleButton Style="{StaticResource ToggleButton.Icon}" 
                           Content="" Tag="Text Wrapping"
@@ -27,11 +27,13 @@
                           BorderBrush="{Binding Source={x:Static sharedServices:LoggingService.Instance}, Path=DoShowTime, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolToStringConverter}, ConverterParameter='True:LightGray:Transparent'}"
                           VerticalAlignment="Center"/>
         </StackPanel>
-        <TextBox Grid.Row="1" 
-                 Text="{Binding Source={x:Static sharedServices:LoggingService.Instance}, Path=Message, Mode=OneWay}"
-                 TextWrapping="{Binding Source={x:Static sharedServices:LoggingService.Instance}, Path=DoTextWrapping, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolToStringConverter}, ConverterParameter='True:Wrap:NoWrap'}"
-                 BorderBrush="Transparent" Background="Transparent" Foreground="{StaticResource TextBox.Foreground.Gray}" 
-                 FontFamily="Consolas" BorderThickness="0" FontSize="12" IsReadOnly="True" 
-                 Padding="2 5" TextChanged="txbLogs_TextChanged"/>
+        <Border Grid.Row="1" Background="{StaticResource Background.WhiteSmoke}" CornerRadius="0 0 5 5">
+            <TextBox 
+                Text="{Binding Source={x:Static sharedServices:LoggingService.Instance}, Path=Message, Mode=OneWay}"
+                TextWrapping="{Binding Source={x:Static sharedServices:LoggingService.Instance}, Path=DoTextWrapping, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolToStringConverter}, ConverterParameter='True:Wrap:NoWrap'}"
+                BorderBrush="Transparent" Background="Transparent" Foreground="{StaticResource TextBox.Foreground.Gray}" 
+                FontFamily="Consolas" BorderThickness="0" FontSize="12" IsReadOnly="True" 
+                Padding="2 5" TextChanged="txbLogs_TextChanged"/>
+        </Border>
     </Grid>
 </UserControl>
