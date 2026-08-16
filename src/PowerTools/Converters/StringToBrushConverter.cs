@@ -18,12 +18,18 @@ namespace PowerTools.Converters
 
             try
             {
+                if (value == null || parameter == null) return value;
+
+                var paramString = parameter == null ? string.Empty : parameter.ToString();
+                var values = paramString.Split(":");
+                var stringColor = _iconColor.ToLower() == values[0].ToLower() ? values[1] : values[2];
+
                 BrushConverter converter = new BrushConverter();
 
                 // Attempt to convert the string to a SolidColorBrush
                 // The string can be a named color (e.g., "Red"), a hex code (e.g., "#FF0000"),
                 // or an ARGB hex code (e.g., "#FFFF0000").
-                return (SolidColorBrush)converter.ConvertFromString(_iconColor);
+                return (SolidColorBrush)converter.ConvertFromString(stringColor);
             }
             catch (Exception e)
             {

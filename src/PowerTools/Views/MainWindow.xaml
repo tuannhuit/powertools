@@ -14,7 +14,6 @@
         mc:Ignorable="d"
         d:DesignHeight="1200" d:DesignWidth="800"
         Title="PowerTools"
-        Background="{StaticResource Background.Default}"
         WindowStartupLocation="CenterScreen" 
         MinWidth="{Binding Source={x:Static configurations:ModuleGlobalSettings.Instance}, Path=WindowSettings.MinWidth}"
         MaxWidth="{Binding Source={x:Static configurations:ModuleGlobalSettings.Instance}, Path=WindowSettings.MaxWidth}"
@@ -28,9 +27,9 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="*" MinHeight="250"/>
             <RowDefinition Height="5"/>
-            <RowDefinition Height="{Binding ViewLogGridLength, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MaxHeight="500"/>
+            <RowDefinition Height="{Binding ViewLogGridLength, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
             <RowDefinition Height="22"/>
         </Grid.RowDefinitions>
         <userControls:SideBar Grid.Column="0" Grid.Row="0" Grid.RowSpan="3"/>
@@ -49,7 +48,7 @@
                 </Grid>
             </Border>
         </Grid>
-        <GridSplitter Style="{StaticResource GridSplitter.Normal}" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Stretch" Background="Transparent"/>
+        <GridSplitter Style="{StaticResource GridSplitter.Normal}" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Stretch" Background="Transparent" Margin="5 0"/>
         <Border Grid.Column="1" Grid.Row="2" Margin="5 0 5 0">
             <TabControl Style="{StaticResource TabControl.Normal}" ItemContainerStyle="{StaticResource TabItem.Simple}" behaviors:TabControlBehavior.CanCloseTabItem="False" Background="White" Margin="0">
                 <TabItem Header="Logs">

@@ -1,9 +1,15 @@
-﻿using Prism.Mvvm;
+﻿using PowerTools.Core.Models;
+using Prism.Commands;
+using Prism.Mvvm;
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Input;
+using TaskStatus = PowerTools.Core.Models.TaskStatus;
 
 namespace PowerTools.Core.SharedServices
 {
@@ -14,7 +20,80 @@ namespace PowerTools.Core.SharedServices
 
         private Process _process;
 
-        private ConcurrentDictionary<string, bool> _taskStatuses = new ConcurrentDictionary<string, bool>();
+        private List<TaskInformation> _tasks;
+
+        public ObservableCollection<TaskInformation> Tasks => new ObservableCollection<TaskInformation>(
+            _tasks.Where(t =>
+                (t.Status == TaskStatus.Idle && DoShowIdle) || 
+                (t.Status == TaskStatus.Error && DoShowError) ||
+                (t.Status == TaskStatus.Done && DoShowDone) || 
+                (t.Status == TaskStatus.Running && DoShowRunning) ||
+                (t.Status == TaskStatus.Cancelling && DoShowCancelling) ||
+                (!DoShowIdle && !DoShowError && !DoShowDone && !DoShowRunning && !DoShowCancelling)));
+
+        public string TasksInformation => $"({RunningTasksCount} Running Tasks)";
+        public int RunningTasksCount => _tasks.Count(p => p.Status == TaskStatus.Running);
+
+        private bool _doShowIdle;
+        public bool DoShowIdle
+        {
+            get => _doShowIdle;
+            set
+            {
+                _doShowIdle = value;
+                RaisePropertyChanged();
+                RaisePropertyChanged(nameof(Tasks));
+            }
+        }
+
+        private bool _doShowError;
+        public bool DoShowError
+        {
+            get => _doShowError;
+            set
+            {
+                _doShowError = value;
+                RaisePropertyChanged();
+                RaisePropertyChanged(nameof(Tasks));
+            }
+        }
+
+        private bool _doShowDone;
+        public bool DoShowDone
+        {
+            get => _doShowDone;
+            set
+            {
+                _doShowDone = value;
+                RaisePropertyChanged();
+                RaisePropertyChanged(nameof(Tasks));
+            }
+        }
+
+        private bool _doShowRunning;
+        public bool DoShowRunning
+        {
+            get => _doShowRunning;
+            set
+            {
+                _doShowRunning = value;
+                RaisePropertyChanged();
+                RaisePropertyChanged(nameof(Tasks));
+            }
+        }
+
+        private bool _doShowCancelling;
+        public bool DoShowCancelling
+        {
+            get => _doShowCancelling;
+            set
+            {
+                _doShowCancelling = value;
+                RaisePropertyChanged();
+                RaisePropertyChanged(nameof(Tasks));
+            }
+        }
+        public ICommand CmdCancelAllTasks { get; set; }
 
         #region Instance
 
@@ -32,44 +111,97 @@ namespace PowerTools.Core.SharedServices
 
         private TaskExecution()
         {
+            _tasks = new List<TaskInformation>();
+            DoShowRunning = true;
+            CmdCancelAllTasks = new DelegateCommand(OnCancelAllTasks);
+        }
 
+        private void OnCancelAllTasks()
+        {
+            var runningTasks = _tasks.Where(p => p.Status == TaskStatus.Running);
+            foreach (var taskInformation in runningTasks)
+            {
+                taskInformation.CancelTask();
+            }
         }
 
         #endregion
 
-        public void RunAsync(Action action, Action errAction = null)
+        public void RunAsync(Action<ITaskReport> action, Action errAction = null, Action<ITaskReport> taskReport = null)
         {
+            var taskInformation = new TaskInformation(action);
+            taskInformation.SetStatus(TaskStatus.Running);
+            taskInformation.SetProgressPercentValue(0);
+
+            _tasks.Insert(0, taskInformation);
+            RaisePropertyChanged(nameof(Tasks));
+            RaisePropertyChanged(nameof(RunningTasksCount));
+            RaisePropertyChanged(nameof(TasksInformation));
+
             Task.Run(() =>
             {
+                LoggingService.Instance.Info($"Calling {taskInformation.TaskName}");
+
                 try
                 {
-                    action.Invoke();
+                    action.Invoke(taskInformation);
+
+                    LoggingService.Instance.Info($"Done! {taskInformation.TaskName}");
+                    taskInformation.SetProgressPercentValue(100);
+                    taskInformation.SetStatus(TaskStatus.Done);
+                    ApplicationService.Instance.InvokeUIAction(() =>
+                    {
+                        RaisePropertyChanged(nameof(Tasks));
+                        RaisePropertyChanged(nameof(RunningTasksCount));
+                        RaisePropertyChanged(nameof(TasksInformation));
+                    });
                 }
                 catch (Exception e)
                 {
+                    errAction?.Invoke();
+
                     LoggingService.Instance.Error("Occured error during running action async", e);
+                    taskInformation.SetStatus(TaskStatus.Error);
+                    ApplicationService.Instance.InvokeUIAction(() =>
+                    {
+                        RaisePropertyChanged(nameof(Tasks));
+                        RaisePropertyChanged(nameof(RunningTasksCount));
+                        RaisePropertyChanged(nameof(TasksInformation));
+                    });
                 }
             });
         }
 
-        public void RunOnceAsync(string taskName, Action action, Action beginAction = null, Action endAction = null, Action errAction = null)
+        public void RunAsync(Action action, Action errAction = null)
         {
+            RunAsync(token => action.Invoke(), errAction);
+        }
+
+        public void RunOnceAsync(string taskName, Action<ITaskReport> action, Action beginAction = null, Action endAction = null, Action errAction = null, Action<ITaskReport> taskReport = null)
+        {
+            TaskInformation taskInformation;
             lock (_lock)
             {
-                if (!_taskStatuses.ContainsKey(taskName))
+                taskInformation = _tasks.FirstOrDefault(p => p.TaskName == taskName);
+
+                if (taskInformation == null)
                 {
-                    _taskStatuses.TryAdd(taskName, false);
+                    taskInformation = new TaskInformation(taskName, string.Empty, action);
+
+                    _tasks.Insert(0, taskInformation);
                 }
 
-                var isTaskRunning = _taskStatuses[taskName];
-                if (isTaskRunning)
+                if (taskInformation.Status == TaskStatus.Running)
                 {
                     return;
                 }
-                else
-                {
-                    _taskStatuses[taskName] = true;
-                }
+
+                taskInformation.SetStatus(TaskStatus.Running);
+                taskInformation.SetProgressPercentValue(0);
+                taskInformation.CancellationToken = new CancellationTokenSource();
+                RaisePropertyChanged(nameof(Tasks));
+                RaisePropertyChanged(nameof(RunningTasksCount));
+                RaisePropertyChanged(nameof(TasksInformation));
             }
 
             Task.Run(() =>
@@ -80,26 +212,41 @@ namespace PowerTools.Core.SharedServices
                     ApplicationService.Instance.Busy();
 
                     beginAction?.Invoke();
-                    action.Invoke();
+                    action.Invoke(taskInformation);
                     endAction?.Invoke();
 
                     LoggingService.Instance.Info($"Done! {taskName}");
+                    taskInformation.SetProgressPercentValue(100);
+                    taskInformation.SetStatus(TaskStatus.Done);
+                    ApplicationService.Instance.InvokeUIAction(() =>
+                    {
+                        RaisePropertyChanged(nameof(Tasks));
+                        RaisePropertyChanged(nameof(RunningTasksCount));
+                        RaisePropertyChanged(nameof(TasksInformation));
+                    });
                 }
                 catch (Exception e)
                 {
                     errAction?.Invoke();
                     LoggingService.Instance.Error($"Error calling {taskName}", e);
+                    taskInformation.SetStatus(TaskStatus.Error);
+                    ApplicationService.Instance.InvokeUIAction(() =>
+                    {
+                        RaisePropertyChanged(nameof(Tasks));
+                        RaisePropertyChanged(nameof(RunningTasksCount));
+                        RaisePropertyChanged(nameof(TasksInformation));
+                    });
                 }
                 finally
                 {
                     ApplicationService.Instance.Free();
-
-                    lock (_lock)
-                    {
-                        _taskStatuses[taskName] = false;
-                    }
                 }
             });
+        }
+
+        public void RunOnceAsync(string taskName, Action action, Action beginAction = null, Action endAction = null, Action errAction = null)
+        {
+            RunOnceAsync(taskName, token => action.Invoke(), beginAction, endAction, errAction);
         }
 
         //public static TaskExecutionResult ExecuteCommand(string applicationPath, string command)

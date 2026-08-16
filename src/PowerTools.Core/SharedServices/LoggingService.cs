@@ -2,7 +2,6 @@
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Windows;
 
 namespace PowerTools.Core.SharedServices
 {
@@ -109,7 +108,7 @@ namespace PowerTools.Core.SharedServices
             _status = string.Empty;
 
             DoTextWrapping = false;
-            DoShowTime = false;
+            DoShowTime = true;
 
             WriteLog("Ready");
         }
@@ -148,7 +147,7 @@ namespace PowerTools.Core.SharedServices
                 return;
             }
 
-            var dateTimeMessage = DoShowTime ? $"{DateTime.Now} " : string.Empty;
+            var dateTimeMessage = DoShowTime ? $"{DateTime.Now.ToString("")} " : string.Empty;
             var indexOfNewLine = message.IndexOf(Environment.NewLine, StringComparison.Ordinal);
             var newMessage = $"> {dateTimeMessage}" + (indexOfNewLine == -1 ? message : message.Substring(0, indexOfNewLine + 1));
 

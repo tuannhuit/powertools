@@ -18,13 +18,11 @@
                           Content="" Tag="Text Wrapping"
                           IsChecked="{Binding Source={x:Static sharedServices:LoggingService.Instance}, Path=DoTextWrapping, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                           FontSize="12" Margin="0 0 5 0" MinWidth="25" MinHeight="25" Height="25"
-                          BorderBrush="{Binding Source={x:Static sharedServices:LoggingService.Instance}, Path=DoTextWrapping, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolToStringConverter}, ConverterParameter='True:LightGray:Transparent'}"
                           VerticalAlignment="Center"/>  
             <ToggleButton Style="{StaticResource ToggleButton.Icon}" 
                           Content="" Tag="Show Time"
                           IsChecked="{Binding Source={x:Static sharedServices:LoggingService.Instance}, Path=DoShowTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                           FontSize="12" Margin="0 0 5 0" MinWidth="25" MinHeight="25" Height="25"
-                          BorderBrush="{Binding Source={x:Static sharedServices:LoggingService.Instance}, Path=DoShowTime, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolToStringConverter}, ConverterParameter='True:LightGray:Transparent'}"
                           VerticalAlignment="Center"/>
         </StackPanel>
         <Border Grid.Row="1" Background="{StaticResource Background.WhiteSmoke}" CornerRadius="0 0 5 5">

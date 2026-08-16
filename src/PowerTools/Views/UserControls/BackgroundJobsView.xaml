@@ -3,9 +3,78 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:services="clr-namespace:PowerTools.Core.SharedServices;assembly=PowerTools.Core"
+             xmlns:models="clr-namespace:PowerTools.Core.Models;assembly=PowerTools.Core"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-            
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0" Orientation="Horizontal" VerticalAlignment="Top" Margin="0 5 0 0" Background="White">
+            <Button Style="{StaticResource Button.Icon}" Command="{Binding Source={x:Static services:TaskExecution.Instance}, Path=CmdCancelAllTasks}" Content="{x:Static models:ButtonIcons.Delete}" Tag="Cancel All Tasks" ToolTip="Cancel All Running Tasks" VerticalAlignment="Center" HorizontalContentAlignment="Left" FontSize="12" Margin="5 0 5 0" Height="25" MinHeight="25"/>
+            <ToggleButton Style="{StaticResource ToggleButton.Icon}" 
+                          Tag="Idle"
+                          IsChecked="{Binding Source={x:Static services:TaskExecution.Instance}, Path=DoShowIdle, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                          FontSize="12" Margin="0 0 5 0" MinWidth="25" MinHeight="25" Height="25"
+                          VerticalAlignment="Center"/>
+            <ToggleButton Style="{StaticResource ToggleButton.Icon}" 
+                          Tag="Running"
+                          IsChecked="{Binding Source={x:Static services:TaskExecution.Instance}, Path=DoShowRunning, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                          FontSize="12" Margin="0 0 5 0" MinWidth="25" MinHeight="25" Height="25"
+                          BorderBrush="Green"
+                          VerticalAlignment="Center"/>
+            <ToggleButton Style="{StaticResource ToggleButton.Icon}" 
+                          Tag="Done"
+                          IsChecked="{Binding Source={x:Static services:TaskExecution.Instance}, Path=DoShowDone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                          FontSize="12" Margin="0 0 5 0" MinWidth="25" MinHeight="25" Height="25"
+                          BorderBrush="Green"
+                          VerticalAlignment="Center"/>
+            <ToggleButton Style="{StaticResource ToggleButton.Icon}" 
+                          Tag="Error"
+                          IsChecked="{Binding Source={x:Static services:TaskExecution.Instance}, Path=DoShowError, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                          FontSize="12" Margin="0 0 5 0" MinWidth="25" MinHeight="25" Height="25"
+                          BorderBrush="Red"
+                          VerticalAlignment="Center"/>
+            <ToggleButton Style="{StaticResource ToggleButton.Icon}" 
+                          Tag="Cancelling"
+                          IsChecked="{Binding Source={x:Static services:TaskExecution.Instance}, Path=DoShowCancelling, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                          FontSize="12" Margin="0 0 5 0" MinWidth="25" MinHeight="25" Height="25"
+                          VerticalAlignment="Center"/>
+        </StackPanel>
+        <Border Grid.Row="1" CornerRadius="0 0 5 5" Background="{StaticResource Background.WhiteSmoke}">
+            <ListView Style="{StaticResource ListView.Normal}" ItemContainerStyle="{StaticResource ListViewItem.Normal}"
+                      ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                      ItemsSource="{Binding Source={x:Static services:TaskExecution.Instance}, Path=Tasks, UpdateSourceTrigger=PropertyChanged}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Margin="5">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Style="{StaticResource TextBlock.ContentSmall}" Grid.Row="0" Grid.Column="0" Text="{Binding TaskName}" FontWeight="SemiBold" HorizontalAlignment="Stretch" Margin="0"/>
+                            <TextBlock Style="{StaticResource TextBlock.ContentSmall}" Grid.Row="1" Grid.Column="0" Text="{Binding TaskDescription}" HorizontalAlignment="Stretch" Margin="0"/>
+                            <ProgressBar Grid.Row="2" Grid.Column="0" Height="4" BorderThickness="0" BorderBrush="Transparent"
+                                         Minimum="0"
+                                         Maximum="100"
+                                         Value="{Binding ProgressValue, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                                         Background="{Binding Status, Converter={StaticResource StringToBrushConverter}, ConverterParameter='Error:Red:LightGray'}"
+                                         VerticalAlignment="Center" Margin="0 5 0 10"/>
+                            <Button Style="{StaticResource Button.Icon}" Grid.Row="0" Grid.RowSpan="3" Grid.Column="1" Content="⛒"
+                                    Command="{Binding CmdCancel}"
+                                    IsEnabled="{Binding Status, Converter={StaticResource StringToBooleanConverter}, ConverterParameter='Running'}"
+                                    Margin="5 0 0 0" MinWidth="25" MinHeight="25" Width="25" Height="25" VerticalAlignment="Center"/>
+                        </Grid>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </Border>
     </Grid>
 </UserControl>

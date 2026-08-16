@@ -11,7 +11,9 @@ namespace PowerTools.Core.Converters
             if (value == null || parameter == null) return value;
 
             var strValue = value.ToString();
-            var values = parameter.ToString().Split(":");
+            var paramString = parameter == null ? string.Empty : parameter.ToString();
+
+            var values = paramString.Split(":");
 
             return strValue.ToLower() == values[0].ToLower() ? values[1] : values[2];
         }

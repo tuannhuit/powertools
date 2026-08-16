@@ -21,7 +21,7 @@ namespace PowerTools.Core.Behaviours
             "CornerRadius",
             typeof(CornerRadius),
             typeof(ButtonBehavior),
-            new FrameworkPropertyMetadata(new CornerRadius(5)));
+            new FrameworkPropertyMetadata(new CornerRadius(3)));
 
         #endregion
     }

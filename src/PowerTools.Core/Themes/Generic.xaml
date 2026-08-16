@@ -16,7 +16,7 @@
     <converters:BoolToStringConverter x:Key="BoolToStringConverter"/>
 
     <SolidColorBrush x:Key="Background.Gray" Color="#CCCCCC"/>
-    <SolidColorBrush x:Key="Background.LightGray" Color="#E6E6E6"/>
+    <SolidColorBrush x:Key="Background.LightGray" Color="#F3F3F3"/>
     <SolidColorBrush x:Key="Background.WhiteSmoke" Color="WhiteSmoke"/>
     <SolidColorBrush x:Key="Background.Default" Color="#F8F8F8"/>
     <SolidColorBrush x:Key="Background.Black" Color="#2C2C2C"/>
@@ -35,13 +35,13 @@
     <SolidColorBrush x:Key="ScrollBar.Pressed.Glyph" Color="#FFFFFF"/>
     <SolidColorBrush x:Key="ScrollBar.Disabled.Glyph" Color="#BFBFBF"/>
 
-    <SolidColorBrush x:Key="Button.MouseOver.Border" Color="#FF3C7FB1"/>
-    <SolidColorBrush x:Key="Button.Pressed.Border" Color="#FF2C628B"/>
+    <SolidColorBrush x:Key="Button.MouseOver.Border" Color="#0072BF"/>
+    <SolidColorBrush x:Key="Button.Pressed.Border" Color="#0065A8"/>
     <SolidColorBrush x:Key="Button.Disabled.Border" Color="#FFADB2B5"/>
 
-    <SolidColorBrush x:Key="Button.Background" Color="#FF92D7FF"/>
-    <SolidColorBrush x:Key="Button.MouseOver.Background" Color="#FFBEE6FD"/>
-    <SolidColorBrush x:Key="Button.Pressed.Background" Color="#FF5AC0FB"/>
+    <SolidColorBrush x:Key="Button.Background" Color="#007ACC"/>
+    <SolidColorBrush x:Key="Button.MouseOver.Background" Color="#0093F5"/>
+    <SolidColorBrush x:Key="Button.Pressed.Background" Color="#007ACC"/>
     <SolidColorBrush x:Key="Button.Disabled.Background" Color="#FFF4F4F4"/>
     <SolidColorBrush x:Key="Button.Disabled.Foreground" Color="#FFBAB8B8"/>
 
@@ -143,7 +143,7 @@
         <Setter Property="HorizontalAlignment" Value="Left"/>
         <Setter Property="Foreground" Value="{StaticResource TextBox.Foreground.Gray}"/>
         <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="BorderBrush" Value="LightGray"/>
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="FontSize" Value="18"/>
         <Setter Property="FontWeight" Value="Normal"/>
@@ -161,7 +161,9 @@
                             <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
                         </Trigger>-->
                         <Trigger Property="IsMouseOver" Value="true">
-                            <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Background}"/>
+                            <Setter Property="Background" TargetName="border" Value="{StaticResource Button.MouseOver.Background}"/>
+                            <Setter Property="Foreground" TargetName="textblock" Value="White"/>
+                            <Setter Property="Foreground" TargetName="textblockText" Value="White"/>
                         </Trigger>
                         <Trigger Property="IsPressed" Value="true">
                             <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Pressed.Background}"/>
@@ -171,6 +173,9 @@
                         <Trigger Property="IsEnabled" Value="false">
                             <Setter Property="Foreground" TargetName="textblock" Value="{StaticResource Button.Disabled.Foreground}"/>
                             <Setter Property="Foreground" TargetName="textblockText" Value="{StaticResource Button.Disabled.Foreground}"/>
+                        </Trigger>
+                        <Trigger Property="IsChecked" Value="false">
+                            <Setter Property="BorderBrush" TargetName="border" Value="Transparent"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -185,8 +190,8 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ToggleButton}">
-                    <Border x:Name="templateRoot" Background="{StaticResource ComboBox.Static.Background}" BorderBrush="{StaticResource ComboBox.Static.Border}" BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="true">
-                        <Border x:Name="splitBorder" BorderBrush="Transparent" BorderThickness="1" HorizontalAlignment="Right" Margin="0" SnapsToDevicePixels="true" Width="{DynamicResource {x:Static SystemParameters.VerticalScrollBarWidthKey}}">
+                    <Border x:Name="templateRoot" Background="{StaticResource ComboBox.Static.Background}" BorderBrush="{StaticResource ComboBox.Static.Border}" BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="true" CornerRadius="3">
+                        <Border x:Name="splitBorder" BorderBrush="Transparent" BorderThickness="1" HorizontalAlignment="Right" Margin="0" SnapsToDevicePixels="true" Width="{DynamicResource {x:Static SystemParameters.VerticalScrollBarWidthKey}}" CornerRadius="3">
                             <Path x:Name="arrow" Data="F1 M 0,0 L 2.667,2.66665 L 5.3334,0 L 5.3334,-1.78168 L 2.6667,0.88501 L0,-1.78168 L0,0 Z" Fill="{StaticResource ComboBox.Static.Glyph}" HorizontalAlignment="Center" Margin="0" VerticalAlignment="Center"/>
                         </Border>
                     </Border>
@@ -285,7 +290,7 @@
             <Popup x:Name="PART_Popup" AllowsTransparency="true" Grid.ColumnSpan="2" IsOpen="{Binding IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}}" Placement="Bottom">
                 <Border Name="dropDownBorder"
                             BorderThickness="1"
-                            Margin="0"
+                            Margin="2"
                             CornerRadius="3"
                             Background="{StaticResource ComboBox.Static.Background}"
                             BorderBrush="{StaticResource ComboBox.Static.Border}" 
@@ -341,7 +346,7 @@
             <Popup x:Name="PART_Popup" AllowsTransparency="true" Grid.ColumnSpan="2" IsOpen="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" Margin="1" Placement="Bottom" PopupAnimation="{DynamicResource {x:Static SystemParameters.ComboBoxPopupAnimationKey}}">
                 <Border Name="dropDownBorder"
                             BorderThickness="1"
-                            Margin="0"
+                            Margin="2"
                             CornerRadius="3"
                             Background="{StaticResource ComboBox.Static.Background}" 
                             BorderBrush="{StaticResource ComboBox.Static.Border}" 
@@ -535,8 +540,8 @@
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="true">
                             <Setter Property="Background" TargetName="border" Value="{StaticResource Button.MouseOver.Background}"/>
-                            <!--<Setter Property="Foreground" TargetName="textblock" Value="Black"/>
-                            <Setter Property="Foreground" TargetName="textblockText" Value="Black"/>-->
+                            <Setter Property="Foreground" TargetName="textblock" Value="White"/>
+                            <Setter Property="Foreground" TargetName="textblockText" Value="White"/>
                         </Trigger>
                         <Trigger Property="IsPressed" Value="true">
                             <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Pressed.Background}"/>
@@ -578,8 +583,8 @@
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="true">
                             <Setter Property="Background" TargetName="border" Value="{StaticResource Button.MouseOver.Background}"/>
-                            <!--<Setter Property="Foreground" TargetName="textblock" Value="Black"/>
-                            <Setter Property="Foreground" TargetName="textblockText" Value="Black"/>-->
+                            <Setter Property="Foreground" TargetName="textblock" Value="White"/>
+                            <Setter Property="Foreground" TargetName="textblockText" Value="White"/>
                         </Trigger>
                         <Trigger Property="IsPressed" Value="true">
                             <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Pressed.Background}"/>
@@ -618,6 +623,7 @@
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="true">
                             <Setter Property="Background" TargetName="border" Value="{StaticResource Button.MouseOver.Background}"/>
+                            <Setter Property="Foreground" TargetName="textblock" Value="White"/>
                         </Trigger>
                         <Trigger Property="IsPressed" Value="true">
                             <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Pressed.Background}"/>
@@ -672,7 +678,7 @@
     </Style>
 
     <SolidColorBrush x:Key="Item.MouseOver.Background" Color="WhiteSmoke"/>
-    <SolidColorBrush x:Key="Item.SelectedActive.Background" Color="LightGray"/>
+    <SolidColorBrush x:Key="Item.SelectedActive.Background" Color="#E6E6E6"/>
     <SolidColorBrush x:Key="Item.SelectedInactive.Background" Color="#3DDADADA"/>
     <Style x:Key="ListViewItem.Normal" TargetType="{x:Type ListViewItem}">
         <Setter Property="SnapsToDevicePixels" Value="True"/>
@@ -690,7 +696,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ListViewItem}">
-                    <Border x:Name="Bd" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}" CornerRadius="5" SnapsToDevicePixels="true">
+                    <Border x:Name="Bd" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}" CornerRadius="3" SnapsToDevicePixels="true">
                         <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
                     </Border>
                     <ControlTemplate.Triggers>
@@ -860,7 +866,7 @@
         </Border>
     </ControlTemplate>
     <ControlTemplate x:Key="DataGridTemplate.PaginationDataGrid" TargetType="{x:Type controls:PaginationDataGrid}">
-        <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}" CornerRadius="5" SnapsToDevicePixels="True">
+        <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}" CornerRadius="3" SnapsToDevicePixels="True">
             <Grid x:Name="gridMain">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
@@ -881,7 +887,7 @@
                                     <RowDefinition Height="*"/>
                                     <RowDefinition Height="Auto"/>
                                 </Grid.RowDefinitions>
-                                <Border Grid.ColumnSpan="3" Background="WhiteSmoke" CornerRadius="5 5 0 0">
+                                <Border Grid.ColumnSpan="3" Background="WhiteSmoke" CornerRadius="3 3 0 0">
                                     <Grid>
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="Auto"/>
@@ -900,19 +906,19 @@
                                                           Content="{x:Static models:ButtonIcons.Refresh}" 
                                                           Command="{Binding Metadata.InvokeAction, RelativeSource={RelativeSource AncestorType=controls:PaginationDataGrid}}" 
                                                           CommandParameter="RefreshItems"
+                                                          BorderBrush="Transparent"
                                                           FontSize="12" Margin="0 0 0 0" MinWidth="25" MinHeight="25" VerticalAlignment="Center" BorderThickness="1" />
                                             <ToggleButton x:Name="btnFilters" Style="{StaticResource ToggleButton.Icon}" 
                                                           Content="{x:Static models:ButtonIcons.Filters}" 
                                                           IsChecked="{Binding RelativeSource={RelativeSource AncestorType={x:Type controls:PaginationDataGrid}}, Path=IsFiltersVisible, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                           Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type controls:PaginationDataGrid}}, Path=IsFiltersEnable, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolToVisibilityConverter}}" 
                                                           FontSize="12" Margin="0 0 0 0" MinWidth="25" MinHeight="25" BorderThickness="1" 
-                                                          BorderBrush="{Binding RelativeSource={RelativeSource AncestorType={x:Type controls:PaginationDataGrid}}, Path=IsFiltersVisible, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolToStringConverter}, ConverterParameter='True:LightGray:Transparent'}"
                                                           VerticalAlignment="Center"/>
                                             <ToggleButton x:Name="btnSettings" Style="{StaticResource ToggleButton.Icon}" 
                                                           Content="{x:Static models:ButtonIcons.Setting}"
                                                           FontSize="12" Margin="0 0 5 0" MinWidth="25" MinHeight="25" VerticalAlignment="Center"/>
                                             <Popup PlacementTarget="{Binding ElementName=btnSettings}" Placement="Bottom" StaysOpen="False" IsOpen="{Binding IsChecked, ElementName=btnSettings, Mode=TwoWay}">
-                                                <Border Background="White" BorderThickness="1" BorderBrush="LightGray" Width="250" CornerRadius="5" ClipToBounds="True">
+                                                <Border Background="White" Margin="1" BorderThickness="1" BorderBrush="LightGray" Width="250" CornerRadius="3" ClipToBounds="True">
                                                     <ScrollViewer CanContentScroll="True" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" FontWeight="Normal" Margin="5">
                                                         <Grid>
                                                             <Grid.RowDefinitions>
@@ -978,14 +984,14 @@
                     </ScrollViewer.Template>
                     <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
                 </ScrollViewer>
-                <Border Grid.Row="1" Background="{StaticResource Background.Default}" BorderBrush="Transparent" BorderThickness="0" CornerRadius="0 0 5 5">
+                <Border Grid.Row="1" Background="{StaticResource Background.Default}" BorderBrush="Transparent" BorderThickness="0" CornerRadius="0 0 3 3">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
                         <StackPanel Grid.Column="0" Orientation="Horizontal" Margin="0">
-                            <ItemsControl ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=controls:PaginationDataGrid}, Path=Metadata.ActiveActions}" Margin="5 0 0 0">
+                            <ItemsControl ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=controls:PaginationDataGrid}, Path=Metadata.ActiveActions}" Margin="3 0 0 0">
                                 <ItemsControl.ItemsPanel>
                                     <ItemsPanelTemplate>
                                         <StackPanel Orientation="Horizontal"/>
@@ -1003,10 +1009,11 @@
                             </ItemsControl>
                             <ToggleButton x:Name="btnAdditionalActions" Style="{StaticResource ToggleButton.Icon}" 
                                   Content="{x:Static models:ButtonIcons.MoreInfo}"
+                                  BorderBrush="Transparent"
                                   Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type controls:PaginationDataGrid}}, Path=Metadata.AdditionalActions, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource ValueToVisibilityConverter}}" 
                                   FontSize="12" Margin="0 5 5 5" MinWidth="25" MinHeight="25"/>
                             <Popup PlacementTarget="{Binding ElementName=btnAdditionalActions}" Placement="Bottom" StaysOpen="False" IsOpen="{Binding IsChecked, ElementName=btnAdditionalActions, Mode=TwoWay}">
-                                <Border Background="WhiteSmoke" BorderBrush="LightGray" BorderThickness="1" CornerRadius="5" ClipToBounds="True" HorizontalAlignment="Right">
+                                <Border Background="WhiteSmoke" BorderBrush="LightGray" Margin="1" BorderThickness="1" CornerRadius="3" ClipToBounds="True" HorizontalAlignment="Right">
                                     <ScrollViewer CanContentScroll="True" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" FontWeight="Normal" Margin="2">
                                         <ItemsControl ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=controls:PaginationDataGrid}, Path=Metadata.AdditionalActions}">
                                             <ItemsControl.ItemTemplate>
@@ -1295,15 +1302,15 @@
         <Style.Triggers>
             <!-- Highlight selected rows -->
             <Trigger Property="IsSelected" Value="True">
-                <Setter Property="Background" Value="{StaticResource Button.Background}" />
+                <Setter Property="Background" Value="{StaticResource Button.MouseOver.Background}" />
                 <Setter Property="BorderBrush" Value="Transparent" />
-                <Setter Property="Foreground" Value="Black" />
+                <!--<Setter Property="Foreground" Value="White" />-->
             </Trigger>
             <Trigger Property="IsFocused" Value="True">
-                <Setter Property="Background" Value="{StaticResource Button.Background}" />
-                <Setter Property="BorderBrush" Value="DarkGray" />
+                <Setter Property="Background" Value="{StaticResource Button.MouseOver.Background}" />
+                <Setter Property="BorderBrush" Value="{StaticResource Button.Pressed.Border}" />
                 <Setter Property="BorderThickness" Value="1"/>
-                <Setter Property="Foreground" Value="Black" />
+                <!--<Setter Property="Foreground" Value="White" />-->
             </Trigger>
         </Style.Triggers>
         <!-- Add some padding around the contents of a cell -->
@@ -1348,6 +1355,7 @@
                         <!-- Highlight a grid row as the mouse passes over -->
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter Property="Background" Value="{StaticResource Button.MouseOver.Background}" />
+                            <!--<Setter Property="Foreground" Value="White" />-->
                         </Trigger>
                     </Style.Triggers>
                 </Style>
@@ -1434,7 +1442,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type TabControl}">
-                    <Border Background="{TemplateBinding Background}" Margin="{TemplateBinding Padding}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="5" >
+                    <Border Background="{TemplateBinding Background}" Margin="{TemplateBinding Padding}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="3" >
                         <Grid x:Name="templateRoot" ClipToBounds="true" SnapsToDevicePixels="true" KeyboardNavigation.TabNavigation="Local">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition x:Name="ColumnDefinition0"/>
@@ -1445,7 +1453,7 @@
                                 <RowDefinition x:Name="RowDefinition1" Height="*"/>
                             </Grid.RowDefinitions>
                             <ScrollViewer x:Name="headerPanel" Grid.Column="0" Grid.Row="0" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
-                                <Border x:Name="border" Background="{TemplateBinding Background}" CornerRadius="5 5 0 0">
+                                <Border x:Name="border" Background="{TemplateBinding Background}" CornerRadius="3 3 0 0">
                                     <TabPanel IsItemsHost="true" Margin="0 " KeyboardNavigation.TabIndex="1" Panel.ZIndex="1"/>
                                 </Border>
                             </ScrollViewer>
@@ -1462,7 +1470,7 @@
                             <!--<Setter Property="Grid.Row" TargetName="tblIcon" Value="0"/>-->
                             <Setter Property="Height" TargetName="RowDefinition0" Value="*"/>
                             <Setter Property="Height" TargetName="RowDefinition1" Value="Auto"/>
-                            <Setter Property="CornerRadius" TargetName="border" Value="0 0 5 5"/>
+                            <Setter Property="CornerRadius" TargetName="border" Value="0 0 3 3"/>
                         </Trigger>
                         <Trigger Property="TabStripPlacement" Value="Left">
                             <Setter Property="Grid.Row" TargetName="headerPanel" Value="0"/>
@@ -1475,7 +1483,7 @@
                             <Setter Property="Width" TargetName="ColumnDefinition1" Value="*"/>
                             <Setter Property="Height" TargetName="RowDefinition0" Value="*"/>
                             <Setter Property="Height" TargetName="RowDefinition1" Value="0"/>
-                            <Setter Property="CornerRadius" TargetName="border" Value="5 0 0 5"/>
+                            <Setter Property="CornerRadius" TargetName="border" Value="3 0 0 3"/>
                         </Trigger>
                         <Trigger Property="TabStripPlacement" Value="Right">
                             <Setter Property="Grid.Row" TargetName="headerPanel" Value="0"/>
@@ -1488,7 +1496,7 @@
                             <Setter Property="Width" TargetName="ColumnDefinition1" Value="Auto"/>
                             <Setter Property="Height" TargetName="RowDefinition0" Value="*"/>
                             <Setter Property="Height" TargetName="RowDefinition1" Value="0"/>
-                            <Setter Property="CornerRadius" TargetName="border" Value="0 5 5 0"/>
+                            <Setter Property="CornerRadius" TargetName="border" Value="0 3 3 0"/>
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="false">
                             <Setter Property="TextElement.Foreground" TargetName="templateRoot" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
@@ -1518,7 +1526,7 @@
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
-                        <Border x:Name="mainBorder" Grid.Column="0" Grid.ColumnSpan="2" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="0" Margin="{TemplateBinding Padding}" CornerRadius="5"/>
+                        <Border x:Name="mainBorder" Grid.Column="0" Grid.ColumnSpan="2" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="0" Margin="{TemplateBinding Padding}" CornerRadius="3"/>
                         <ContentPresenter x:Name="contentPresenter" Grid.Column="0" ContentSource="Header" Focusable="False" HorizontalAlignment="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" Margin="8 6 6 6" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
                         <Button x:Name="btnClose" Style="{StaticResource Button.Icon}" Grid.Column="1" Content="&#xE0A4;" Command="{Binding CmdCloseTab}" VerticalAlignment="Center" HorizontalAlignment="Right" FontSize="11" Foreground="{TemplateBinding Foreground}" Margin="0 0 3 0" MinHeight="20" Height="20" MinWidth="20" Width="20" />
                     </Grid>
@@ -1535,7 +1543,7 @@
                             </MultiDataTrigger.Conditions>
                             <Setter Property="Panel.ZIndex" Value="1"/>
                             <Setter Property="TextElement.FontWeight" TargetName="contentPresenter" Value="SemiBold"/>
-                            <Setter Property="CornerRadius" TargetName="mainBorder" Value="5"/>
+                            <Setter Property="CornerRadius" TargetName="mainBorder" Value="3"/>
                         </MultiDataTrigger>
                         <MultiDataTrigger>
                             <MultiDataTrigger.Conditions>
@@ -1746,12 +1754,12 @@
                             <RowDefinition Height="*"/>
                             <RowDefinition Height="5"/>
                         </Grid.RowDefinitions>
-                        <Border BorderBrush="Transparent" BorderThickness="0" Background="{TemplateBinding Background}" CornerRadius="4" Grid.Column="0" Grid.ColumnSpan="4" Grid.RowSpan="3" Grid.Row="1">
-                            <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="4">
-                                <Border BorderBrush="White" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="4"/>
+                        <Border BorderBrush="Transparent" BorderThickness="0" Background="{TemplateBinding Background}" CornerRadius="3" Grid.Column="0" Grid.ColumnSpan="4" Grid.RowSpan="3" Grid.Row="1">
+                            <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="3">
+                                <Border BorderBrush="White" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="3"/>
                             </Border>
                         </Border>
-                        <Border x:Name="Header" Grid.Column="1" Padding="2" Grid.RowSpan="2" Grid.Row="0" Background="{TemplateBinding BorderBrush}" BorderBrush="Transparent" BorderThickness="0" CornerRadius="4">
+                        <Border x:Name="Header" Grid.Column="1" Padding="2" Grid.RowSpan="2" Grid.Row="0" Background="{TemplateBinding BorderBrush}" BorderBrush="Transparent" BorderThickness="0" CornerRadius="3">
                             <ContentPresenter ContentSource="Header" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
                         </Border>
                         <ContentPresenter Grid.Column="1" Grid.ColumnSpan="2" Margin="{TemplateBinding Padding}" Grid.Row="2" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
@@ -2067,7 +2075,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Thumb}">
-                    <Border x:Name="border" Background="{StaticResource ScrollBar.Static.Thumb}" Height="{TemplateBinding Height}" SnapsToDevicePixels="True" Width="{TemplateBinding Width}" BorderThickness="0" BorderBrush="Transparent" CornerRadius="4"/>
+                    <Border x:Name="border" Background="{StaticResource ScrollBar.Static.Thumb}" Height="{TemplateBinding Height}" SnapsToDevicePixels="True" Width="{TemplateBinding Width}" BorderThickness="0" BorderBrush="Transparent" CornerRadius="3"/>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="true">
                             <Setter Property="Background" TargetName="border" Value="{StaticResource ScrollBar.MouseOver.Thumb}"/>
@@ -2086,7 +2094,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Thumb}">
-                    <Border x:Name="border" Background="{StaticResource ScrollBar.Static.Thumb}" Height="{TemplateBinding Height}" SnapsToDevicePixels="True" Width="{TemplateBinding Width}" BorderThickness="0" BorderBrush="Transparent" CornerRadius="4"/>
+                    <Border x:Name="border" Background="{StaticResource ScrollBar.Static.Thumb}" Height="{TemplateBinding Height}" SnapsToDevicePixels="True" Width="{TemplateBinding Width}" BorderThickness="0" BorderBrush="Transparent" CornerRadius="3"/>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="true">
                             <Setter Property="Background" TargetName="border" Value="{StaticResource ScrollBar.MouseOver.Thumb}"/>
