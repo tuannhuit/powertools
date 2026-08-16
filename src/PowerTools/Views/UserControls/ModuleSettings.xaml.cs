@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace PowerTools.Views.UserControls
 {
     /// <summary>
-    /// Interaction logic for ModuleSettingsView.xaml
+    /// Interaction logic for ModuleSettings.xaml
     /// </summary>
-    public partial class ModuleSettingsView : UserControl
+    public partial class ModuleSettings : UserControl
     {
-        public ModuleSettingsView()
+        public ModuleSettings()
         {
             InitializeComponent();
         }

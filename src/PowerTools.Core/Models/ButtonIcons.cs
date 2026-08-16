@@ -30,6 +30,8 @@
         public static string Char_K = "𝞙";
         public static string Char_E = "𝐄";
         public static string Char_Q = "𝙌";
+        public static string Save = "\uE105";
+        public static string Revert = "\uE149";
     }
 
     public enum ModuleIconStyle

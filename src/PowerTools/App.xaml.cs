@@ -23,7 +23,7 @@ namespace PowerTools
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
-            containerRegistry.RegisterDialog<ModuleSettingsView, ModuleSettingsViewModel>();
+            //containerRegistry.RegisterDialog<ModuleSettingsView, ModuleSettingsViewModel>();
             containerRegistry.RegisterDialog<DialogView, DialogViewModel>();
         }
 

@@ -1,20 +1,24 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using System.IO;
-using System.Linq;
-using System.Net;
-using PowerTools.Core.Configurations;
+﻿using PowerTools.Core.Configurations;
+using PowerTools.Core.Models;
 using PowerTools.Core.SharedServices;
 using PowerTools.Helpers;
 using PowerTools.ViewModels.UserControls;
+using PowerTools.Views.UserControls;
 using Prism.Commands;
 using Prism.Ioc;
 using Prism.Mvvm;
 using Prism.Regions;
 using Prism.Services.Dialogs;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.IO;
+using System.Linq;
+using System.Net;
 using System.Windows;
 using System.Windows.Input;
-using PowerTools.Core.Models;
+using PowerTools.Models;
+using ModuleSettings = PowerTools.Views.UserControls.ModuleSettings;
 
 namespace PowerTools.ViewModels
 {
@@ -186,19 +190,54 @@ namespace PowerTools.ViewModels
         private void OnCmdShowSettings()
         {
             var settings = ModuleGlobalSettings.Instance.LoadApplicationConfigurationsAsList();
-            var dialogParams = new DialogParameters
+
+            var moduleSettings = new Models.ModuleSettings();
+            moduleSettings.SetSettings(settings);
+
+            var actions = new List<DialogAction>
             {
-                { "settings", settings }
+                new DialogAction
+                {
+                    Icon = ButtonIcons.Revert,
+                    Name = "Revert",
+                    Action = (actionParams) =>
+                    {
+                        //if(string.IsNullOrEmpty(editServer.Name))
+                        //{
+                        //    MessageBox.Show("Server name cannot be empty.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        //    return;
+                        //}
+
+                        //var modifiedServer = Servers.FirstOrDefault(s => s.Id == editServer.Id);
+                        //if (modifiedServer != null)
+                        //{
+                        //    modifiedServer.Name = editServer.Name;
+                        //}
+
+                        //SelectedServer = modifiedServer;
+
+                        //OnCmdGetEventLogs();
+                    }
+                },
+                new DialogAction
+                {
+                    Icon = ButtonIcons.Save,
+                    Name = "Save & Close",
+                    Action = (actionParams) =>
+                    {
+                        ModuleGlobalSettings.Instance.SaveModuleConfigurations(moduleSettings.GetModuleSettingsAsDictionary(), true);
+                    },
+                    DoCloseWhenInvoked = true
+                },
             };
 
-            _dialogService.ShowDialog("ModuleSettingsView", dialogParams, callback =>
-            {
-                if (callback.Result == ButtonResult.OK)
-                {
-                    var result = callback.Parameters.GetValue<ModuleSettingsViewModel>("ModuleSettingsViewModel");
-                    ModuleGlobalSettings.Instance.SaveModuleConfigurations(result.GetModuleSettingsAsDictionary(), true);
-                }
-            });
+            ApplicationService.Instance.ShowDialog<ModuleSettings>(
+                "Module Settings | Edit",
+                moduleSettings,
+                null,
+                actions,
+                750,
+                300);
         }
 
         private void OnCmdSelectModuleList()

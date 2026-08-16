@@ -192,27 +192,27 @@ namespace PowerTools.Core.Configurations
             return settings;
         }
 
-        public List<KeyValuePair<string, string?>> LoadApplicationConfigurationsAsList()
+        public List<KeyValuePair<string, string>> LoadApplicationConfigurationsAsList()
         {
             var appConfigurations = LoadApplicationConfigurations();
             if (appConfigurations == null)
             {
-                return new List<KeyValuePair<string, string?>>();
+                return new List<KeyValuePair<string, string>>();
             }
 
-            var settings = new List<KeyValuePair<string, string?>>();
-            var configItems = appConfigurations["appsettings"]!.Deserialize<Dictionary<string, string?>>();
+            var settings = new List<KeyValuePair<string, string>>();
+            var configItems = appConfigurations["appsettings"]!.Deserialize<Dictionary<string, string>>();
             if (configItems != null)
             {
                 foreach (var item in configItems)
                 {
-                    settings.Add(new KeyValuePair<string, string?>(item.Key, item.Value));
+                    settings.Add(new KeyValuePair<string, string>(item.Key, item.Value));
                 }
             }
 
             if (settings.Count(p => p.Key == "RepositoryRemote") == 0)
             {
-                settings.Add(new KeyValuePair<string, string?>("RepositoryRemote", null));
+                settings.Add(new KeyValuePair<string, string>("RepositoryRemote", null));
             }
 
             return settings;

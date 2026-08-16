@@ -117,15 +117,17 @@
                                     Tag="{Binding Name}"
                                     Command="{Binding Command}"
                                     WindowChrome.IsHitTestVisibleInChrome="True" 
-                                    Margin="5 10 0 5" FontSize="12"/>
+                                    Margin="5 10 0 10" FontSize="12"/>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
                 <Button Style="{StaticResource Button.IconActive}" 
                         Grid.Row="0" Grid.Column="2" Margin="5 10 10 10" 
-                        Content="{x:Static models:ButtonIcons.Cancel}" Tag="Close"
+                        Content="{x:Static models:ButtonIcons.Cancel}"
+                        Tag="Close"
                         WindowChrome.IsHitTestVisibleInChrome="True"
-                        Command="{Binding CloseCommand}">
+                        Command="{Binding CloseCommand}"
+                        VerticalAlignment="Center">
                     <Button.Triggers>
                         <EventTrigger RoutedEvent="Button.Click">
                             <BeginStoryboard Storyboard="{StaticResource Storyboard.Dialog.Exit}"/>

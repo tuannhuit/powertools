@@ -1,0 +1,26 @@
+﻿<UserControl x:Class="PowerTools.Views.UserControls.ModuleSettings"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:controls="clr-namespace:PowerTools.Core.Controls;assembly=PowerTools.Core"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/PowerTools.Core;component/Themes/Generic.xaml"/>
+                <ResourceDictionary Source="../../Themes/Generic.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <controls:PaginationDataGrid CanUserAddRows="False" AutoGenerateColumns="False"
+                                 Header="All Settings"
+                                 BorderThickness="0" Margin="5"
+                                 Metadata="{Binding Settings, UpdateSourceTrigger=PropertyChanged}">
+        <controls:PaginationDataGrid.Columns>
+            <controls:PaginationDataGridTextColumn Name="Key" Header="Key" Binding="{Binding Key, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True" MinWidth="200" />
+            <controls:PaginationDataGridTextColumn Name="Value" Header="Value" Binding="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MinWidth="350" Width="400"/>
+        </controls:PaginationDataGrid.Columns>
+    </controls:PaginationDataGrid>
+</UserControl>
