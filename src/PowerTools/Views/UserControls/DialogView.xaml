@@ -121,7 +121,7 @@
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
-                <Button Style="{StaticResource Button.IconActive}" 
+                <Button Style="{StaticResource Button.IconHighlight}" 
                         Grid.Row="0" Grid.Column="2" Margin="5 10 10 10" 
                         Content="{x:Static models:ButtonIcons.Cancel}"
                         Tag="Close"

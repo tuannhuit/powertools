@@ -14,6 +14,7 @@
     <converters:MultiValueToVisibilityConverter x:Key="MultiValueToVisibilityConverter"/>
     <converters:BooleanToGridSizeConverter x:Key="BooleanToGridSizeConverter"/>
     <converters:BoolToStringConverter x:Key="BoolToStringConverter"/>
+    <converters:StringJsonFormatConverter x:Key="StringJsonFormatConverter"/>
 
     <SolidColorBrush x:Key="Background.Gray" Color="#CCCCCC"/>
     <SolidColorBrush x:Key="Background.LightGray" Color="#F3F3F3"/>
@@ -44,6 +45,8 @@
     <SolidColorBrush x:Key="Button.Pressed.Background" Color="#007ACC"/>
     <SolidColorBrush x:Key="Button.Disabled.Background" Color="#FFF4F4F4"/>
     <SolidColorBrush x:Key="Button.Disabled.Foreground" Color="#FFBAB8B8"/>
+
+    <SolidColorBrush x:Key="DataGrid.Cell.Background" Color="#0099FF"/>
 
     <Style x:Key="FocusVisual">
         <Setter Property="Control.Template">
@@ -602,6 +605,12 @@
         </Setter>
     </Style>
 
+    <Style x:Key="Button.IconHighlight" TargetType="{x:Type Button}" BasedOn="{StaticResource Button.IconActive}">
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="Background" Value="{StaticResource Button.MouseOver.Background}"/>
+        <Setter Property="BorderBrush" Value="LightGray"/>
+    </Style>
+
     <Style x:Key="Button.Normal" TargetType="{x:Type Button}">
         <Setter Property="Margin" Value="5 5 0 0"/>
         <Setter Property="MinWidth" Value="75"/>
@@ -887,7 +896,8 @@
                                     <RowDefinition Height="*"/>
                                     <RowDefinition Height="Auto"/>
                                 </Grid.RowDefinitions>
-                                <Border Grid.ColumnSpan="3" Background="WhiteSmoke" CornerRadius="3 3 0 0">
+                                <Border Grid.ColumnSpan="3" Background="WhiteSmoke" CornerRadius="3 3 0 0"
+                                        Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type controls:PaginationDataGrid}}, Path=IsHeaderVisible, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolToVisibilityConverter}}" >
                                     <Grid>
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="Auto"/>
@@ -1302,12 +1312,12 @@
         <Style.Triggers>
             <!-- Highlight selected rows -->
             <Trigger Property="IsSelected" Value="True">
-                <Setter Property="Background" Value="{StaticResource Button.MouseOver.Background}" />
+                <Setter Property="Background" Value="{StaticResource DataGrid.Cell.Background}" />
                 <Setter Property="BorderBrush" Value="Transparent" />
                 <!--<Setter Property="Foreground" Value="White" />-->
             </Trigger>
             <Trigger Property="IsFocused" Value="True">
-                <Setter Property="Background" Value="{StaticResource Button.MouseOver.Background}" />
+                <Setter Property="Background" Value="{StaticResource DataGrid.Cell.Background}" />
                 <Setter Property="BorderBrush" Value="{StaticResource Button.Pressed.Border}" />
                 <Setter Property="BorderThickness" Value="1"/>
                 <!--<Setter Property="Foreground" Value="White" />-->
@@ -1354,7 +1364,7 @@
                     <Style.Triggers>
                         <!-- Highlight a grid row as the mouse passes over -->
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" Value="{StaticResource Button.MouseOver.Background}" />
+                            <Setter Property="Background" Value="{StaticResource DataGrid.Cell.Background}" />
                             <!--<Setter Property="Foreground" Value="White" />-->
                         </Trigger>
                     </Style.Triggers>
@@ -1384,7 +1394,7 @@
                     <Style.Triggers>
                         <!-- Highlight a grid row as the mouse passes over -->
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" Value="{StaticResource Button.MouseOver.Background}" />
+                            <Setter Property="Background" Value="{StaticResource DataGrid.Cell.Background}" />
                         </Trigger>
                     </Style.Triggers>
                 </Style>
@@ -1415,7 +1425,7 @@
                     <Style.Triggers>
                         <!-- Highlight a grid row as the mouse passes over -->
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" Value="{StaticResource Button.MouseOver.Background}" />
+                            <Setter Property="Background" Value="{StaticResource DataGrid.Cell.Background}" />
                         </Trigger>
                     </Style.Triggers>
                 </Style>

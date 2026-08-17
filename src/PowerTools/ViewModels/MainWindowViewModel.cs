@@ -237,7 +237,7 @@ namespace PowerTools.ViewModels
                 null,
                 actions,
                 750,
-                300);
+                450);
         }
 
         private void OnCmdSelectModuleList()

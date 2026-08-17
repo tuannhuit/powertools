@@ -12,6 +12,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\dep\3rdPartyLibraries\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
     <Page Update="Themes\Generic.xaml">
       <SubType>Designer</SubType>
       <Generator></Generator>

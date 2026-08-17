@@ -1,17 +1,26 @@
 ﻿using PowerTools.Core.Models;
 using Prism.Mvvm;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace PowerTools.Models
 {
     public class ModuleSettings : BindableBase
     {
         private PaginationCollection<SettingItem> _settings;
+        private SettingItem _selectedSetting;
+
         public PaginationCollection<SettingItem> Settings
         {
             get => _settings;
             set => SetProperty(ref _settings, value);
         }
+        public SettingItem SelectedSetting
+        {
+            get => _selectedSetting;
+            set => SetProperty(ref _selectedSetting, value);
+        }
+
 
         public void SetSettings(List<KeyValuePair<string, string>> settings)
         {
@@ -22,6 +31,8 @@ namespace PowerTools.Models
                 var newSettingItem = new SettingItem(item, item.Value);
                 Settings.AddItem(newSettingItem);
             }
+
+            SelectedSetting = _settings.Items.FirstOrDefault();
         }
 
         public void RevertSettings()
