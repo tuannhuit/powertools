@@ -439,7 +439,7 @@
         <Setter Property="Margin" Value="5 5 5 0"/>
         <Setter Property="HorizontalAlignment" Value="Left"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
-        <Setter Property="FontSize" Value="11"/>
+        <Setter Property="FontSize" Value="12"/>
         <Setter Property="FontWeight" Value="Normal"/>
     </Style>
     <Style x:Key="TextBlock.Status" TargetType="{x:Type TextBlock}">
@@ -471,7 +471,7 @@
         <Setter Property="Padding" Value="3"/>
         <Setter Property="MinHeight" Value="24"/>
         <Setter Property="Margin" Value="5"/>
-        <Setter Property="FontSize" Value="11"/>
+        <Setter Property="FontSize" Value="12"/>
         <Setter Property="BorderBrush" Value="LightGray"/>
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="FontWeight" Value="Normal"/>
@@ -500,7 +500,7 @@
 
     <Style x:Key="CheckBox.Normal" TargetType="{x:Type CheckBox}">
         <Setter Property="Margin" Value="5 5 5 0"/>
-        <Setter Property="FontSize" Value="11"/>
+        <Setter Property="FontSize" Value="12"/>
         <Setter Property="FontWeight" Value="Normal"/>
         <Setter Property="Foreground" Value="{StaticResource TextBox.Foreground.Gray}"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
