@@ -28,7 +28,21 @@ namespace PowerTools.Core.Converters
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return value;
+            if (value != null)
+            {
+                try
+                {
+                    return JValue.Parse(value.ToString()).ToString(Newtonsoft.Json.Formatting.None);
+                }
+                catch
+                {
+                    return value;
+                }
+            }
+            else
+            {
+                return value;
+            }
         }
     }
 }

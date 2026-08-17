@@ -202,21 +202,7 @@ namespace PowerTools.ViewModels
                     Name = "Revert",
                     Action = (actionParams) =>
                     {
-                        //if(string.IsNullOrEmpty(editServer.Name))
-                        //{
-                        //    MessageBox.Show("Server name cannot be empty.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                        //    return;
-                        //}
-
-                        //var modifiedServer = Servers.FirstOrDefault(s => s.Id == editServer.Id);
-                        //if (modifiedServer != null)
-                        //{
-                        //    modifiedServer.Name = editServer.Name;
-                        //}
-
-                        //SelectedServer = modifiedServer;
-
-                        //OnCmdGetEventLogs();
+                        moduleSettings.RevertSettings();
                     }
                 },
                 new DialogAction
@@ -236,8 +222,8 @@ namespace PowerTools.ViewModels
                 moduleSettings,
                 null,
                 actions,
-                750,
-                450);
+                850,
+                480);
         }
 
         private void OnCmdSelectModuleList()

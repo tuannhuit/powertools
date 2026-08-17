@@ -46,7 +46,7 @@
     <SolidColorBrush x:Key="Button.Disabled.Background" Color="#FFF4F4F4"/>
     <SolidColorBrush x:Key="Button.Disabled.Foreground" Color="#FFBAB8B8"/>
 
-    <SolidColorBrush x:Key="DataGrid.Cell.Background" Color="#0099FF"/>
+    <SolidColorBrush x:Key="DataGrid.Cell.Background" Color="#03A3F2"/>
 
     <Style x:Key="FocusVisual">
         <Setter Property="Control.Template">
@@ -146,7 +146,7 @@
         <Setter Property="HorizontalAlignment" Value="Left"/>
         <Setter Property="Foreground" Value="{StaticResource TextBox.Foreground.Gray}"/>
         <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="BorderBrush" Value="LightGray"/>
+        <Setter Property="BorderBrush" Value="Gray"/>
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="FontSize" Value="18"/>
         <Setter Property="FontWeight" Value="Normal"/>
@@ -1349,6 +1349,18 @@
         </Setter>
     </Style>
 
+    <Style x:Key="DataGridRow.Normal" TargetType="{x:Type DataGridRow}">
+        <Setter Property="MinHeight" Value="25"/>
+        <Setter Property="MaxHeight" Value="75"/>
+        <Style.Triggers>
+            <!-- Highlight a grid row as the mouse passes over -->
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{StaticResource DataGrid.Cell.Background}" />
+                <!--<Setter Property="Foreground" Value="White" />-->
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
     <Style x:Key="DataGrid.Normal" TargetType="DataGrid">
         <Setter Property="BorderBrush" Value="WhiteSmoke" />
         <Setter Property="HorizontalGridLinesBrush" Value="WhiteSmoke" />
@@ -1356,21 +1368,7 @@
         <Setter Property="AutoGenerateColumns" Value="False" />
         <Setter Property="CanUserAddRows" Value="False" />
         <Setter Property="FontWeight" Value="Normal"/>
-        <Setter Property="RowStyle">
-            <Setter.Value>
-                <Style TargetType="DataGridRow">
-                    <Setter Property="MinHeight" Value="25"/>
-                    <Setter Property="MaxHeight" Value="75"/>
-                    <Style.Triggers>
-                        <!-- Highlight a grid row as the mouse passes over -->
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" Value="{StaticResource DataGrid.Cell.Background}" />
-                            <!--<Setter Property="Foreground" Value="White" />-->
-                        </Trigger>
-                    </Style.Triggers>
-                </Style>
-            </Setter.Value>
-        </Setter>
+        <Setter Property="RowStyle" Value="{StaticResource DataGridRow.Normal}"/>
         <Setter Property="CellStyle" Value="{StaticResource DataGridCell.Normal}"/>
         <Setter Property="Template" Value="{StaticResource DataGridTemplate.Normal}"/>
     </Style>
@@ -1386,20 +1384,7 @@
         <Setter Property="FontWeight" Value="Normal"/>
         <Setter Property="HorizontalScrollBarVisibility" Value="Auto"/>
         <Setter Property="ItemsSource" Value="{Binding Tag.Items, RelativeSource={RelativeSource Self}, UpdateSourceTrigger=PropertyChanged}"/>
-        <Setter Property="RowStyle">
-            <Setter.Value>
-                <Style TargetType="DataGridRow">
-                    <Setter Property="MinHeight" Value="25"/>
-                    <Setter Property="MaxHeight" Value="75"/>
-                    <Style.Triggers>
-                        <!-- Highlight a grid row as the mouse passes over -->
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" Value="{StaticResource DataGrid.Cell.Background}" />
-                        </Trigger>
-                    </Style.Triggers>
-                </Style>
-            </Setter.Value>
-        </Setter>
+        <Setter Property="RowStyle" Value="{StaticResource DataGridRow.Normal}"/>
         <Setter Property="ColumnHeaderStyle" Value="{StaticResource DataGridColumnHeader.Normal}"/>
         <Setter Property="CellStyle" Value="{StaticResource DataGridCell.Normal}"/>
         <Setter Property="Template" Value="{StaticResource DataGridTemplate.Pagination}"/>
@@ -1417,20 +1402,7 @@
         <Setter Property="FontWeight" Value="Normal"/>
         <Setter Property="HorizontalScrollBarVisibility" Value="Auto"/>
         <Setter Property="ItemsSource" Value="{Binding Metadata.Items, RelativeSource={RelativeSource Self}, UpdateSourceTrigger=PropertyChanged}"/>
-        <Setter Property="RowStyle">
-            <Setter.Value>
-                <Style TargetType="DataGridRow">
-                    <Setter Property="MinHeight" Value="25"/>
-                    <Setter Property="MaxHeight" Value="75"/>
-                    <Style.Triggers>
-                        <!-- Highlight a grid row as the mouse passes over -->
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" Value="{StaticResource DataGrid.Cell.Background}" />
-                        </Trigger>
-                    </Style.Triggers>
-                </Style>
-            </Setter.Value>
-        </Setter>
+        <Setter Property="RowStyle" Value="{StaticResource DataGridRow.Normal}"/>
         <Setter Property="ColumnHeaderStyle" Value="{StaticResource DataGridColumnHeader.PaginationDataGrid.Normal}"/>
         <Setter Property="CellStyle" Value="{StaticResource DataGridCell.Normal}"/>
         <Setter Property="Template" Value="{StaticResource DataGridTemplate.PaginationDataGrid}"/>

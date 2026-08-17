@@ -25,9 +25,18 @@
                                      BorderThickness="0" Margin="0"
                                      Metadata="{Binding Settings, UpdateSourceTrigger=PropertyChanged}"
                                      SelectedItem="{Binding SelectedSetting, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+            <controls:PaginationDataGrid.RowStyle>
+                <Style TargetType="DataGridRow" BasedOn="{StaticResource DataGridRow.Normal}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsValueChanged, UpdateSourceTrigger=PropertyChanged}" Value="True">
+                            <Setter Property="FontWeight" Value="SemiBold"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </controls:PaginationDataGrid.RowStyle>
             <controls:PaginationDataGrid.Columns>
-                <controls:PaginationDataGridTextColumn Name="Key" Header="Key" Binding="{Binding Key, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True" MinWidth="200" />
-                <controls:PaginationDataGridTextColumn Name="Value" Header="Value" Binding="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MinWidth="350" Width="400"/>
+                <controls:PaginationDataGridTextColumn Name="Key" Header="Key" Binding="{Binding Key, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True" MinWidth="200"/>
+                <controls:PaginationDataGridTextColumn Name="Value" Header="Value" Binding="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MinWidth="350" Width="450"/>
             </controls:PaginationDataGrid.Columns>
         </controls:PaginationDataGrid>
         <Border Grid.Row="1" BorderBrush="LightGray" Background="WhiteSmoke" BorderThickness="1" CornerRadius="3" Margin="5">
@@ -36,7 +45,7 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
-                <TextBlock Style="{StaticResource TextBlock.ContentSmall}" Grid.Row="0" Text="{Binding SelectedSetting.Key}" Margin="5 5 5 10"/>
+                <TextBlock Style="{StaticResource TextBlock.ContentSmall}" Grid.Row="0" Text="{Binding SelectedSetting.Key}" Margin="5"/>
                 <TextBox Style="{StaticResource TextBox.ContentSmall}" Grid.Row="1" Text="{Binding SelectedSetting.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource StringJsonFormatConverter}}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalContentAlignment="Top" HorizontalContentAlignment="Left" Margin="0" BorderThickness="0"/>
             </Grid>
         </Border>

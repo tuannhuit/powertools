@@ -14,8 +14,9 @@
         public static string MoreInfo = "\uE10C";
         public static string Loading = "\ue2FD";
         public static string ShowLogs = "\ue13E";
-        public static string Information = "🛈";
+        public static string Information = "\u2757";
         public static string Menu = "🛈";
+        public static string Star = "\uE113";
         public static string UnknownModule = "\ue243";
         public static string None = "\ud83d\udec7";
         public static string Check = "\ue081";
