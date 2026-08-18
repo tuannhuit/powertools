@@ -114,6 +114,8 @@ namespace PowerTools.Core.SharedServices
             _tasks = new List<TaskInformation>();
             DoShowRunning = true;
             CmdCancelAllTasks = new DelegateCommand(OnCancelAllTasks);
+
+            ApplicationService.Instance.RegisterDisposableAction(OnCancelAllTasks);
         }
 
         private void OnCancelAllTasks()
@@ -177,7 +179,7 @@ namespace PowerTools.Core.SharedServices
             RunAsync(token => action.Invoke(), errAction);
         }
 
-        public void RunOnceAsync(string taskName, Action<ITaskReport> action, Action beginAction = null, Action endAction = null, Action errAction = null, Action<ITaskReport> taskReport = null)
+        public void RunOnceAsync(string taskName, Action<ITaskReport> action, Action beginAction = null, Action endAction = null, Action errAction = null, bool doLockScreen = true)
         {
             TaskInformation taskInformation;
             lock (_lock)
@@ -209,7 +211,8 @@ namespace PowerTools.Core.SharedServices
                 LoggingService.Instance.Info($"Calling {taskName}");
                 try
                 {
-                    ApplicationService.Instance.Busy();
+                    if (doLockScreen)
+                        ApplicationService.Instance.Busy();
 
                     beginAction?.Invoke();
                     action.Invoke(taskInformation);
@@ -239,14 +242,15 @@ namespace PowerTools.Core.SharedServices
                 }
                 finally
                 {
-                    ApplicationService.Instance.Free();
+                    if (doLockScreen)
+                        ApplicationService.Instance.Free();
                 }
             });
         }
 
-        public void RunOnceAsync(string taskName, Action action, Action beginAction = null, Action endAction = null, Action errAction = null)
+        public void RunOnceAsync(string taskName, Action action, Action beginAction = null, Action endAction = null, Action errAction = null, bool doLockScreen = true)
         {
-            RunOnceAsync(taskName, token => action.Invoke(), beginAction, endAction, errAction);
+            RunOnceAsync(taskName, token => action.Invoke(), beginAction, endAction, errAction, doLockScreen);
         }
 
         //public static TaskExecutionResult ExecuteCommand(string applicationPath, string command)
