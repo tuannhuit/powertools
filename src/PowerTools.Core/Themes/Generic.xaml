@@ -17,6 +17,7 @@
     <converters:StringJsonFormatConverter x:Key="StringJsonFormatConverter"/>
 
     <SolidColorBrush x:Key="Background.Gray" Color="#CCCCCC"/>
+    <SolidColorBrush x:Key="Background.Red" Color="#C72E0F"/>
     <SolidColorBrush x:Key="Background.LightGray" Color="#F3F3F3"/>
     <SolidColorBrush x:Key="Background.WhiteSmoke" Color="WhiteSmoke"/>
     <SolidColorBrush x:Key="Background.Default" Color="#F8F8F8"/>
