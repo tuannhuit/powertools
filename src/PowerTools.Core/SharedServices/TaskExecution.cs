@@ -24,9 +24,9 @@ namespace PowerTools.Core.SharedServices
 
         public ObservableCollection<TaskInformation> Tasks => new ObservableCollection<TaskInformation>(
             _tasks.Where(t =>
-                (t.Status == TaskStatus.Idle && DoShowIdle) || 
+                (t.Status == TaskStatus.Idle && DoShowIdle) ||
                 (t.Status == TaskStatus.Error && DoShowError) ||
-                (t.Status == TaskStatus.Done && DoShowDone) || 
+                (t.Status == TaskStatus.Done && DoShowDone) ||
                 (t.Status == TaskStatus.Running && DoShowRunning) ||
                 (t.Status == TaskStatus.Cancelling && DoShowCancelling) ||
                 (!DoShowIdle && !DoShowError && !DoShowDone && !DoShowRunning && !DoShowCancelling)));
@@ -129,7 +129,7 @@ namespace PowerTools.Core.SharedServices
 
         #endregion
 
-        public void RunAsync(Action<ITaskReport> action, Action errAction = null, Action<ITaskReport> taskReport = null)
+        public void RunAsync(Action<ITaskReport> action, Action<ITaskReport> errAction = null)
         {
             var taskInformation = new TaskInformation(action);
             taskInformation.SetStatus(TaskStatus.Running);
@@ -160,7 +160,7 @@ namespace PowerTools.Core.SharedServices
                 }
                 catch (Exception e)
                 {
-                    errAction?.Invoke();
+                    errAction?.Invoke(taskInformation);
 
                     LoggingService.Instance.Error("Occured error during running action async", e);
                     taskInformation.SetStatus(TaskStatus.Error);
@@ -176,10 +176,10 @@ namespace PowerTools.Core.SharedServices
 
         public void RunAsync(Action action, Action errAction = null)
         {
-            RunAsync(token => action.Invoke(), errAction);
+            RunAsync(token => action.Invoke(), token => errAction?.Invoke());
         }
 
-        public void RunOnceAsync(string taskName, Action<ITaskReport> action, Action beginAction = null, Action endAction = null, Action errAction = null, bool doLockScreen = true)
+        public void RunOnceAsync(string taskName, Action<ITaskReport> action, Action<ITaskReport> beginAction = null, Action<ITaskReport> endAction = null, Action<ITaskReport> errAction = null, bool doLockScreen = true, int timeSleepInMs = 0)
         {
             TaskInformation taskInformation;
             lock (_lock)
@@ -212,11 +212,29 @@ namespace PowerTools.Core.SharedServices
                 try
                 {
                     if (doLockScreen)
+                    {
                         ApplicationService.Instance.Busy();
+                    }
 
-                    beginAction?.Invoke();
-                    action.Invoke(taskInformation);
-                    endAction?.Invoke();
+                    beginAction?.Invoke(taskInformation);
+
+                    while (!taskInformation.CancellationToken.IsCancellationRequested)
+                    {
+                        action.Invoke(taskInformation);
+                        if (timeSleepInMs > 0)
+                        {
+                            if (!taskInformation.CancellationToken.IsCancellationRequested)
+                            {
+                                Thread.Sleep(timeSleepInMs);
+                            }
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+
+                    endAction?.Invoke(taskInformation);
 
                     LoggingService.Instance.Info($"Done! {taskName}");
                     taskInformation.SetProgressPercentValue(100);
@@ -230,7 +248,7 @@ namespace PowerTools.Core.SharedServices
                 }
                 catch (Exception e)
                 {
-                    errAction?.Invoke();
+                    errAction?.Invoke(taskInformation);
                     LoggingService.Instance.Error($"Error calling {taskName}", e);
                     taskInformation.SetStatus(TaskStatus.Error);
                     ApplicationService.Instance.InvokeUIAction(() =>
@@ -243,14 +261,23 @@ namespace PowerTools.Core.SharedServices
                 finally
                 {
                     if (doLockScreen)
+                    {
                         ApplicationService.Instance.Free();
+                    }
                 }
             });
         }
 
-        public void RunOnceAsync(string taskName, Action action, Action beginAction = null, Action endAction = null, Action errAction = null, bool doLockScreen = true)
+        public void RunOnceAsync(string taskName, Action action, Action beginAction = null, Action endAction = null, Action errAction = null, bool doLockScreen = true, int timeSleepInMs = 0)
         {
-            RunOnceAsync(taskName, token => action.Invoke(), beginAction, endAction, errAction, doLockScreen);
+            RunOnceAsync(
+                taskName,
+                token => action.Invoke(),
+                token => beginAction?.Invoke(),
+                token => endAction?.Invoke(),
+                token => errAction?.Invoke(),
+                doLockScreen,
+                timeSleepInMs);
         }
 
         //public static TaskExecutionResult ExecuteCommand(string applicationPath, string command)
