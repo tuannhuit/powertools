@@ -179,7 +179,7 @@ namespace PowerTools.Core.SharedServices
             RunAsync(token => action.Invoke(), token => errAction?.Invoke());
         }
 
-        public void RunOnceAsync(string taskName, Action<ITaskReport> action, Action<ITaskReport> beginAction = null, Action<ITaskReport> endAction = null, Action<ITaskReport> errAction = null, bool doLockScreen = true, int timeSleepInMs = 0)
+        public void RunOnceAsync(string taskName, Action<ITaskReport> action, Action<ITaskReport> beginAction = null, Action<ITaskReport> endAction = null, Action<ITaskReport> errAction = null, bool doLockScreen = true, int timeSleepInMs = 0, bool canStop = true)
         {
             TaskInformation taskInformation;
             lock (_lock)
@@ -188,7 +188,7 @@ namespace PowerTools.Core.SharedServices
 
                 if (taskInformation == null)
                 {
-                    taskInformation = new TaskInformation(taskName, string.Empty, action);
+                    taskInformation = new TaskInformation(taskName, string.Empty, action, canStop);
 
                     _tasks.Insert(0, taskInformation);
                 }
@@ -204,6 +204,11 @@ namespace PowerTools.Core.SharedServices
                 RaisePropertyChanged(nameof(Tasks));
                 RaisePropertyChanged(nameof(RunningTasksCount));
                 RaisePropertyChanged(nameof(TasksInformation));
+
+                if (!taskInformation.CanStop && canStop)
+                {
+                    LoggingService.Instance.Info($"Task {taskInformation.TaskName} was marked as not stoppable");
+                }
             }
 
             Task.Run(() =>

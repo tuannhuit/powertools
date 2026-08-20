@@ -61,6 +61,31 @@ namespace PowerTools.Core.SharedServices
             }
         }
 
+        private string _version;
+        /// </summary>
+        public string Version
+        {
+            get => _version;
+            set
+            {
+                _version = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private bool _hasNewVersion;
+        public bool HasNewVersion
+        {
+            get => _hasNewVersion;
+            set
+            {
+                _hasNewVersion = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
+
         public void Restart()
         {
             var executionLocation = Path.GetDirectoryName(Application.ResourceAssembly.Location);

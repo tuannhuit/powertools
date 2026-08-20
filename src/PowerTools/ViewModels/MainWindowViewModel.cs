@@ -1,9 +1,9 @@
-﻿using PowerTools.Core.Configurations;
+﻿using Octokit;
+using PowerTools.Core.Configurations;
 using PowerTools.Core.Models;
 using PowerTools.Core.SharedServices;
 using PowerTools.Helpers;
-using PowerTools.ViewModels.UserControls;
-using PowerTools.Views.UserControls;
+using PowerTools.Utils;
 using Prism.Commands;
 using Prism.Ioc;
 using Prism.Mvvm;
@@ -12,12 +12,10 @@ using Prism.Services.Dialogs;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.IO;
 using System.Linq;
-using System.Net;
 using System.Windows;
 using System.Windows.Input;
-using PowerTools.Models;
+using Application = System.Windows.Application;
 using ModuleSettings = PowerTools.Views.UserControls.ModuleSettings;
 
 namespace PowerTools.ViewModels
@@ -68,6 +66,7 @@ namespace PowerTools.ViewModels
             //    webClient.DownloadFile("file://hsnicx-fg01/icxteamcitybucket/Teams/Delta/Tools/PowerTool/modules/repository-v3.0.0.0-PREVIEW.json", localFile);
             //}
 
+            ApplicationService.Instance.Version = App.Version;
             _dialogService = dialogService;
 
             LoggingService.Instance.DoShowLogCallback = DoShowLogCallback;
@@ -121,7 +120,45 @@ namespace PowerTools.ViewModels
 
             Repositories.RepositoriesChanged += Repositories_RepositoriesChanged;
 
-            DownloadPowerToolVersions();
+            TaskExecution.Instance.RunOnceAsync(
+                "Check Versions",
+                OnCheckVersions,
+                null,
+                null,
+                null,
+                false,
+                5 * 60 * 1000,
+                false);
+        }
+
+        private void OnCheckVersions(ITaskReport taskReport)
+        {
+            taskReport.SetDescription("Start checking versions of PowerTools mainframe");
+
+            var client = new GitHubClient(new ProductHeaderValue("PowerTools"));
+            try
+            {
+                var releases = client.Repository.Release.GetAll("tuannhuit", "powertools").Result;
+                if (releases.Count == 0)
+                {
+                    LoggingService.Instance.Info("Found no version of PowerTools");
+                    return;
+                }
+
+                var tagNames = releases.Select(p => p.TagName.TrimStart('v'));
+                foreach (var tagName in tagNames)
+                {
+                    if (tagName.GetVersionValue() > App.Version.GetVersionValue())
+                    {
+                        ApplicationService.Instance.HasNewVersion = true;
+                    }
+                }
+                
+            }
+            catch (Exception e)
+            {
+                LoggingService.Instance.Error("Failed to check versions", e);
+            }
         }
 
         private void OnCmdClearLogs()
@@ -132,11 +169,6 @@ namespace PowerTools.ViewModels
         private void Repositories_RepositoriesChanged()
         {
             RaisePropertyChanged("ModuleList");
-        }
-
-        private void DownloadPowerToolVersions()
-        {
-
         }
 
         private MessageBoxResult DoShowMessageBox(string message, string caption, MessageBoxButton button)

@@ -69,7 +69,7 @@
                                          VerticalAlignment="Center" Margin="0 5 0 10"/>
                             <Button Style="{StaticResource Button.Icon}" Grid.Row="0" Grid.RowSpan="3" Grid.Column="1" Content="⛒"
                                     Command="{Binding CmdCancel}"
-                                    IsEnabled="{Binding Status, Converter={StaticResource StringToBooleanConverter}, ConverterParameter='Running'}"
+                                    IsEnabled="{Binding CanStop, UpdateSourceTrigger=PropertyChanged}"
                                     Margin="5 0 0 0" MinWidth="25" MinHeight="25" Width="25" Height="25" VerticalAlignment="Center"/>
                         </Grid>
                     </DataTemplate>

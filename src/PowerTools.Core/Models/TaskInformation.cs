@@ -53,8 +53,12 @@ namespace PowerTools.Core.Models
             {
                 _status = value;
                 RaisePropertyChanged();
+                RaisePropertyChanged(nameof(CanStop));
             }
         }
+
+        private bool _canStop;
+        public bool CanStop => _canStop && Status == TaskStatus.Running;
 
         public Action<ITaskReport> Action { get; private set; }
         public ICommand CmdCancel { get; private set; }
@@ -62,19 +66,21 @@ namespace PowerTools.Core.Models
         public CancellationTokenSource CancellationToken { get; set; }
 
         public TaskInformation(Action<ITaskReport> action)
-            : this(string.Empty, action)
+            : this(string.Empty, action, true)
         {
 
         }
 
-        public TaskInformation(string description, Action<ITaskReport> action)
-            : this(Guid.NewGuid().ToString(), description, action)
+        public TaskInformation(string description, Action<ITaskReport> action, bool canStop)
+            : this(Guid.NewGuid().ToString(), description, action, canStop)
         {
 
         }
 
-        public TaskInformation(string taskName, string description, Action<ITaskReport> action)
+        public TaskInformation(string taskName, string description, Action<ITaskReport> action, bool canStop)
         {
+            _canStop = canStop;
+
             TaskName = taskName;
             Action = action;
             CancellationToken = new CancellationTokenSource();

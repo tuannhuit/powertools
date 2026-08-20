@@ -18,7 +18,7 @@ namespace PowerTools
     /// </summary>
     public partial class App : PrismApplication
     {
-
+        public static readonly string Version = "0.0.0.0";
         public static IContainerProvider ContainerProvider;
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
