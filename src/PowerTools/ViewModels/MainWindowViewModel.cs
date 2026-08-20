@@ -146,14 +146,20 @@ namespace PowerTools.ViewModels
                 }
 
                 var tagNames = releases.Select(p => p.TagName.TrimStart('v'));
+                var versions = new List<string>();
+
                 foreach (var tagName in tagNames)
                 {
-                    if (tagName.GetVersionValue() > App.Version.GetVersionValue())
-                    {
-                        ApplicationService.Instance.HasNewVersion = true;
-                    }
+                    versions.Add(tagName);
                 }
-                
+
+                versions = versions.OrderByDescending(p => p.GetVersionValue()).ToList();
+                var latestVersion = versions.LastOrDefault();
+
+                if (latestVersion != null && latestVersion.GetVersionValue() > App.Version.GetVersionValue())
+                {
+                    ApplicationService.Instance.HasNewVersion = true;
+                }
             }
             catch (Exception e)
             {
