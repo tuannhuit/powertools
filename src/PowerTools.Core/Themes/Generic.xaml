@@ -15,11 +15,13 @@
     <converters:BooleanToGridSizeConverter x:Key="BooleanToGridSizeConverter"/>
     <converters:BoolToStringConverter x:Key="BoolToStringConverter"/>
     <converters:StringJsonFormatConverter x:Key="StringJsonFormatConverter"/>
+    <converters:StringFormatConverter x:Key="StringFormatConverter"/>
 
-    <SolidColorBrush x:Key="Background.Gray" Color="#CCCCCC"/>
+    <SolidColorBrush x:Key="Background.Gray" Color="#ADADAD"/>
     <SolidColorBrush x:Key="Background.Red" Color="#C72E0F"/>
-    <SolidColorBrush x:Key="Background.LightGray" Color="#F3F3F3"/>
+    <SolidColorBrush x:Key="Background.LightGray" Color="#EBEBEB"/>
     <SolidColorBrush x:Key="Background.WhiteSmoke" Color="WhiteSmoke"/>
+    <SolidColorBrush x:Key="Background.White" Color="#FFFFFF"/>
     <SolidColorBrush x:Key="Background.Default" Color="#F8F8F8"/>
     <SolidColorBrush x:Key="Background.Black" Color="#2C2C2C"/>
 
@@ -175,8 +177,9 @@
                             <Setter Property="Foreground" TargetName="textblockText" Value="White"/>
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="false">
-                            <Setter Property="Foreground" TargetName="textblock" Value="{StaticResource Button.Disabled.Foreground}"/>
-                            <Setter Property="Foreground" TargetName="textblockText" Value="{StaticResource Button.Disabled.Foreground}"/>
+                            <!--<Setter Property="Background" TargetName="border" Value="{StaticResource Button.Disabled.Background}"/>
+                            <Setter Property="Foreground" TargetName="textblock" Value="{StaticResource Button.Disabled.Foreground}"/>-->
+                            <Setter Property="Opacity" TargetName="border" Value="0.4"/>
                         </Trigger>
                         <Trigger Property="IsChecked" Value="false">
                             <Setter Property="BorderBrush" TargetName="border" Value="Transparent"/>
@@ -553,9 +556,9 @@
                             <Setter Property="Foreground" TargetName="textblockText" Value="White"/>
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="false">
-                            <!--<Setter Property="Background" TargetName="border" Value="{StaticResource Button.Disabled.Background}"/>-->
-                            <Setter Property="Foreground" TargetName="textblock" Value="{StaticResource Button.Disabled.Foreground}"/>
-                            <Setter Property="Foreground" TargetName="textblockText" Value="{StaticResource Button.Disabled.Foreground}"/>
+                            <!--<Setter Property="Background" TargetName="border" Value="{StaticResource Button.Disabled.Background}"/>
+                            <Setter Property="Foreground" TargetName="textblock" Value="{StaticResource Button.Disabled.Foreground}"/>-->
+                            <Setter Property="Opacity" TargetName="border" Value="0.4"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -596,9 +599,9 @@
                             <Setter Property="Foreground" TargetName="textblockText" Value="White"/>
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="false">
-                            <!--<Setter Property="Background" TargetName="border" Value="{StaticResource Button.Disabled.Background}"/>-->
-                            <Setter Property="Foreground" TargetName="textblock" Value="{StaticResource Button.Disabled.Foreground}"/>
-                            <Setter Property="Foreground" TargetName="textblockText" Value="{StaticResource Button.Disabled.Foreground}"/>
+                            <!--<Setter Property="Background" TargetName="border" Value="{StaticResource Button.Disabled.Background}"/>
+                            <Setter Property="Foreground" TargetName="textblock" Value="{StaticResource Button.Disabled.Foreground}"/>-->
+                            <Setter Property="Opacity" TargetName="border" Value="0.4"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -640,8 +643,9 @@
                             <Setter Property="Foreground" TargetName="textblock" Value="White"/>
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="false">
-                            <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Disabled.Background}"/>
-                            <Setter Property="Foreground" TargetName="textblock" Value="{StaticResource Button.Disabled.Foreground}"/>
+                            <!--<Setter Property="Background" TargetName="border" Value="{StaticResource Button.Disabled.Background}"/>
+                            <Setter Property="Foreground" TargetName="textblock" Value="{StaticResource Button.Disabled.Foreground}"/>-->
+                            <Setter Property="Opacity" TargetName="border" Value="0.4"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -2250,9 +2254,10 @@
            TargetType="ToolTip">
         <Setter Property="OverridesDefaultStyle" Value="true" />
         <Setter Property="HasDropShadow" Value="True" />
-        <Setter Property="FontSize" Value="12" />
+        <Setter Property="FontSize" Value="11" />
         <Setter Property="FontWeight" Value="Normal" />
-        <Setter Property="Padding" Value="8 4" />
+        <Setter Property="Padding" Value="8 3" />
+        <Setter Property="Foreground" Value="Black" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ToolTip">
