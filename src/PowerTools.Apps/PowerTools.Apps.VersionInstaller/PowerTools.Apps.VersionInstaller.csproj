@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0-windows7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
+    <BaseOutputPath>..\..\..\dep\Output\VersionInstaller</BaseOutputPath>
+  </PropertyGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="del /S /Q &quot;$(TargetDir)..\..\..\Debug\net8.0-windows7.0\tools\VersionInstaller&quot;&#xD;&#xA;mkdir &quot;$(TargetDir)..\..\..\Debug\net8.0-windows7.0\tools\VersionInstaller&quot;&#xD;&#xA;xcopy /E /Y &quot;$(TargetDir)*.dll&quot; &quot;$(TargetDir)..\..\..\Debug\net8.0-windows7.0\tools\VersionInstaller&quot;&#xD;&#xA;xcopy /E /Y &quot;$(TargetDir)*.exe&quot; &quot;$(TargetDir)..\..\..\Debug\net8.0-windows7.0\tools\VersionInstaller&quot;&#xD;&#xA;xcopy /E /Y &quot;$(TargetDir)*.json&quot; &quot;$(TargetDir)..\..\..\Debug\net8.0-windows7.0\tools\VersionInstaller&quot;" />
+  </Target>
+
+</Project>

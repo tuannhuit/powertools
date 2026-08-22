@@ -7,6 +7,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PowerTools", "PowerTools\Po
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PowerTools.Core", "PowerTools.Core\PowerTools.Core.csproj", "{E8CA988A-B479-411A-8162-742A63FCFA4D}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Apps", "Apps", "{BC876C81-8E70-49B0-9AA0-C62B4505A27B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PowerTools.Apps.VersionInstaller", "PowerTools.Apps\PowerTools.Apps.VersionInstaller\PowerTools.Apps.VersionInstaller.csproj", "{AFBABE80-6464-1B82-E9F3-5812FA9DB410}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PowerTools.Apps.AssemblyLoader", "PowerTools.Apps\PowerTools.Apps.AssemblyLoader\PowerTools.Apps.AssemblyLoader.csproj", "{2880D9BC-B3A2-949F-BF7C-64EF775A1555}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,9 +27,21 @@ Global
 		{E8CA988A-B479-411A-8162-742A63FCFA4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E8CA988A-B479-411A-8162-742A63FCFA4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E8CA988A-B479-411A-8162-742A63FCFA4D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AFBABE80-6464-1B82-E9F3-5812FA9DB410}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AFBABE80-6464-1B82-E9F3-5812FA9DB410}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AFBABE80-6464-1B82-E9F3-5812FA9DB410}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AFBABE80-6464-1B82-E9F3-5812FA9DB410}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2880D9BC-B3A2-949F-BF7C-64EF775A1555}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2880D9BC-B3A2-949F-BF7C-64EF775A1555}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2880D9BC-B3A2-949F-BF7C-64EF775A1555}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2880D9BC-B3A2-949F-BF7C-64EF775A1555}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{AFBABE80-6464-1B82-E9F3-5812FA9DB410} = {BC876C81-8E70-49B0-9AA0-C62B4505A27B}
+		{2880D9BC-B3A2-949F-BF7C-64EF775A1555} = {BC876C81-8E70-49B0-9AA0-C62B4505A27B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {601CE96F-E384-40A4-AEF0-AC6ECE49C26E}
