@@ -1,4 +1,5 @@
 ﻿using Octokit;
+using PowerTools.Core.Configurations;
 using PowerTools.Core.Models;
 using PowerTools.Core.SharedServices;
 using PowerTools.Utils;
@@ -6,6 +7,7 @@ using Prism.Commands;
 using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -15,36 +17,37 @@ namespace PowerTools.Models
 {
     public class AppVersion : BindableBase
     {
-        private VersionUpdateStatus _versionUpdateStatus;
+        private readonly object _lockObject = new object();
+        private VersionUpdateStatus _status;
         private List<string> _versionList;
         private string _newVersion;
         private string _onlineNewVersionFilePath;
         private string _downloadedNewVersionFilePath;
 
-        public VersionUpdateStatus VersionUpdateStatus
+        public VersionUpdateStatus Status
         {
-            get => _versionUpdateStatus;
+            get => _status;
             set
             {
-                SetProperty(ref _versionUpdateStatus, value);
-                RaisePropertyChanged(nameof(CanUpdateNewVersion));
-                RaisePropertyChanged(nameof(CanExecutionAction));
-                RaisePropertyChanged(nameof(VersionUpdateStatusString));
+                SetProperty(ref _status, value);
+                RaisePropertyChanged(nameof(StatusAsString));
             }
         }
 
-        public string VersionUpdateStatusString
+        public string StatusAsString
         {
             get
             {
-                switch (VersionUpdateStatus)
+                switch (Status)
                 {
-                    case VersionUpdateStatus.None:
-                        return "No Update";
+                    case VersionUpdateStatus.NoUpdates:
+                        return "Check for Updates";
+                    case VersionUpdateStatus.CheckForUpdates:
+                        return "Checking new version";
                     case VersionUpdateStatus.HasNewVersion:
-                        return "Update";
+                        return $"Update to v{NewVersion}";
                     case VersionUpdateStatus.Updating:
-                        return "Updating...";
+                        return "Downloading ...";
                     case VersionUpdateStatus.Done:
                         return "Restart";
                     default:
@@ -62,93 +65,102 @@ namespace PowerTools.Models
             {
                 _newVersion = value;
                 RaisePropertyChanged(nameof(NewVersion));
+                RaisePropertyChanged(nameof(NewVersionUpdateAsString));
             }
         }
 
-        public bool CanUpdateNewVersion => VersionUpdateStatus == VersionUpdateStatus.HasNewVersion || VersionUpdateStatus == VersionUpdateStatus.Updating || VersionUpdateStatus == VersionUpdateStatus.Done;
-        public bool CanExecutionAction => VersionUpdateStatus == VersionUpdateStatus.HasNewVersion || VersionUpdateStatus == VersionUpdateStatus.Done;
-        public string NewVersionUpdateString => $"Update to {NewVersion}";
+        public string NewVersionUpdateAsString => $"Update current version v{CurrentVersion} to v{NewVersion}";
 
         public ICommand CmdUpdateToLatestVersion { get; set; }
 
         public AppVersion()
         {
             _versionList = new List<string>();
-            VersionUpdateStatus = VersionUpdateStatus.None;
+            Status = VersionUpdateStatus.NoUpdates;
             CmdUpdateToLatestVersion = new DelegateCommand(OnCmdUpdateToLatestVersion);
-
-            ApplicationService.Instance.Restart();
         }
 
         private void OnCmdUpdateToLatestVersion()
         {
             // Start downloading latest version of the application
-            if (VersionUpdateStatus == VersionUpdateStatus.HasNewVersion)
+            if (Status == VersionUpdateStatus.NoUpdates)
             {
-                VersionUpdateStatus = VersionUpdateStatus.Updating;
+                Status = VersionUpdateStatus.CheckForUpdates;
+                TaskExecution.Instance.RunAsync(OnCheckForUpdate);
+            }
+            else if (Status == VersionUpdateStatus.HasNewVersion)
+            {
+                Status = VersionUpdateStatus.Updating;
                 TaskExecution.Instance.RunAsync(OnDownloadNewVersion);
             }
-            else if (VersionUpdateStatus == VersionUpdateStatus.Done)
+            else if (Status == VersionUpdateStatus.Done)
             {
-
+                ApplicationService.Instance.Shutdown();
             }
         }
 
-        private void OnDownloadNewVersion(ITaskReport obj)
+        private async void OnDownloadNewVersion(ITaskReport obj)
         {
             if (string.IsNullOrEmpty(NewVersion))
             {
                 return;
             }
 
-            if (string.IsNullOrEmpty(_downloadedNewVersionFilePath))
+            if (string.IsNullOrEmpty(_onlineNewVersionFilePath))
             {
                 return;
             }
 
-            TaskExecution.Instance.RunAsync(OnDownloadNewVersionFromPath);
-        }
-
-        private async void OnDownloadNewVersionFromPath(ITaskReport obj)
-        {
             var localFilePath = $"{ApplicationService.Instance.GetOrCreateTempFolder()}\\PowerTools.v{NewVersion}.zip";
             var httpClient = new HttpClient();
 
-            using (var downloadStream = await httpClient.GetStreamAsync(_onlineNewVersionFilePath))
+            try
             {
-                using (var fileStream = new FileStream(localFilePath, System.IO.FileMode.Create, System.IO.FileAccess.Write, System.IO.FileShare.None))
+                using (var downloadStream = await httpClient.GetStreamAsync(_onlineNewVersionFilePath))
                 {
-                    await downloadStream.CopyToAsync(fileStream);
+                    using (var fileStream = new FileStream(localFilePath, System.IO.FileMode.Create,
+                               System.IO.FileAccess.Write, System.IO.FileShare.None))
+                    {
+                        await downloadStream.CopyToAsync(fileStream);
 
-                    _downloadedNewVersionFilePath = localFilePath;
-                    LoggingService.Instance.Info($"Downloaded new version to {localFilePath}");
+                        _downloadedNewVersionFilePath = localFilePath;
+                        LoggingService.Instance.Info($"Downloaded new version to {localFilePath}");
+                    }
                 }
-            }
 
-            VersionUpdateStatus = VersionUpdateStatus.Done;
+                Status = VersionUpdateStatus.Done;
+            }
+            catch (Exception e)
+            {
+                LoggingService.Instance.Error("Failed to download new version", e);
+                Status = VersionUpdateStatus.HasNewVersion;
+            }
         }
 
         private bool ValidateVersions(IEnumerable<string> versionList)
         {
-            if (!versionList.Any())
+            lock (_lockObject)
             {
+                if (!versionList.Any())
+                {
+                    return false;
+                }
+
+                _versionList = new List<string>(versionList);
+
+                var orderedList = _versionList.OrderBy(p => p.GetVersionValue());
+                var latestVersion = orderedList.Last();
+
+                if (latestVersion.GetVersionValue() > CurrentVersion.GetVersionValue())
+                {
+                    NewVersion = latestVersion;
+                    Status = VersionUpdateStatus.HasNewVersion;
+
+                    return true;
+                }
+
                 return false;
             }
-
-            _versionList = new List<string>(versionList);
-
-            var orderedList = _versionList.OrderBy(p => p.GetVersionValue());
-            var latestVersion = orderedList.Last();
-
-            if (latestVersion.GetVersionValue() > CurrentVersion.GetVersionValue())
-            {
-                NewVersion = latestVersion;
-                VersionUpdateStatus = VersionUpdateStatus.HasNewVersion;
-
-                return true;
-            }
-
-            return false;
         }
 
         /// <summary>
@@ -158,16 +170,17 @@ namespace PowerTools.Models
         public void CheckForUpdate()
         {
             TaskExecution.Instance.RunOnceAsync(
-                "Check Versions",
-                OnCheckVersions,
+                "Check Ver sions",
+                OnCheckForUpdate,
                 null,
                 null,
                 null,
                 false,
-                5 * 60 * 1000,
+                60 * 60 * 1000,
                 false);
         }
-        private void OnCheckVersions(ITaskReport taskReport)
+
+        private void OnCheckForUpdate(ITaskReport taskReport)
         {
             taskReport.SetDescription($"Start checking versions of {App.AppName}");
 
@@ -185,7 +198,29 @@ namespace PowerTools.Models
 
                 ValidateVersions(versions);
 
-                if (VersionUpdateStatus == VersionUpdateStatus.HasNewVersion)
+                if (Status == VersionUpdateStatus.HasNewVersion)
+                {
+                    FindDownloadNewVersionLink(releases);
+                    taskReport.SetDescription($"Found new version v{NewVersion} for {App.AppName}");
+                }
+                else
+                {
+                    Status = VersionUpdateStatus.NoUpdates;
+                    taskReport.SetDescription($"No updates found for {App.AppName}");
+                }
+            }
+            catch (Exception e)
+            {
+                LoggingService.Instance.Error("Failed to check versions", e);
+                Status = VersionUpdateStatus.NoUpdates;
+            }
+        }
+
+        private void FindDownloadNewVersionLink(IReadOnlyList<Release> releases)
+        {
+            lock (_lockObject)
+            {
+                if (Status == VersionUpdateStatus.HasNewVersion)
                 {
                     var asset = releases.FirstOrDefault(p => p.TagName == NewVersion);
                     if (asset != null)
@@ -193,24 +228,112 @@ namespace PowerTools.Models
                         var validAsset = asset.Assets.FirstOrDefault(p => p.Name == $"PowerTools.v{NewVersion}.zip");
                         if (validAsset != null)
                         {
-                            _downloadedNewVersionFilePath = validAsset.BrowserDownloadUrl;
+                            _onlineNewVersionFilePath = validAsset.BrowserDownloadUrl;
                         }
                     }
                 }
-            }
-            catch (Exception e)
-            {
-                LoggingService.Instance.Error("Failed to check versions", e);
             }
         }
 
         public void InstallNewVersion()
         {
-            if (VersionUpdateStatus == VersionUpdateStatus.Done && !string.IsNullOrEmpty(_downloadedNewVersionFilePath))
+            if (Status == VersionUpdateStatus.Done && !string.IsNullOrEmpty(_downloadedNewVersionFilePath))
             {
-                // Copy Installer into temp folder and run it
-                var tempFolder = ApplicationService.Instance.GetOrCreateTempFolder();
+                ApplicationService.Instance.Busy("Preparing for new version...");
+
+                var currentFolder = Path.GetDirectoryName(typeof(PowerTools.App).Assembly.Location);
+                var tempExtractedNewVersion = ApplicationService.Instance.GetOrCreateTempFolder();
+
+                ApplicationService.Instance.Busy("Extracting");
+                var _7zPath = Get7zExecutionPath();
+
+                var process = new Process
+                {
+                    StartInfo = new ProcessStartInfo
+                    {
+                        FileName = _7zPath,
+                        Arguments = $"x \"{_downloadedNewVersionFilePath}\" -o\"{tempExtractedNewVersion}\" -y",
+                        RedirectStandardError = true,
+                        RedirectStandardOutput = true,
+                        UseShellExecute = false,
+                        CreateNoWindow = true,
+                    }
+                };
+
+                process.Start();
+
+                process.WaitForExit();
+                process.Close();
+                process.Dispose();
+
+                ApplicationService.Instance.Busy("Starting VersionInstaller...");
+
+                // Copy VersionInstaller to another temporary folder
+                var versionInstallerFolder = ApplicationService.Instance.GetOrCreateTempFolder();
+                var versionInstallerExtractedFolder = Path.Combine(tempExtractedNewVersion, "tools\\VersionInstaller");
+
+                try
+                {
+                    CopyDirectory(versionInstallerExtractedFolder, versionInstallerFolder);
+                }
+                catch (Exception e)
+                {
+                    LoggingService.Instance.Error("Failed to copy VersionInstaller directory", e);
+                    ApplicationService.Instance.MessageBox("Failed to install new version: Not found VersionInstaller");
+                    return;
+                }   
+
+                var versionInstallerExecutionPath = Path.Combine(versionInstallerFolder, "PowerTools.Apps.VersionInstaller.exe");
+
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = versionInstallerExecutionPath,
+                    Arguments = $"\"{tempExtractedNewVersion}\" \"{currentFolder}\"",
+                    UseShellExecute = true
+                });
             }
+        }
+
+        private void CopyDirectory(string sourceDir, string destinationDir, bool overwrite = true)
+        {
+            // 1. Get information about the source directory
+            var dir = new DirectoryInfo(sourceDir);
+
+            if (!dir.Exists)
+            {
+                throw new DirectoryNotFoundException($"Source directory not found: {dir.FullName}");
+            }
+
+            // 2. Create the destination directory if it doesn't exist
+            Directory.CreateDirectory(destinationDir);
+
+            // 3. Copy all files in the current directory
+            foreach (FileInfo file in dir.GetFiles())
+            {
+                string targetFilePath = Path.Combine(destinationDir, file.Name);
+                file.CopyTo(targetFilePath, overwrite);
+            }
+
+            // 4. Recursively copy all subdirectories
+            foreach (DirectoryInfo subDir in dir.GetDirectories())
+            {
+                string targetSubDirPath = Path.Combine(destinationDir, subDir.Name);
+                CopyDirectory(subDir.FullName, targetSubDirPath, overwrite);
+            }
+        }
+
+        private string Get7zExecutionPath()
+        {
+            var seventZipPath = ModuleGlobalSettings.Instance.GetModuleConfigurationsByKey("7zExecutionPath");
+            if (string.IsNullOrEmpty(seventZipPath))
+            {
+                var executionFolder = Path.GetDirectoryName(typeof(PowerTools.App).Assembly.Location);
+                seventZipPath = Path.Combine(executionFolder, @"tools\7z\7z.exe");
+
+                ModuleGlobalSettings.Instance.SaveModuleConfigurationsByKey("7zExecutionPath", seventZipPath);
+            }
+
+            return seventZipPath;
         }
     }
 }

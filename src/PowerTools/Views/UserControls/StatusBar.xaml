@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:sharedServices="clr-namespace:PowerTools.Core.SharedServices;assembly=PowerTools.Core"
              xmlns:models="clr-namespace:PowerTools.Core.Models;assembly=PowerTools.Core"
+             xmlns:behaviours="clr-namespace:PowerTools.Core.Behaviours;assembly=PowerTools.Core"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid VerticalAlignment="Bottom">
@@ -16,22 +17,49 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
-        <TextBlock Style="{StaticResource TextBlock.ContentSmall}" Grid.Row="1" Grid.Column="0" Text="{Binding Source={x:Static sharedServices:LoggingService.Instance}, Path=Status, Mode=OneWay}" FontSize="12" FontFamily="Consolas"  Margin="10 3" MaxHeight="20"/>
-        <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5 1">
-            <Grid Width="120">
+        <TextBlock Style="{StaticResource TextBlock.ContentSmall}" Grid.Row="1" Grid.Column="0" Text="{Binding Source={x:Static sharedServices:LoggingService.Instance}, Path=Status, Mode=OneWay}" FontSize="12" FontFamily="Consolas" Margin="10 0 0 0" MaxHeight="20"/>
+        <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5 1 0 1">
+            <Grid Width="100" Margin="10 0 0 0">
                 <Button Style="{StaticResource Button.Icon}" Tag="{Binding Source={x:Static sharedServices:TaskExecution.Instance}, Path=TasksInformation, UpdateSourceTrigger=PropertyChanged}" Margin="0"  Height="20" MinHeight="20" BorderThickness="0" />
             </Grid>
-            <Grid Width="80">
-                <Button Style="{StaticResource Button.IconHighlight}" 
-                        Tag="{Binding Path=AppVersion.VersionUpdateStatusString, UpdateSourceTrigger=PropertyChanged}" 
-                        ToolTip="{Binding Path=AppVersion.NewVersionUpdateString, UpdateSourceTrigger=PropertyChanged}"
-                        Visibility="{Binding Path=AppVersion.CanUpdateNewVersion, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}"
-                        IsEnabled="{Binding Path=AppVersion.CanExecutionAction, UpdateSourceTrigger=PropertyChanged}"
-                        Command="{Binding Path=AppVersion.CmdUpdateToLatestVersion}"
-                        Margin="0" Height="20" MinHeight="20" BorderThickness="0"/>
-            </Grid>
-            <Button Style="{StaticResource Button.Icon}" Command="{Binding CmdShowLog}" Content="{x:Static models:ButtonIcons.ShowLogs}" ToolTip="Click to view logs" Margin="10 0" Height="20" MinHeight="20" />
-            <TextBlock Style="{StaticResource TextBlock.ContentSmall}" Text="{Binding Path=AppVersion.CurrentVersion, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource StringFormatConverter}, ConverterParameter='Version: {0}'}" VerticalAlignment="Center" Margin="10 0" />
+            <Button Style="{StaticResource Button.Icon}" Command="{Binding CmdShowLog}" Content="{x:Static models:ButtonIcons.ShowLogs}" ToolTip="Click to view logs" Margin="10 0 0 0" Height="20" MinHeight="20" />
+            <Border Margin="10 0 " CornerRadius="3" Background="{StaticResource Background.LightGray}">
+                <StackPanel Orientation="Horizontal">
+                    <Button Tag="{Binding Path=AppVersion.StatusAsString, UpdateSourceTrigger=PropertyChanged}" 
+                            ToolTip="{Binding Path=AppVersion.NewVersionUpdateAsString, UpdateSourceTrigger=PropertyChanged}"
+                            Command="{Binding Path=AppVersion.CmdUpdateToLatestVersion}"
+                            Margin="0" Height="20" MinHeight="20" BorderThickness="0 0 1 0" BorderBrush="{StaticResource Background.Gray}"
+                            behaviours:ButtonBehavior.CornerRadius="3 0 0 3"
+                            Width="120">
+                        <Button.Style>
+                            <Style TargetType="{x:Type Button}" BasedOn="{StaticResource Button.IconHighlight}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Path=AppVersion.Status, UpdateSourceTrigger=PropertyChanged}" Value="NoUpdates">
+                                        <Setter Property="Background" Value="{StaticResource Background.LightGray}"/>
+                                        <Setter Property="Foreground" Value="Black"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Path=AppVersion.Status, UpdateSourceTrigger=PropertyChanged}" Value="CheckForUpdates">
+                                        <Setter Property="Background" Value="{StaticResource Background.LightGray}"/>
+                                        <Setter Property="Foreground" Value="Black"/>
+                                        <Setter Property="IsEnabled" Value="false"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Path=AppVersion.Status, UpdateSourceTrigger=PropertyChanged}" Value="Updating">
+                                        <Setter Property="IsEnabled" Value="false"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Path=AppVersion.Status, UpdateSourceTrigger=PropertyChanged}" Value="HasNewVersion">
+                                        <Setter Property="FontWeight" Value="SemiBold"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Path=AppVersion.Status, UpdateSourceTrigger=PropertyChanged}" Value="Done">
+                                        <Setter Property="Background" Value="{StaticResource Background.LightGray}"/>
+                                        <Setter Property="Foreground" Value="Black"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                    <TextBlock Style="{StaticResource TextBlock.ContentSmall}" Text="{Binding Path=AppVersion.CurrentVersion, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource StringFormatConverter}, ConverterParameter='v{0}'}" VerticalAlignment="Center" Margin="10 0" />
+                </StackPanel>
+            </Border>
         </StackPanel>
     </Grid>
 </UserControl>

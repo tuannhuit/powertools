@@ -2,7 +2,8 @@
 {
     public enum VersionUpdateStatus
     {
-        None,
+        NoUpdates,
+        CheckForUpdates,
         HasNewVersion,
         Updating,
         Done

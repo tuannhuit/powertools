@@ -84,49 +84,46 @@
         </Grid>
         <GridSplitter Style="{StaticResource GridSplitter.Normal}" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
         <Grid Grid.Column="2" Visibility="{Binding SelectedModule, Converter={StaticResource ValueToVisibilityConverter}}">
-            <Grid Margin="40 0">
+            <Grid Grid.Row="0" Margin="0 20 0 0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
-                <Grid Grid.Row="0" Margin="0 20">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
-                    <Border Grid.Column="0" Grid.Row="0" Grid.RowSpan="4" Margin="5" MaxHeight="80" MaxWidth="80" Height="80" Width="80">
-                        <TextBlock FontFamily="Segoe UI Symbol" FontSize="60" Text="{Binding SelectedModule.Icon}" Foreground="{Binding SelectedModule.IconColor, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource StringToBrushConverter}}" VerticalAlignment="Center" HorizontalAlignment="Center"  Margin="0"/>
-                    </Border>
-                    <TextBlock Style="{StaticResource TextBlock.Header}" Grid.Column="1" Grid.Row="0" Text="{Binding SelectedModule.DisplayName}" FontWeight="SemiBold"/>
-                    <StackPanel Grid.Column="1" Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Left">
-                        <TextBlock Style="{StaticResource TextBlock.Content}" Text="{Binding SelectedModule.PublisherDisplayName}"/>
-                        <TextBlock Style="{StaticResource TextBlock.Content}" Margin="0 5 0 0">
-                            <Hyperlink Command="{Binding ElementName=userControl, Path=DataContext.CmdNavigateRepoLink}" CommandParameter="{Binding SelectedModule.RepoLink}">Repository</Hyperlink>
-                        </TextBlock>
-                    </StackPanel>
-                    <TextBlock Style="{StaticResource TextBlock.Content}" Grid.Column="1" Grid.Row="2" Text="{Binding SelectedModule.Description}"/>
-                    <StackPanel Grid.Column="1" Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Left" Margin="5">
-                        <ComboBox Style="{StaticResource ComboBox.Flat}" ItemsSource="{Binding Path=SelectedModule.AllVersions}" SelectedItem="{Binding Path=SelectedModule.Version, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Width="150" Margin="0"/>
-                        <Button Style="{StaticResource Button.IconActive}" Content="{x:Static models:ButtonIcons.Download}" Tag="Install" Command="{Binding Path=CmdInstallModule, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding SelectedModule.IsDownloading, Converter={StaticResource BoolToReverseConverter}}" Visibility="{Binding Path=SelectedModule.IsNotInstalled, Converter={StaticResource  BoolToVisibilityConverter}}" VerticalAlignment="Center" Width="85" Margin="5 0 0 0"/>
-                        <Button Style="{StaticResource Button.IconActive}" Content="{x:Static models:ButtonIcons.Delete}" Tag="Uninstall" Command="{Binding Path=CmdUninstallModule, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding Path=SelectedModule.IsInstalled, Converter={StaticResource  BoolToVisibilityConverter}}" VerticalAlignment="Center" Width="85" Margin="5 0 0 0" Padding="0"/>
-                        <Button Style="{StaticResource Button.IconActive}" Content="{x:Static models:ButtonIcons.None}" Tag="Disable" Command="{Binding Path=CmdDisableModule, UpdateSourceTrigger=PropertyChanged}" CommandParameter="{Binding SelectedModule.Name, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding Path=SelectedModule.IsActive}" Visibility="{Binding SelectedModule.IsInstalled, Converter={StaticResource BoolToVisibilityConverter}}" VerticalAlignment="Center" Margin="5 0 0 0"/>
-                        <Button Style="{StaticResource Button.IconActive}" Content="{x:Static models:ButtonIcons.Check}" Tag="Enable" Command="{Binding Path=CmdEnableModule, UpdateSourceTrigger=PropertyChanged}" CommandParameter="{Binding SelectedModule.Name, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding Path=SelectedModule.IsActive, Converter={StaticResource BoolToReverseConverter}}" Visibility="{Binding SelectedModule.IsInstalled, Converter={StaticResource BoolToVisibilityConverter}}" VerticalAlignment="Center" Margin="5 0 0 0"/>
-                    </StackPanel>
-                </Grid>
-                <TabControl Style="{StaticResource TabControl.Normal}" Grid.Row="1" behaviours:TabControlBehavior.CanCloseTabItem="False">
-                    <TabItem Style="{StaticResource TabItem.Normal}" Header="DETAILS">
+                <Border Grid.Column="0" Grid.Row="0" Grid.RowSpan="4" Margin="5" MaxHeight="80" MaxWidth="80" Height="80" Width="80">
+                    <TextBlock FontFamily="Segoe UI Symbol" FontSize="60" Text="{Binding SelectedModule.Icon}" Foreground="{Binding SelectedModule.IconColor, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource StringToBrushConverter}}" VerticalAlignment="Center" HorizontalAlignment="Center"  Margin="0"/>
+                </Border>
+                <TextBlock Style="{StaticResource TextBlock.Header}" Grid.Column="1" Grid.Row="0" Text="{Binding SelectedModule.DisplayName}" FontWeight="SemiBold"/>
+                <StackPanel Grid.Column="1" Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Left">
+                    <TextBlock Style="{StaticResource TextBlock.Content}" Text="{Binding SelectedModule.PublisherDisplayName}"/>
+                    <TextBlock Style="{StaticResource TextBlock.Content}" Margin="0 5 0 0">
+            <Hyperlink Command="{Binding ElementName=userControl, Path=DataContext.CmdNavigateRepoLink}" CommandParameter="{Binding SelectedModule.RepoLink}">Repository</Hyperlink>
+                    </TextBlock>
+                </StackPanel>
+                <TextBlock Style="{StaticResource TextBlock.Content}" Grid.Column="1" Grid.Row="2" Text="{Binding SelectedModule.Description}"/>
+                <StackPanel Grid.Column="1" Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Left" Margin="5">
+                    <ComboBox Style="{StaticResource ComboBox.Flat}" ItemsSource="{Binding Path=SelectedModule.AllVersions}" SelectedItem="{Binding Path=SelectedModule.Version, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Width="150" Margin="0"/>
+                    <Button Style="{StaticResource Button.IconActive}" Content="{x:Static models:ButtonIcons.Download}" Tag="Install" Command="{Binding Path=CmdInstallModule, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding SelectedModule.IsDownloading, Converter={StaticResource BoolToReverseConverter}}" Visibility="{Binding Path=SelectedModule.IsNotInstalled, Converter={StaticResource  BoolToVisibilityConverter}}" VerticalAlignment="Center" Width="85" Margin="5 0 0 0"/>
+                    <Button Style="{StaticResource Button.IconActive}" Content="{x:Static models:ButtonIcons.Delete}" Tag="Uninstall" Command="{Binding Path=CmdUninstallModule, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding Path=SelectedModule.IsInstalled, Converter={StaticResource  BoolToVisibilityConverter}}" VerticalAlignment="Center" Width="85" Margin="5 0 0 0" Padding="0"/>
+                    <Button Style="{StaticResource Button.IconActive}" Content="{x:Static models:ButtonIcons.None}" Tag="Disable" Command="{Binding Path=CmdDisableModule, UpdateSourceTrigger=PropertyChanged}" CommandParameter="{Binding SelectedModule.Name, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding Path=SelectedModule.IsActive}" Visibility="{Binding SelectedModule.IsInstalled, Converter={StaticResource BoolToVisibilityConverter}}" VerticalAlignment="Center" Margin="5 0 0 0"/>
+                    <Button Style="{StaticResource Button.IconActive}" Content="{x:Static models:ButtonIcons.Check}" Tag="Enable" Command="{Binding Path=CmdEnableModule, UpdateSourceTrigger=PropertyChanged}" CommandParameter="{Binding SelectedModule.Name, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding Path=SelectedModule.IsActive, Converter={StaticResource BoolToReverseConverter}}" Visibility="{Binding SelectedModule.IsInstalled, Converter={StaticResource BoolToVisibilityConverter}}" VerticalAlignment="Center" Margin="5 0 0 0"/>
+                </StackPanel>
+                <Border Grid.Column="1" Grid.Row="4" Background="{StaticResource Background.WhiteSmoke}" BorderBrush="LightGray" BorderThickness="1" CornerRadius="3" Margin="0 20 20 20">
+                    <TabControl Style="{StaticResource TabControl.Normal}" behaviours:TabControlBehavior.CanCloseTabItem="False" BorderThickness="0" Margin="2">
+                        <TabItem Style="{StaticResource TabItem.Normal}" Header="DETAILS">
 
-                    </TabItem>
-                    <TabItem Style="{StaticResource TabItem.Normal}" Header="CHANGELOGS">
+                        </TabItem>
+                        <TabItem Style="{StaticResource TabItem.Normal}" Header="CHANGELOGS">
 
-                    </TabItem>
-                </TabControl>
+                        </TabItem>
+                    </TabControl>
+                </Border>
             </Grid>
         </Grid>
     </Grid>

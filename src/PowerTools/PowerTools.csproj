@@ -37,6 +37,9 @@
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
+    <None Update="repository.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
   <ItemGroup>
@@ -45,7 +48,7 @@
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="mkdir &quot;$(TargetDir)modules&quot;&#xD;&#xA;xcopy /Y /I &quot;$(ProjectDir)repository.json&quot; &quot;$(TargetDir)modules&quot;" />
+    <Exec Command="rmdir /S /Q &quot;$(TargetDir)tools&quot;&#xD;&#xA;mkdir &quot;$(TargetDir)tools&quot;&#xD;&#xA;xcopy /E /H /Y /I &quot;$(ProjectDir)..\..\tools\*&quot; &quot;$(TargetDir)tools\&quot;" />
   </Target>
 
 </Project>

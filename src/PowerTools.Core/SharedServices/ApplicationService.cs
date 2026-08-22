@@ -61,6 +61,10 @@ namespace PowerTools.Core.SharedServices
             }
         }
 
+        public void Shutdown()
+        {
+            Application.Current.Shutdown();
+        }
 
         public void Restart()
         {

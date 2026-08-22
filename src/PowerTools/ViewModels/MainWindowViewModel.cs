@@ -130,7 +130,6 @@ namespace PowerTools.ViewModels
             AppVersion = new AppVersion();
             AppVersion.CheckForUpdate();
 
-
             ApplicationService.Instance.RegisterDisposableAction(() =>
             {
                 AppVersion.InstallNewVersion();

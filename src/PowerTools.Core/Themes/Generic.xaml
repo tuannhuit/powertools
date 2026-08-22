@@ -19,7 +19,7 @@
 
     <SolidColorBrush x:Key="Background.Gray" Color="#ADADAD"/>
     <SolidColorBrush x:Key="Background.Red" Color="#C72E0F"/>
-    <SolidColorBrush x:Key="Background.LightGray" Color="#EBEBEB"/>
+    <SolidColorBrush x:Key="Background.LightGray" Color="#E4E4E4"/>
     <SolidColorBrush x:Key="Background.WhiteSmoke" Color="WhiteSmoke"/>
     <SolidColorBrush x:Key="Background.White" Color="#FFFFFF"/>
     <SolidColorBrush x:Key="Background.Default" Color="#F8F8F8"/>
@@ -48,6 +48,8 @@
     <SolidColorBrush x:Key="Button.Pressed.Background" Color="#007ACC"/>
     <SolidColorBrush x:Key="Button.Disabled.Background" Color="#FFF4F4F4"/>
     <SolidColorBrush x:Key="Button.Disabled.Foreground" Color="#FFBAB8B8"/>
+
+    <SolidColorBrush x:Key="TabItem.Background" Color="#E0E0E0"/>
 
     <SolidColorBrush x:Key="DataGrid.Cell.Background" Color="#03A3F2"/>
 
@@ -540,7 +542,7 @@
                 <ControlTemplate TargetType="{x:Type Button}">
                     <Border x:Name="border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="true" CornerRadius="{Binding RelativeSource={RelativeSource AncestorType={x:Type Button}}, Path=(behaviors:ButtonBehavior.CornerRadius), UpdateSourceTrigger=PropertyChanged}">
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="{TemplateBinding Padding}">
-                            <TextBlock x:Name="textblock" FontFamily="Segoe UI Symbol" Foreground="{TemplateBinding Foreground}" FontSize="{TemplateBinding FontSize}" Text="{TemplateBinding Content}" VerticalAlignment="Center" Margin="0"/>
+                            <TextBlock x:Name="textblock" FontFamily="Segoe UI Symbol" Foreground="{TemplateBinding Foreground}" FontSize="{TemplateBinding FontSize}" FontWeight="{TemplateBinding FontWeight}" Text="{TemplateBinding Content}" VerticalAlignment="Center" Margin="0"/>
                             <TextBlock x:Name="textblockText" FontFamily="Segoe UI" Foreground="{TemplateBinding Foreground}" FontSize="11" FontWeight="{TemplateBinding FontWeight}" Text="{TemplateBinding Tag}" Padding="5 0 5 0" Visibility="{TemplateBinding Tag, Converter={StaticResource ValueToVisibilityConverter}}" VerticalAlignment="Center"/>
                         </StackPanel>
                     </Border>
@@ -583,7 +585,7 @@
                 <ControlTemplate TargetType="{x:Type Button}">
                     <Border x:Name="border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="{Binding RelativeSource={RelativeSource AncestorType={x:Type Button}}, Path=(behaviors:ButtonBehavior.CornerRadius), UpdateSourceTrigger=PropertyChanged}" SnapsToDevicePixels="true">
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="5 0 5 0">
-                            <TextBlock x:Name="textblock" FontFamily="Segoe UI Symbol" Foreground="{TemplateBinding Foreground}" FontSize="{TemplateBinding FontSize}" Text="{TemplateBinding Content}" VerticalAlignment="Center" Margin="0"/>
+                            <TextBlock x:Name="textblock" FontFamily="Segoe UI Symbol" Foreground="{TemplateBinding Foreground}" FontSize="{TemplateBinding FontSize}" FontWeight="{TemplateBinding FontWeight}" Text="{TemplateBinding Content}" VerticalAlignment="Center" Margin="0"/>
                             <TextBlock x:Name="textblockText" FontFamily="Segoe UI" Foreground="{TemplateBinding Foreground}" FontSize="11" FontWeight="{TemplateBinding FontWeight}" Text="{TemplateBinding Tag}" Padding="5 0 5 0" Visibility="{TemplateBinding Tag, Converter={StaticResource ValueToVisibilityConverter}}" VerticalAlignment="Center"/>
                         </StackPanel>
                     </Border>
@@ -631,7 +633,7 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
                     <Border x:Name="border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="0.5" SnapsToDevicePixels="true" CornerRadius="{Binding RelativeSource={RelativeSource AncestorType={x:Type Button}}, Path=(behaviors:ButtonBehavior.CornerRadius), UpdateSourceTrigger=PropertyChanged}">
-                        <TextBlock x:Name="textblock" FontFamily="Segoe UI" Foreground="{TemplateBinding Foreground}" FontSize="{TemplateBinding FontSize}" Text="{TemplateBinding Content}" Margin="{TemplateBinding Padding}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        <TextBlock x:Name="textblock" FontFamily="Segoe UI" Foreground="{TemplateBinding Foreground}" FontSize="{TemplateBinding FontSize}" FontWeight="{TemplateBinding FontWeight}" Text="{TemplateBinding Content}" Margin="{TemplateBinding Padding}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="true">
@@ -1498,7 +1500,7 @@
     <!--TabItem.Normal-->
     <Style x:Key="TabItem.Normal" TargetType="{x:Type TabItem}">
         <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
-        <Setter Property="Background" Value="{StaticResource Background.LightGray}"/>
+        <Setter Property="Background" Value="{StaticResource TabItem.Background}"/>
         <Setter Property="BorderBrush" Value="Transparent"/>
         <Setter Property="Margin" Value="0"/>
         <Setter Property="Padding" Value=" 2 2 0 2"/>

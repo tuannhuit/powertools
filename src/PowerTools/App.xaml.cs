@@ -18,7 +18,7 @@ namespace PowerTools
     /// </summary>
     public partial class App : PrismApplication
     {
-        public static readonly string Version = "0.0.0.0";
+        public static readonly string Version = "2.0.0.1";
         public static readonly string AppName = "PowerTools";
         public static readonly string OwnerName = "tuannhuit";
         public static readonly string RepoName = "powertools";
