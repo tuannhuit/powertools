@@ -10,8 +10,16 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Apps", "Apps", "{BC876C81-8E70-49B0-9AA0-C62B4505A27B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PowerTools.Apps.VersionInstaller", "PowerTools.Apps\PowerTools.Apps.VersionInstaller\PowerTools.Apps.VersionInstaller.csproj", "{AFBABE80-6464-1B82-E9F3-5812FA9DB410}"
+	ProjectSection(ProjectDependencies) = postProject
+		{14110174-7CDD-4747-B94C-90F0ABDAA8FC} = {14110174-7CDD-4747-B94C-90F0ABDAA8FC}
+		{E8CA988A-B479-411A-8162-742A63FCFA4D} = {E8CA988A-B479-411A-8162-742A63FCFA4D}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PowerTools.Apps.AssemblyLoader", "PowerTools.Apps\PowerTools.Apps.AssemblyLoader\PowerTools.Apps.AssemblyLoader.csproj", "{2880D9BC-B3A2-949F-BF7C-64EF775A1555}"
+	ProjectSection(ProjectDependencies) = postProject
+		{14110174-7CDD-4747-B94C-90F0ABDAA8FC} = {14110174-7CDD-4747-B94C-90F0ABDAA8FC}
+		{E8CA988A-B479-411A-8162-742A63FCFA4D} = {E8CA988A-B479-411A-8162-742A63FCFA4D}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

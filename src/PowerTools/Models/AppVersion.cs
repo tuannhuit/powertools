@@ -45,7 +45,7 @@ namespace PowerTools.Models
                     case VersionUpdateStatus.CheckForUpdates:
                         return "Checking new version";
                     case VersionUpdateStatus.HasNewVersion:
-                        return $"Update to v{NewVersion}";
+                        return $"Install v{NewVersion}";
                     case VersionUpdateStatus.Updating:
                         return "Downloading ...";
                     case VersionUpdateStatus.Done:
@@ -285,12 +285,18 @@ namespace PowerTools.Models
 
                 var versionInstallerExecutionPath = Path.Combine(versionInstallerFolder, "PowerTools.Apps.VersionInstaller.exe");
 
-                Process.Start(new ProcessStartInfo
+                var versionInstallerProcess = new Process
                 {
-                    FileName = versionInstallerExecutionPath,
-                    Arguments = $"\"{tempExtractedNewVersion}\" \"{currentFolder}\"",
-                    UseShellExecute = true
-                });
+                    StartInfo = new ProcessStartInfo
+                    {
+                        FileName = versionInstallerExecutionPath,
+                        Arguments = $"\"{tempExtractedNewVersion}\" \"{currentFolder}\"",
+                        UseShellExecute = true
+                    }
+                };
+
+                versionInstallerProcess.Start();
+                versionInstallerProcess.Dispose();
             }
         }
 

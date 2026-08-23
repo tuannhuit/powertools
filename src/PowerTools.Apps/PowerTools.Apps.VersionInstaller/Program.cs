@@ -8,7 +8,7 @@ namespace PowerTools.Apps.VersionInstaller
         {
             if (args == null || args.Length != 2)
             {
-                Console.WriteLine("Invalid arguments. Please provide the paths for the extracted new version and the current version.");
+                Console.WriteLine("Invalid arguments. Please provide the paths for the extracted new version and the current version.. Press any key to exit.");
                 Console.ReadLine();
                 return;
             }
@@ -24,7 +24,7 @@ namespace PowerTools.Apps.VersionInstaller
             var isLocked = IsFolderLocked(currentVersionPath);
             if (isLocked)
             {
-                Console.WriteLine($"\nFound files are locked in folder: {currentVersionPath}");
+                Console.WriteLine($"\nFound files are locked in folder: {currentVersionPath}. Press any key to exit.");
                 Console.ReadLine();
                 return;
             }
@@ -51,7 +51,7 @@ namespace PowerTools.Apps.VersionInstaller
             isLocked = IsFolderLocked(currentVersionPath);
             if (isLocked)
             {
-                Console.WriteLine($"\nFolder is locked for cleaning up: {currentVersionPath}");
+                Console.WriteLine($"\nFolder is locked for cleaning up: {currentVersionPath}. Press any key to exit.");
                 Console.ReadLine();
                 return;
             }
@@ -62,7 +62,7 @@ namespace PowerTools.Apps.VersionInstaller
             isLocked = IsFolderLocked(currentVersionPath);
             if (isLocked)
             {
-                Console.WriteLine($"\nFolder is locked after cleaning up: {currentVersionPath}");
+                Console.WriteLine($"\nFolder is locked after cleaning up: {currentVersionPath}. Press any key to exit.");
                 Console.ReadLine();
                 return;
             }
@@ -98,7 +98,7 @@ namespace PowerTools.Apps.VersionInstaller
                     }
                 }
 
-                if(!isLocked || sw.ElapsedMilliseconds >= 30 * 1000) // Timeout after 30 seconds
+                if(!isLocked || sw.ElapsedMilliseconds >= 60 * 1000) // Timeout after 60 seconds
                 {
                     break;
                 }
@@ -125,9 +125,10 @@ namespace PowerTools.Apps.VersionInstaller
                     stream.Close();
                 }
             }
-            catch (IOException)
+            catch (IOException e)
             {
                 // If an IOException is thrown, the file is locked
+                Console.WriteLine($"\nFile is locked: {filePath}. Exception: {e.Message}");
                 return true;
             }
 
