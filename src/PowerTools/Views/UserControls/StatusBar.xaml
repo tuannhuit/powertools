@@ -24,7 +24,7 @@
             </Grid>
             <Button Style="{StaticResource Button.Icon}" Command="{Binding CmdShowLog}" Content="{x:Static models:ButtonIcons.ShowLogs}" ToolTip="Click to view logs" Margin="10 0 0 0" Height="20" MinHeight="20" />
             <Border Margin="10 0 " CornerRadius="3" Background="{StaticResource Background.LightGray}">
-                <StackPanel Orientation="Horizontal">
+                <StackPanel Margin="0" Orientation="Horizontal">
                     <Button Tag="{Binding Path=AppVersion.StatusAsString, UpdateSourceTrigger=PropertyChanged}" 
                             ToolTip="{Binding Path=AppVersion.NewVersionUpdateAsString, UpdateSourceTrigger=PropertyChanged}"
                             Command="{Binding Path=AppVersion.CmdUpdateToLatestVersion}"
@@ -36,11 +36,11 @@
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding Path=AppVersion.Status, UpdateSourceTrigger=PropertyChanged}" Value="NoUpdates">
                                         <Setter Property="Background" Value="{StaticResource Background.LightGray}"/>
-                                        <Setter Property="Foreground" Value="Black"/>
+                                        <Setter Property="Foreground" Value="{StaticResource TextBox.Foreground.Gray}"/>
                                     </DataTrigger>
                                     <DataTrigger Binding="{Binding Path=AppVersion.Status, UpdateSourceTrigger=PropertyChanged}" Value="CheckForUpdates">
                                         <Setter Property="Background" Value="{StaticResource Background.LightGray}"/>
-                                        <Setter Property="Foreground" Value="Black"/>
+                                        <Setter Property="Foreground" Value="{StaticResource TextBox.Foreground.Gray}"/>
                                         <Setter Property="IsEnabled" Value="false"/>
                                     </DataTrigger>
                                     <DataTrigger Binding="{Binding Path=AppVersion.Status, UpdateSourceTrigger=PropertyChanged}" Value="Updating">
@@ -51,13 +51,17 @@
                                     </DataTrigger>
                                     <DataTrigger Binding="{Binding Path=AppVersion.Status, UpdateSourceTrigger=PropertyChanged}" Value="Done">
                                         <Setter Property="Background" Value="{StaticResource Background.LightGray}"/>
-                                        <Setter Property="Foreground" Value="Black"/>
+                                        <Setter Property="Foreground" Value="{StaticResource TextBox.Foreground.Gray}"/>
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
                         </Button.Style>
                     </Button>
-                    <TextBlock Style="{StaticResource TextBlock.ContentSmall}" Text="{Binding Path=AppVersion.CurrentVersion, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource StringFormatConverter}, ConverterParameter='v{0}'}" VerticalAlignment="Center" Margin="10 0" />
+                    <ToggleButton Style="{StaticResource ToggleButton.Icon}"
+                            Tag="{Binding Path=AppVersion.CurrentVersion, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource StringFormatConverter}, ConverterParameter='v{0}'}" 
+                            Margin="0" Height="20" MinHeight="20" MinWidth="50"
+                            BorderThickness="0"
+                            behaviours:ButtonBehavior.CornerRadius="0 3 3 0"/>
                 </StackPanel>
             </Border>
         </StackPanel>

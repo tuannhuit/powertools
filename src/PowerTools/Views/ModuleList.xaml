@@ -114,7 +114,7 @@
                     <Button Style="{StaticResource Button.IconActive}" Content="{x:Static models:ButtonIcons.None}" Tag="Disable" Command="{Binding Path=CmdDisableModule, UpdateSourceTrigger=PropertyChanged}" CommandParameter="{Binding SelectedModule.Name, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding Path=SelectedModule.IsActive}" Visibility="{Binding SelectedModule.IsInstalled, Converter={StaticResource BoolToVisibilityConverter}}" VerticalAlignment="Center" Margin="5 0 0 0"/>
                     <Button Style="{StaticResource Button.IconActive}" Content="{x:Static models:ButtonIcons.Check}" Tag="Enable" Command="{Binding Path=CmdEnableModule, UpdateSourceTrigger=PropertyChanged}" CommandParameter="{Binding SelectedModule.Name, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding Path=SelectedModule.IsActive, Converter={StaticResource BoolToReverseConverter}}" Visibility="{Binding SelectedModule.IsInstalled, Converter={StaticResource BoolToVisibilityConverter}}" VerticalAlignment="Center" Margin="5 0 0 0"/>
                 </StackPanel>
-                <Border Grid.Column="1" Grid.Row="4" Background="{StaticResource Background.WhiteSmoke}" BorderBrush="LightGray" BorderThickness="1" CornerRadius="3" Margin="0 20 20 20">
+                <Border Grid.Column="1" Grid.Row="4" Background="{StaticResource Background.WhiteSmoke}" BorderBrush="LightGray" BorderThickness="1" CornerRadius="3" Margin="0 20 20 80">
                     <TabControl Style="{StaticResource TabControl.Normal}" behaviours:TabControlBehavior.CanCloseTabItem="False" BorderThickness="0" Margin="2">
                         <TabItem Style="{StaticResource TabItem.Normal}" Header="DETAILS">
 
