@@ -16,6 +16,9 @@ namespace PowerTools.Apps.VersionInstaller
             var tempExtractedNewVersionPath = args[0];
             var currentVersionPath = args[1];
 
+            //var tempExtractedNewVersionPath = "C:\\Users\\HP\\Downloads\\PowerTools.v2.0.0.0";
+            //var currentVersionPath = "D:\\2.Work\\hsn\\PowerTools\\powertools\\dep\\Output\\Debug\\net8.0-windows7.0 - Copy";
+
             Console.WriteLine($"Extracted New Version Folder Path: {tempExtractedNewVersionPath}");
             Console.WriteLine($"Current Version Folder Path: {currentVersionPath}");
 
@@ -32,32 +35,8 @@ namespace PowerTools.Apps.VersionInstaller
             var modulesFolder = Path.Combine(currentVersionPath, "modules");
             var dataFolder = Path.Combine(currentVersionPath, "data");
 
-            var destModulesFolder = Path.Combine(tempExtractedNewVersionPath, "modules");
-            var destDataFolder = Path.Combine(tempExtractedNewVersionPath, "data");
-
-            if(Directory.Exists(modulesFolder))
-            {
-                Console.WriteLine($"\nCopy {modulesFolder}");
-                CopyDirectory(modulesFolder, destModulesFolder);
-            }
-
-            if(Directory.Exists(dataFolder))
-            {
-                Console.WriteLine($"\nCopy {dataFolder}");
-                CopyDirectory(dataFolder, destDataFolder);
-            }
-
-            Console.WriteLine($"\nClean up {currentVersionPath}");
-            isLocked = IsFolderLocked(currentVersionPath);
-            if (isLocked)
-            {
-                Console.WriteLine($"\nFolder is locked for cleaning up: {currentVersionPath}. Press any key to exit.");
-                Console.ReadLine();
-                return;
-            }
-
             Console.WriteLine($"\nDelete folder: {currentVersionPath}");
-            DeleteAllDirectoryContents(currentVersionPath);
+            CleanUpFolder(currentVersionPath, new List<string> { currentVersionPath, modulesFolder, dataFolder });
 
             isLocked = IsFolderLocked(currentVersionPath);
             if (isLocked)
@@ -98,14 +77,14 @@ namespace PowerTools.Apps.VersionInstaller
                     }
                 }
 
-                if(!isLocked || sw.ElapsedMilliseconds >= 60 * 1000) // Timeout after 60 seconds
+                if (!isLocked || sw.ElapsedMilliseconds >= 60 * 1000) // Timeout after 60 seconds
                 {
                     break;
                 }
 
             } while (true);
 
-             
+
             return isLocked;
         }
 
@@ -163,31 +142,57 @@ namespace PowerTools.Apps.VersionInstaller
             }
         }
 
-        private static void DeleteAllDirectoryContents(string folder)
+        private static void CleanUpFolder(string folder, List<string> excludedFolders = null, List<string> excludedFiles = null)
         {
             if (!Directory.Exists(folder))
             {
                 return;
             }
 
+            if (excludedFolders == null)
+            {
+                excludedFolders = new List<string>();
+            }
+
+            if (excludedFiles == null)
+            {
+                excludedFiles = new List<string>();
+            }
+
             var files = Directory.GetFiles(folder);
             var dirs = Directory.GetDirectories(folder);
+
             foreach (var file in files)
             {
+                if (excludedFiles.Contains(file))
+                {
+                    continue;
+                }
+
                 File.SetAttributes(file, FileAttributes.Normal);
                 File.Delete(file);
             }
 
             foreach (var dir in dirs)
             {
+                if (excludedFolders.Contains(dir))
+                {
+                    continue;
+                }
+
                 if (Directory.GetFiles(dir).Length == 0 && Directory.GetDirectories(dir).Length == 0)
                 {
                     Directory.Delete(dir);
                 }
                 else
                 {
-                    DeleteAllDirectoryContents(dir);
+                    CleanUpFolder(dir, excludedFolders, excludedFiles);
                 }
+            }
+
+            if (!excludedFolders.Contains(folder))
+            {
+                Directory.Delete(folder);
             }
         }
     }
