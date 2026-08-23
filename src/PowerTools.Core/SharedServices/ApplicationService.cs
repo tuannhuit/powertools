@@ -169,6 +169,11 @@ namespace PowerTools.Core.SharedServices
             DialogService.ShowDialog("DialogView", dialogParameters, parameters.Callback);
         }
 
+        public string GetCurrentExecutionPath()
+        {
+            return Path.GetDirectoryName(typeof(ApplicationService).Assembly.Location);
+        }
+
         public string GetOrCreateTempFolder()
         {
             string tempDirectory = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());

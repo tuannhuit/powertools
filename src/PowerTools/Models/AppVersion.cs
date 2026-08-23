@@ -11,6 +11,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace PowerTools.Models
@@ -19,10 +20,15 @@ namespace PowerTools.Models
     {
         private readonly object _lockObject = new object();
         private VersionUpdateStatus _status;
+        private ReleaseInformation _releaseInformation;
         private List<string> _versionList;
         private string _newVersion;
         private string _onlineNewVersionFilePath;
+        private string _onlineReadmeFilePath;
+        private string _onlineChangelogsFilePath;
         private string _downloadedNewVersionFilePath;
+        private string _downloadedReadmeFilePath;
+        private string _downloadedChangelogsFilePath;
 
         public VersionUpdateStatus Status
         {
@@ -72,12 +78,46 @@ namespace PowerTools.Models
         public string NewVersionUpdateAsString => $"Update current version v{CurrentVersion} to v{NewVersion}";
 
         public ICommand CmdUpdateToLatestVersion { get; set; }
+        public ICommand CmdShowReleaseInformation { get; set; }
 
         public AppVersion()
         {
             _versionList = new List<string>();
             Status = VersionUpdateStatus.NoUpdates;
             CmdUpdateToLatestVersion = new DelegateCommand(OnCmdUpdateToLatestVersion);
+            CmdShowReleaseInformation = new DelegateCommand(OnCmdShowReleaseInformation);
+        }
+
+        private void OnCmdShowReleaseInformation()
+        {
+            if (_releaseInformation == null)
+            {
+                _releaseInformation = new ReleaseInformation();
+
+                var currentFolder = ApplicationService.Instance.GetCurrentExecutionPath();
+                var changelogsFile = Path.Combine(currentFolder, "Changelogs.md");
+                var detailsFile = Path.Combine(currentFolder, "Readme.md");
+
+                if (File.Exists(changelogsFile))
+                {
+                    _releaseInformation.ChangeLogs = File.ReadAllText(changelogsFile);
+                }
+
+                if (File.Exists(detailsFile))
+                {
+                    _releaseInformation.Details = File.ReadAllText(detailsFile);
+                }
+            }
+
+            var actions = new List<DialogAction>();
+
+            ApplicationService.Instance.ShowDialog<Views.UserControls.ReleaseInformation>(
+                $"Release Information v{CurrentVersion}",
+                _releaseInformation,
+                null,
+                actions,
+                850,
+                400);
         }
 
         private void OnCmdUpdateToLatestVersion()
@@ -111,30 +151,66 @@ namespace PowerTools.Models
                 return;
             }
 
-            var localFilePath = $"{ApplicationService.Instance.GetOrCreateTempFolder()}\\PowerTools.v{NewVersion}.zip";
+            if (!string.IsNullOrEmpty(_onlineNewVersionFilePath))
+            {
+                var localNewVersionFilePath = await DownloadFile(_onlineNewVersionFilePath);
+                if (File.Exists(localNewVersionFilePath))
+                {
+                    _downloadedNewVersionFilePath = localNewVersionFilePath;
+                    Status = VersionUpdateStatus.Done;
+                    LoggingService.Instance.Info($"Downloaded new version to {_downloadedNewVersionFilePath}");
+                }
+                else
+                {
+                    LoggingService.Instance.Info("Failed to download new version");
+                    Status = VersionUpdateStatus.HasNewVersion;
+                }
+            }
+
+            if (!string.IsNullOrEmpty(_onlineChangelogsFilePath))
+            {
+                var localChangelogsFilePath = await DownloadFile(_onlineChangelogsFilePath);
+                if (File.Exists(localChangelogsFilePath))
+                {
+                    _downloadedChangelogsFilePath = localChangelogsFilePath;
+                    LoggingService.Instance.Info($"Downloaded Changelogs.md to {_downloadedChangelogsFilePath}");
+                }
+            }
+
+            if (!string.IsNullOrEmpty(_onlineReadmeFilePath))
+            {
+                var localReadmeFilePath = await DownloadFile(_onlineReadmeFilePath);
+                if (File.Exists(localReadmeFilePath))
+                {
+                    _downloadedReadmeFilePath = localReadmeFilePath;
+                    LoggingService.Instance.Info($"Downloaded Readme.md to {_downloadedReadmeFilePath}");
+                }
+            }
+        }
+
+        private async Task<string> DownloadFile(string onlineFilePath)
+        {
+            var tempFolder = ApplicationService.Instance.GetOrCreateTempFolder();
+            var localFilePath = Path.Combine(tempFolder, Path.GetRandomFileName());
+
             var httpClient = new HttpClient();
 
             try
             {
-                using (var downloadStream = await httpClient.GetStreamAsync(_onlineNewVersionFilePath))
+                using (var downloadStream = await httpClient.GetStreamAsync(onlineFilePath))
                 {
-                    using (var fileStream = new FileStream(localFilePath, System.IO.FileMode.Create,
-                               System.IO.FileAccess.Write, System.IO.FileShare.None))
+                    using (var fileStream = new FileStream(localFilePath, System.IO.FileMode.Create, FileAccess.Write, FileShare.None))
                     {
                         await downloadStream.CopyToAsync(fileStream);
-
-                        _downloadedNewVersionFilePath = localFilePath;
-                        LoggingService.Instance.Info($"Downloaded new version to {localFilePath}");
                     }
                 }
-
-                Status = VersionUpdateStatus.Done;
             }
             catch (Exception e)
             {
-                LoggingService.Instance.Error("Failed to download new version", e);
-                Status = VersionUpdateStatus.HasNewVersion;
+                LoggingService.Instance.Error($"Failed to download file {onlineFilePath}", e);
             }
+
+            return localFilePath;
         }
 
         private bool ValidateVersions(IEnumerable<string> versionList)
@@ -170,7 +246,7 @@ namespace PowerTools.Models
         public void CheckForUpdate()
         {
             TaskExecution.Instance.RunOnceAsync(
-                "Check Ver sions",
+                "Check Versions",
                 OnCheckForUpdate,
                 null,
                 null,
@@ -225,10 +301,22 @@ namespace PowerTools.Models
                     var asset = releases.FirstOrDefault(p => p.TagName == NewVersion);
                     if (asset != null)
                     {
-                        var validAsset = asset.Assets.FirstOrDefault(p => p.Name == $"PowerTools.v{NewVersion}.zip");
-                        if (validAsset != null)
+                        var validAssetNewVersion = asset.Assets.FirstOrDefault(p => p.Name == $"PowerTools.v{NewVersion}.zip");
+                        if (validAssetNewVersion != null)
                         {
-                            _onlineNewVersionFilePath = validAsset.BrowserDownloadUrl;
+                            _onlineNewVersionFilePath = validAssetNewVersion.BrowserDownloadUrl;
+                        }
+
+                        var validAssetReadme = asset.Assets.FirstOrDefault(p => p.Name == $"Readme.md");
+                        if (validAssetReadme != null)
+                        {
+                            _onlineReadmeFilePath = validAssetReadme.BrowserDownloadUrl;
+                        }
+
+                        var validAssetChangelogs = asset.Assets.FirstOrDefault(p => p.Name == $"Changelogs.md");
+                        if (validAssetChangelogs != null)
+                        {
+                            _onlineChangelogsFilePath = validAssetChangelogs.BrowserDownloadUrl;
                         }
                     }
                 }
@@ -266,6 +354,19 @@ namespace PowerTools.Models
                 process.Close();
                 process.Dispose();
 
+                // Copy Changelogs and Readme files to the extracted folder
+                if (File.Exists(_downloadedChangelogsFilePath))
+                {
+                    var destChangelogsFile = Path.Combine(tempExtractedNewVersion, "Changelogs.md");
+                    File.Copy(_downloadedChangelogsFilePath, destChangelogsFile, true);
+                }
+
+                if (File.Exists(_downloadedReadmeFilePath))
+                {
+                    var destReadmeFile = Path.Combine(tempExtractedNewVersion, "Readme.md");
+                    File.Copy(_downloadedReadmeFilePath, destReadmeFile, true);
+                }
+
                 ApplicationService.Instance.Busy("Starting VersionInstaller...");
 
                 // Copy VersionInstaller to another temporary folder
@@ -281,7 +382,7 @@ namespace PowerTools.Models
                     LoggingService.Instance.Error("Failed to copy VersionInstaller directory", e);
                     ApplicationService.Instance.MessageBox("Failed to install new version: Not found VersionInstaller");
                     return;
-                }   
+                }
 
                 var versionInstallerExecutionPath = Path.Combine(versionInstallerFolder, "PowerTools.Apps.VersionInstaller.exe");
 

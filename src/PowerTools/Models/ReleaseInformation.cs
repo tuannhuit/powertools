@@ -1,14 +1,22 @@
-﻿using System.Text.Json.Serialization;
+﻿using Prism.Mvvm;
 
 namespace PowerTools.Models
 {
-    public class ReleaseInformation
+    public class ReleaseInformation: BindableBase
     {
-        [JsonPropertyName("tag_name")]
-        public string TagName { get; set; }
+        private string _changeLogs;
+        private string _details;
 
+        public string ChangeLogs
+        {
+            get => _changeLogs;
+            set => SetProperty(ref _changeLogs, value);
+        }
 
-        [JsonPropertyName("assets")]
-        public ReleaseAsset[] Assets { get; set; }
+        public string Details
+        {
+            get => _details;
+            set => SetProperty(ref _details, value);
+        }
     }
 }

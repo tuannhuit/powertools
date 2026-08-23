@@ -1417,86 +1417,6 @@
 
     <!--End DataGrid.Normal-->
 
-    <!--TabControl.Normal-->
-    <Style x:Key="TabControl.Normal" TargetType="{x:Type TabControl}">
-        <Setter Property="Padding" Value="0"/>
-        <Setter Property="HorizontalContentAlignment" Value="Center"/>
-        <Setter Property="VerticalContentAlignment" Value="Center"/>
-        <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="BorderBrush" Value="LightGray"/>
-        <Setter Property="BorderThickness" Value="1"/>
-        <Setter Property="Margin" Value="5"/>
-        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
-        <Setter Property="FontWeight" Value="Normal"/>
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type TabControl}">
-                    <Border Background="{TemplateBinding Background}" Margin="{TemplateBinding Padding}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="3" >
-                        <Grid x:Name="templateRoot" ClipToBounds="true" SnapsToDevicePixels="true" KeyboardNavigation.TabNavigation="Local">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition x:Name="ColumnDefinition0"/>
-                                <ColumnDefinition x:Name="ColumnDefinition1" Width="0"/>
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition x:Name="RowDefinition0" Height="Auto"/>
-                                <RowDefinition x:Name="RowDefinition1" Height="*"/>
-                            </Grid.RowDefinitions>
-                            <ScrollViewer x:Name="headerPanel" Grid.Column="0" Grid.Row="0" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
-                                <Border x:Name="border" Background="{TemplateBinding Background}" CornerRadius="3 3 0 0">
-                                    <TabPanel IsItemsHost="true" Margin="0 " KeyboardNavigation.TabIndex="1" Panel.ZIndex="1"/>
-                                </Border>
-                            </ScrollViewer>
-                            <!--<TextBlock x:Name="tblIcon" Style="{StaticResource TextBlock.Header}" Background="Yellow" Grid.Column="0" Grid.Row="1" FontFamily="Segoe UI Symbol" Text="&#xE154;" FontSize="40" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="WhiteSmoke" Visibility="{TemplateBinding SelectedContent, Converter={StaticResource NullToVisibilityConverter}}"/>-->
-                            <Border x:Name="contentPanel" Grid.Column="0" Grid.Row="1" Margin="{TemplateBinding Padding}"  KeyboardNavigation.DirectionalNavigation="Contained" KeyboardNavigation.TabIndex="2" KeyboardNavigation.TabNavigation="Local">
-                                <ContentPresenter x:Name="PART_SelectedContentHost" ContentSource="SelectedContent" Margin="2" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
-                            </Border>
-                        </Grid>
-                    </Border>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="TabStripPlacement" Value="Bottom">
-                            <Setter Property="Grid.Row" TargetName="headerPanel" Value="1"/>
-                            <Setter Property="Grid.Row" TargetName="contentPanel" Value="0"/>
-                            <!--<Setter Property="Grid.Row" TargetName="tblIcon" Value="0"/>-->
-                            <Setter Property="Height" TargetName="RowDefinition0" Value="*"/>
-                            <Setter Property="Height" TargetName="RowDefinition1" Value="Auto"/>
-                            <Setter Property="CornerRadius" TargetName="border" Value="0 0 3 3"/>
-                        </Trigger>
-                        <Trigger Property="TabStripPlacement" Value="Left">
-                            <Setter Property="Grid.Row" TargetName="headerPanel" Value="0"/>
-                            <Setter Property="Grid.Row" TargetName="contentPanel" Value="0"/>
-                            <!--<Setter Property="Grid.Row" TargetName="tblIcon" Value="0"/>-->
-                            <Setter Property="Grid.Column" TargetName="headerPanel" Value="0"/>
-                            <Setter Property="Grid.Column" TargetName="contentPanel" Value="1"/>
-                            <!--<Setter Property="Grid.Column" TargetName="tblIcon" Value="1"/>-->
-                            <Setter Property="Width" TargetName="ColumnDefinition0" Value="Auto"/>
-                            <Setter Property="Width" TargetName="ColumnDefinition1" Value="*"/>
-                            <Setter Property="Height" TargetName="RowDefinition0" Value="*"/>
-                            <Setter Property="Height" TargetName="RowDefinition1" Value="0"/>
-                            <Setter Property="CornerRadius" TargetName="border" Value="3 0 0 3"/>
-                        </Trigger>
-                        <Trigger Property="TabStripPlacement" Value="Right">
-                            <Setter Property="Grid.Row" TargetName="headerPanel" Value="0"/>
-                            <Setter Property="Grid.Row" TargetName="contentPanel" Value="0"/>
-                            <!--<Setter Property="Grid.Row" TargetName="tblIcon" Value="0"/>-->
-                            <Setter Property="Grid.Column" TargetName="headerPanel" Value="1"/>
-                            <Setter Property="Grid.Column" TargetName="contentPanel" Value="0"/>
-                            <!--<Setter Property="Grid.Column" TargetName="tblIcon" Value="0"/>-->
-                            <Setter Property="Width" TargetName="ColumnDefinition0" Value="*"/>
-                            <Setter Property="Width" TargetName="ColumnDefinition1" Value="Auto"/>
-                            <Setter Property="Height" TargetName="RowDefinition0" Value="*"/>
-                            <Setter Property="Height" TargetName="RowDefinition1" Value="0"/>
-                            <Setter Property="CornerRadius" TargetName="border" Value="0 3 3 0"/>
-                        </Trigger>
-                        <Trigger Property="IsEnabled" Value="false">
-                            <Setter Property="TextElement.Foreground" TargetName="templateRoot" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
-                        </Trigger>
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-    <!--End TabControl.Normal-->
-
     <!--TabItem.Normal-->
     <Style x:Key="TabItem.Normal" TargetType="{x:Type TabItem}">
         <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
@@ -1589,7 +1509,7 @@
     </Style>
     <!--End TabItem.Normal-->
 
-    <!--TabItem.Normal-->
+    <!--TabItem.Simple-->
     <Style x:Key="TabItem.Simple" TargetType="{x:Type TabItem}">
         <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
         <Setter Property="Foreground" Value="Black"/>
@@ -1684,7 +1604,89 @@
             </DataTrigger>
         </Style.Triggers>
     </Style>
-    <!--End TabItem.Normal-->
+    <!--End TabItem.Simple-->
+
+
+    <!--TabControl.Normal-->
+    <Style x:Key="TabControl.Normal" TargetType="{x:Type TabControl}">
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderBrush" Value="LightGray"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Margin" Value="5"/>
+        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+        <Setter Property="FontWeight" Value="Normal"/>
+        <Setter Property="ItemContainerStyle" Value="{StaticResource TabItem.Normal}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type TabControl}">
+                    <Border Background="{TemplateBinding Background}" Margin="{TemplateBinding Padding}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="3" >
+                        <Grid x:Name="templateRoot" ClipToBounds="true" SnapsToDevicePixels="true" KeyboardNavigation.TabNavigation="Local">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition x:Name="ColumnDefinition0"/>
+                                <ColumnDefinition x:Name="ColumnDefinition1" Width="0"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition x:Name="RowDefinition0" Height="Auto"/>
+                                <RowDefinition x:Name="RowDefinition1" Height="*"/>
+                            </Grid.RowDefinitions>
+                            <ScrollViewer x:Name="headerPanel" Grid.Column="0" Grid.Row="0" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
+                                <Border x:Name="border" Background="{TemplateBinding Background}" CornerRadius="3 3 0 0">
+                                    <TabPanel IsItemsHost="true" Margin="0 " KeyboardNavigation.TabIndex="1" Panel.ZIndex="1"/>
+                                </Border>
+                            </ScrollViewer>
+                            <!--<TextBlock x:Name="tblIcon" Style="{StaticResource TextBlock.Header}" Background="Yellow" Grid.Column="0" Grid.Row="1" FontFamily="Segoe UI Symbol" Text="&#xE154;" FontSize="40" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="WhiteSmoke" Visibility="{TemplateBinding SelectedContent, Converter={StaticResource NullToVisibilityConverter}}"/>-->
+                            <Border x:Name="contentPanel" Grid.Column="0" Grid.Row="1" Margin="{TemplateBinding Padding}"  KeyboardNavigation.DirectionalNavigation="Contained" KeyboardNavigation.TabIndex="2" KeyboardNavigation.TabNavigation="Local">
+                                <ContentPresenter x:Name="PART_SelectedContentHost" ContentSource="SelectedContent" Margin="2" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                            </Border>
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="TabStripPlacement" Value="Bottom">
+                            <Setter Property="Grid.Row" TargetName="headerPanel" Value="1"/>
+                            <Setter Property="Grid.Row" TargetName="contentPanel" Value="0"/>
+                            <!--<Setter Property="Grid.Row" TargetName="tblIcon" Value="0"/>-->
+                            <Setter Property="Height" TargetName="RowDefinition0" Value="*"/>
+                            <Setter Property="Height" TargetName="RowDefinition1" Value="Auto"/>
+                            <Setter Property="CornerRadius" TargetName="border" Value="0 0 3 3"/>
+                        </Trigger>
+                        <Trigger Property="TabStripPlacement" Value="Left">
+                            <Setter Property="Grid.Row" TargetName="headerPanel" Value="0"/>
+                            <Setter Property="Grid.Row" TargetName="contentPanel" Value="0"/>
+                            <!--<Setter Property="Grid.Row" TargetName="tblIcon" Value="0"/>-->
+                            <Setter Property="Grid.Column" TargetName="headerPanel" Value="0"/>
+                            <Setter Property="Grid.Column" TargetName="contentPanel" Value="1"/>
+                            <!--<Setter Property="Grid.Column" TargetName="tblIcon" Value="1"/>-->
+                            <Setter Property="Width" TargetName="ColumnDefinition0" Value="Auto"/>
+                            <Setter Property="Width" TargetName="ColumnDefinition1" Value="*"/>
+                            <Setter Property="Height" TargetName="RowDefinition0" Value="*"/>
+                            <Setter Property="Height" TargetName="RowDefinition1" Value="0"/>
+                            <Setter Property="CornerRadius" TargetName="border" Value="3 0 0 3"/>
+                        </Trigger>
+                        <Trigger Property="TabStripPlacement" Value="Right">
+                            <Setter Property="Grid.Row" TargetName="headerPanel" Value="0"/>
+                            <Setter Property="Grid.Row" TargetName="contentPanel" Value="0"/>
+                            <!--<Setter Property="Grid.Row" TargetName="tblIcon" Value="0"/>-->
+                            <Setter Property="Grid.Column" TargetName="headerPanel" Value="1"/>
+                            <Setter Property="Grid.Column" TargetName="contentPanel" Value="0"/>
+                            <!--<Setter Property="Grid.Column" TargetName="tblIcon" Value="0"/>-->
+                            <Setter Property="Width" TargetName="ColumnDefinition0" Value="*"/>
+                            <Setter Property="Width" TargetName="ColumnDefinition1" Value="Auto"/>
+                            <Setter Property="Height" TargetName="RowDefinition0" Value="*"/>
+                            <Setter Property="Height" TargetName="RowDefinition1" Value="0"/>
+                            <Setter Property="CornerRadius" TargetName="border" Value="0 3 3 0"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="false">
+                            <Setter Property="TextElement.Foreground" TargetName="templateRoot" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <!--End TabControl.Normal-->
 
     <!--GridSplitter.Normal-->
     <SolidColorBrush x:Key="GridSplitter.Background.MouseOver" Color="#006CBE"/>
