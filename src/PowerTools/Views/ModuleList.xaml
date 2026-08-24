@@ -17,114 +17,118 @@
             <ColumnDefinition Width="4" />
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <Grid Grid.Column="0">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="{Binding ElementName=eInstalled, Path=IsExpanded, Converter={StaticResource BooleanToGridSizeConverter}}"/>
-                <RowDefinition Height="{Binding ElementName=eRecommended, Path=IsExpanded, Converter={StaticResource BooleanToGridSizeConverter}}"/>
-            </Grid.RowDefinitions>
-            <TextBlock Style="{StaticResource TextBlock.ContentSmall}" Grid.Row="0" Text="EXTENSIONS" />
-            <Button Style="{StaticResource Button.Icon}" Grid.Row="0" Content="{x:Static models:ButtonIcons.Refresh}" Command="{Binding CmdRefreshModules}" Tag="Refresh" Margin="5" HorizontalAlignment="Right"/>
-            <commonControls:TextPlaceHolder Grid.Row="1" Text="{Binding SearchingText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PlaceHolder="Search Extensions in local or remote lists" Margin="5">
-                <commonControls:TextPlaceHolder.InputBindings>
-                    <KeyBinding Key="Enter" Command="{Binding CmdRefreshModules}"/>
-                </commonControls:TextPlaceHolder.InputBindings>
-            </commonControls:TextPlaceHolder>
-            <Expander x:Name="eInstalled" Style="{StaticResource Expander.Normal}" Grid.Row="2" Header="INSTALLED" Tag="{Binding AdditionalInstalledInfo, UpdateSourceTrigger=PropertyChanged}" IsExpanded="True">
-                <ListView Style="{StaticResource ListView.Normal}" ItemsSource="{Binding InstalledModuleList}" SelectedItem="{Binding Path=SelectedModule, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemContainerStyle="{StaticResource ListViewItem.Normal}" HorizontalContentAlignment="Stretch" Margin="5" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto">
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <Grid Margin="0 0 0 5">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                </Grid.RowDefinitions>
-                                <Border Grid.Column="0" Grid.Row="0" Grid.RowSpan="4" Margin="5" MaxHeight="30" MaxWidth="30" Height="30" Width="30">
-                                    <TextBlock FontFamily="Segoe UI Symbol" FontSize="28" Text="{Binding Icon}" Foreground="{Binding IconColor, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource StringToBrushConverter}}" VerticalAlignment="Center" HorizontalAlignment="Center"  Margin="0"/>
-                                </Border>
-                                <TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding DisplayName}" Style="{StaticResource TextBlock.Content}" FontWeight="SemiBold"/>
-                                <TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding Description}" Style="{StaticResource TextBlock.ContentSmall}"/>
-                                <TextBlock Grid.Column="1" Grid.Row="2" Text="{Binding PublisherDisplayName}" Style="{StaticResource TextBlock.ContentSmall}" FontWeight="SemiBold"/>
-                            </Grid>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
-            </Expander>
-            <Expander x:Name="eRecommended" Style="{StaticResource Expander.Normal}" Grid.Row="3" Header="RECOMMENDED" Tag="{Binding AdditionalRecommendedInfo, UpdateSourceTrigger=PropertyChanged}" BorderThickness="0" IsExpanded="True">
-                <ListView Style="{StaticResource ListView.Normal}" ItemsSource="{Binding ModuleList}" SelectedItem="{Binding Path=SelectedModule, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemContainerStyle="{StaticResource ListViewItem.Normal}" HorizontalContentAlignment="Stretch" Margin="5" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto">
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <Grid Margin="0 0 0 5">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                </Grid.RowDefinitions>
-                                <Border Grid.Column="0" Grid.Row="0" Grid.RowSpan="4" Margin="5" MaxHeight="30" MaxWidth="30" Height="30" Width="30">
-                                    <TextBlock FontFamily="Segoe UI Symbol" FontSize="28" Text="{Binding Icon}" Foreground="{Binding IconColor, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource StringToBrushConverter}}" VerticalAlignment="Center" HorizontalAlignment="Center"  Margin="0"/>
-                                </Border>
-                                <TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding DisplayName}" Style="{StaticResource TextBlock.Content}" FontWeight="SemiBold"/>
-                                <TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding Description}" Style="{StaticResource TextBlock.ContentSmall}"/>
-                                <TextBlock Grid.Column="1" Grid.Row="2" Text="{Binding PublisherDisplayName}" Style="{StaticResource TextBlock.ContentSmall}" FontWeight="SemiBold"/>
-                            </Grid>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
-            </Expander>
-        </Grid>
-        <GridSplitter Style="{StaticResource GridSplitter.Normal}" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-        <Grid Grid.Column="2" Visibility="{Binding SelectedModule, Converter={StaticResource ValueToVisibilityConverter}}">
-            <Grid Grid.Row="0" Margin="0 20 0 0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
+        <Border Style="{StaticResource Border.Normal}" Grid.Column="0">
+            <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="{Binding ElementName=eInstalled, Path=IsExpanded, Converter={StaticResource BooleanToGridSizeConverter}}"/>
+                    <RowDefinition Height="{Binding ElementName=eRecommended, Path=IsExpanded, Converter={StaticResource BooleanToGridSizeConverter}}"/>
                 </Grid.RowDefinitions>
-                <Border Grid.Column="0" Grid.Row="0" Grid.RowSpan="4" Margin="5" MaxHeight="80" MaxWidth="80" Height="80" Width="80">
-                    <TextBlock FontFamily="Segoe UI Symbol" FontSize="60" Text="{Binding SelectedModule.Icon}" Foreground="{Binding SelectedModule.IconColor, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource StringToBrushConverter}}" VerticalAlignment="Center" HorizontalAlignment="Center"  Margin="0"/>
-                </Border>
-                <TextBlock Style="{StaticResource TextBlock.Header}" Grid.Column="1" Grid.Row="0" Text="{Binding SelectedModule.DisplayName}" FontWeight="SemiBold"/>
-                <StackPanel Grid.Column="1" Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Left">
-                    <TextBlock Style="{StaticResource TextBlock.Content}" Text="{Binding SelectedModule.PublisherDisplayName}"/>
-                    <TextBlock Style="{StaticResource TextBlock.Content}" Margin="0 5 0 0">
-            <Hyperlink Command="{Binding ElementName=userControl, Path=DataContext.CmdNavigateRepoLink}" CommandParameter="{Binding SelectedModule.RepoLink}">Repository</Hyperlink>
-                    </TextBlock>
-                </StackPanel>
-                <TextBlock Style="{StaticResource TextBlock.Content}" Grid.Column="1" Grid.Row="2" Text="{Binding SelectedModule.Description}"/>
-                <StackPanel Grid.Column="1" Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Left" Margin="5">
-                    <ComboBox Style="{StaticResource ComboBox.Flat}" ItemsSource="{Binding Path=SelectedModule.AllVersions}" SelectedItem="{Binding Path=SelectedModule.Version, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Width="150" Margin="0"/>
-                    <Button Style="{StaticResource Button.IconActive}" Content="{x:Static models:ButtonIcons.Download}" Tag="Install" Command="{Binding Path=CmdInstallModule, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding SelectedModule.IsDownloading, Converter={StaticResource BoolToReverseConverter}}" Visibility="{Binding Path=SelectedModule.IsNotInstalled, Converter={StaticResource  BoolToVisibilityConverter}}" VerticalAlignment="Center" Width="85" Margin="5 0 0 0"/>
-                    <Button Style="{StaticResource Button.IconActive}" Content="{x:Static models:ButtonIcons.Delete}" Tag="Uninstall" Command="{Binding Path=CmdUninstallModule, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding Path=SelectedModule.IsInstalled, Converter={StaticResource  BoolToVisibilityConverter}}" VerticalAlignment="Center" Width="85" Margin="5 0 0 0" Padding="0"/>
-                    <Button Style="{StaticResource Button.IconActive}" Content="{x:Static models:ButtonIcons.None}" Tag="Disable" Command="{Binding Path=CmdDisableModule, UpdateSourceTrigger=PropertyChanged}" CommandParameter="{Binding SelectedModule.Name, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding Path=SelectedModule.IsActive}" Visibility="{Binding SelectedModule.IsInstalled, Converter={StaticResource BoolToVisibilityConverter}}" VerticalAlignment="Center" Margin="5 0 0 0"/>
-                    <Button Style="{StaticResource Button.IconActive}" Content="{x:Static models:ButtonIcons.Check}" Tag="Enable" Command="{Binding Path=CmdEnableModule, UpdateSourceTrigger=PropertyChanged}" CommandParameter="{Binding SelectedModule.Name, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding Path=SelectedModule.IsActive, Converter={StaticResource BoolToReverseConverter}}" Visibility="{Binding SelectedModule.IsInstalled, Converter={StaticResource BoolToVisibilityConverter}}" VerticalAlignment="Center" Margin="5 0 0 0"/>
-                </StackPanel>
-                <Border Grid.Column="1" Grid.Row="4" Background="{StaticResource Background.WhiteSmoke}" BorderBrush="LightGray" BorderThickness="1" CornerRadius="3" Margin="0 20 20 80">
-                    <TabControl Style="{StaticResource TabControl.Normal}" behaviours:TabControlBehavior.CanCloseTabItem="False" BorderThickness="0" Margin="2">
-                        <TabItem Style="{StaticResource TabItem.Normal}" Header="DETAILS">
-
-                        </TabItem>
-                        <TabItem Style="{StaticResource TabItem.Normal}" Header="CHANGELOGS">
-
-                        </TabItem>
-                    </TabControl>
-                </Border>
+                <TextBlock Style="{StaticResource TextBlock.ContentSmall}" Grid.Row="0" Text="EXTENSIONS" />
+                <Button Style="{StaticResource Button.Icon}" Grid.Row="0" Content="{x:Static models:ButtonIcons.Refresh}" Command="{Binding CmdRefreshModules}" Tag="Refresh" Margin="5" HorizontalAlignment="Right"/>
+                <commonControls:TextPlaceHolder Grid.Row="1" Text="{Binding SearchingText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PlaceHolder="Search Extensions in local or remote lists" Margin="5">
+                    <commonControls:TextPlaceHolder.InputBindings>
+                        <KeyBinding Key="Enter" Command="{Binding CmdRefreshModules}"/>
+                    </commonControls:TextPlaceHolder.InputBindings>
+                </commonControls:TextPlaceHolder>
+                <Expander x:Name="eInstalled" Style="{StaticResource Expander.Normal}" Grid.Row="2" Header="INSTALLED" Tag="{Binding AdditionalInstalledInfo, UpdateSourceTrigger=PropertyChanged}" IsExpanded="True">
+                    <ListView Style="{StaticResource ListView.Normal}" ItemsSource="{Binding InstalledModuleList}" SelectedItem="{Binding Path=SelectedModule, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemContainerStyle="{StaticResource ListViewItem.Normal}" HorizontalContentAlignment="Stretch" Margin="5" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="0 0 0 5">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+                                    <Border Grid.Column="0" Grid.Row="0" Grid.RowSpan="4" Margin="5" MaxHeight="30" MaxWidth="30" Height="30" Width="30">
+                                        <TextBlock FontFamily="Segoe UI Symbol" FontSize="28" Text="{Binding Icon}" Foreground="{Binding IconColor, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource StringToBrushConverter}}" VerticalAlignment="Center" HorizontalAlignment="Center"  Margin="0"/>
+                                    </Border>
+                                    <TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding DisplayName}" Style="{StaticResource TextBlock.Content}" FontWeight="SemiBold"/>
+                                    <TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding Description}" Style="{StaticResource TextBlock.ContentSmall}"/>
+                                    <TextBlock Grid.Column="1" Grid.Row="2" Text="{Binding PublisherDisplayName}" Style="{StaticResource TextBlock.ContentSmall}" FontWeight="SemiBold"/>
+                                </Grid>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </Expander>
+                <Expander x:Name="eRecommended" Style="{StaticResource Expander.Normal}" Grid.Row="3" Header="RECOMMENDED" Tag="{Binding AdditionalRecommendedInfo, UpdateSourceTrigger=PropertyChanged}" BorderThickness="0" IsExpanded="True">
+                    <ListView Style="{StaticResource ListView.Normal}" ItemsSource="{Binding ModuleList}" SelectedItem="{Binding Path=SelectedModule, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemContainerStyle="{StaticResource ListViewItem.Normal}" HorizontalContentAlignment="Stretch" Margin="5" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="0 0 0 5">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+                                    <Border Grid.Column="0" Grid.Row="0" Grid.RowSpan="4" Margin="5" MaxHeight="30" MaxWidth="30" Height="30" Width="30">
+                                        <TextBlock FontFamily="Segoe UI Symbol" FontSize="28" Text="{Binding Icon}" Foreground="{Binding IconColor, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource StringToBrushConverter}}" VerticalAlignment="Center" HorizontalAlignment="Center"  Margin="0"/>
+                                    </Border>
+                                    <TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding DisplayName}" Style="{StaticResource TextBlock.Content}" FontWeight="SemiBold"/>
+                                    <TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding Description}" Style="{StaticResource TextBlock.ContentSmall}"/>
+                                    <TextBlock Grid.Column="1" Grid.Row="2" Text="{Binding PublisherDisplayName}" Style="{StaticResource TextBlock.ContentSmall}" FontWeight="SemiBold"/>
+                                </Grid>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </Expander>
             </Grid>
-        </Grid>
+        </Border>
+        <GridSplitter Style="{StaticResource GridSplitter.Normal}" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+        <Border Style="{StaticResource Border.Normal}" Grid.Column="2">
+            <Grid Visibility="{Binding SelectedModule, Converter={StaticResource ValueToVisibilityConverter}}">
+                <Grid Grid.Row="0" Margin="0 20 0 0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Border Grid.Column="0" Grid.Row="0" Grid.RowSpan="4" Margin="5" MaxHeight="80" MaxWidth="80" Height="80" Width="80">
+                        <TextBlock FontFamily="Segoe UI Symbol" FontSize="60" Text="{Binding SelectedModule.Icon}" Foreground="{Binding SelectedModule.IconColor, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource StringToBrushConverter}}" VerticalAlignment="Center" HorizontalAlignment="Center"  Margin="0"/>
+                    </Border>
+                    <TextBlock Style="{StaticResource TextBlock.Header}" Grid.Column="1" Grid.Row="0" Text="{Binding SelectedModule.DisplayName}" FontWeight="SemiBold"/>
+                    <StackPanel Grid.Column="1" Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Left">
+                        <TextBlock Style="{StaticResource TextBlock.Content}" Text="{Binding SelectedModule.PublisherDisplayName}"/>
+                        <TextBlock Style="{StaticResource TextBlock.Content}" Margin="0 5 0 0">
+            <Hyperlink Command="{Binding ElementName=userControl, Path=DataContext.CmdNavigateRepoLink}" CommandParameter="{Binding SelectedModule.RepoLink}">Repository</Hyperlink>
+                        </TextBlock>
+                    </StackPanel>
+                    <TextBlock Style="{StaticResource TextBlock.Content}" Grid.Column="1" Grid.Row="2" Text="{Binding SelectedModule.Description}"/>
+                    <StackPanel Grid.Column="1" Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Left" Margin="5">
+                        <ComboBox Style="{StaticResource ComboBox.Flat}" ItemsSource="{Binding Path=SelectedModule.AllVersions}" SelectedItem="{Binding Path=SelectedModule.Version, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Width="150" Margin="0"/>
+                        <Button Style="{StaticResource Button.IconActive}" Content="{x:Static models:ButtonIcons.Download}" Tag="Install" Command="{Binding Path=CmdInstallModule, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding SelectedModule.IsDownloading, Converter={StaticResource BoolToReverseConverter}}" Visibility="{Binding Path=SelectedModule.IsNotInstalled, Converter={StaticResource  BoolToVisibilityConverter}}" VerticalAlignment="Center" Width="85" Margin="5 0 0 0"/>
+                        <Button Style="{StaticResource Button.IconActive}" Content="{x:Static models:ButtonIcons.Delete}" Tag="Uninstall" Command="{Binding Path=CmdUninstallModule, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding Path=SelectedModule.IsInstalled, Converter={StaticResource  BoolToVisibilityConverter}}" VerticalAlignment="Center" Width="85" Margin="5 0 0 0" Padding="0"/>
+                        <Button Style="{StaticResource Button.IconActive}" Content="{x:Static models:ButtonIcons.None}" Tag="Disable" Command="{Binding Path=CmdDisableModule, UpdateSourceTrigger=PropertyChanged}" CommandParameter="{Binding SelectedModule.Name, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding Path=SelectedModule.IsActive}" Visibility="{Binding SelectedModule.IsInstalled, Converter={StaticResource BoolToVisibilityConverter}}" VerticalAlignment="Center" Margin="5 0 0 0"/>
+                        <Button Style="{StaticResource Button.IconActive}" Content="{x:Static models:ButtonIcons.Check}" Tag="Enable" Command="{Binding Path=CmdEnableModule, UpdateSourceTrigger=PropertyChanged}" CommandParameter="{Binding SelectedModule.Name, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding Path=SelectedModule.IsActive, Converter={StaticResource BoolToReverseConverter}}" Visibility="{Binding SelectedModule.IsInstalled, Converter={StaticResource BoolToVisibilityConverter}}" VerticalAlignment="Center" Margin="5 0 0 0"/>
+                    </StackPanel>
+                    <Border Grid.Column="1" Grid.Row="4" Background="{StaticResource Background.WhiteSmoke}" BorderBrush="LightGray" BorderThickness="1" CornerRadius="3" Margin="0 20 20 80">
+                        <TabControl Style="{StaticResource TabControl.Normal}" behaviours:TabControlBehavior.CanCloseTabItem="False" BorderThickness="0" Margin="2">
+                            <TabItem Style="{StaticResource TabItem.Normal}" Header="DETAILS">
+
+                            </TabItem>
+                            <TabItem Style="{StaticResource TabItem.Normal}" Header="CHANGELOGS">
+
+                            </TabItem>
+                        </TabControl>
+                    </Border>
+                </Grid>
+            </Grid>
+        </Border>
     </Grid>
 </UserControl>

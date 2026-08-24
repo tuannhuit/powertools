@@ -24,7 +24,7 @@
             </Grid>
             <Button Style="{StaticResource Button.Icon}" Command="{Binding CmdShowLog}" Content="{x:Static models:ButtonIcons.ShowLogs}" ToolTip="Click to view logs" Margin="10 0 0 0" Height="20" MinHeight="20" />
             <!--<Border Margin="10 0 " CornerRadius="3" Background="{StaticResource Background.LightGray}">-->
-                <StackPanel Margin="0" Orientation="Horizontal">
+                <StackPanel Margin="10 0" Orientation="Horizontal">
                     <Button Tag="{Binding Path=AppVersion.StatusAsString, UpdateSourceTrigger=PropertyChanged}" 
                             ToolTip="{Binding Path=AppVersion.NewVersionUpdateAsString, UpdateSourceTrigger=PropertyChanged}"
                             Command="{Binding Path=AppVersion.CmdUpdateToLatestVersion}"
@@ -60,7 +60,7 @@
                     <Button Style="{StaticResource Button.IconActive}"
                             Tag="{Binding Path=AppVersion.CurrentVersion, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource StringFormatConverter}, ConverterParameter='v{0}'}" 
                             Command="{Binding Path=AppVersion.CmdShowReleaseInformation}"
-                            Margin="0 0 10 0" Height="20" MinHeight="20" MinWidth="50"
+                            Margin="0" Height="20" MinHeight="20" MinWidth="50"
                             BorderThickness="0"
                             behaviours:ButtonBehavior.CornerRadius="0 3 3 0"/>
                 </StackPanel>

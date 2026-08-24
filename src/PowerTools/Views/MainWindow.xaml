@@ -39,7 +39,7 @@
                     <BlurEffect Radius="8" KernelType="Gaussian" RenderingBias="Performance"/>
                 </Border.Effect>
             </Border>-->
-            <Border Margin="0" Background="White" BorderBrush="{StaticResource Background.Gray}" BorderThickness="1" CornerRadius="5">
+            <Border Margin="0" Background="White" BorderBrush="Transparent" BorderThickness="0" CornerRadius="5" ClipToBounds="True">
                 <Grid>
                     <ContentControl prism:RegionManager.RegionName="{x:Static configurations:Constants.ModuleRegionName}"
                                         Focusable="False"
