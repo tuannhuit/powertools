@@ -13,6 +13,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using PowerTools.Helpers;
 
 namespace PowerTools.Models
 {
@@ -23,9 +24,7 @@ namespace PowerTools.Models
         private ReleaseInformation _releaseInformation;
         private List<string> _versionList;
         private string _newVersion;
-        private string _onlineNewVersionFilePath;
-        private string _onlineReadmeFilePath;
-        private string _onlineChangelogsFilePath;
+        private Release _latestRelease;
         private string _downloadedNewVersionFilePath;
         private string _downloadedReadmeFilePath;
         private string _downloadedChangelogsFilePath;
@@ -146,17 +145,20 @@ namespace PowerTools.Models
                 return;
             }
 
-            if (string.IsNullOrEmpty(_onlineNewVersionFilePath))
+            if (_latestRelease == null)
             {
                 return;
             }
 
-            if (!string.IsNullOrEmpty(_onlineNewVersionFilePath))
+            LocalReleaseAssets localReleaseAssets = null;
+
+            try
             {
-                var localNewVersionFilePath = await DownloadFile(_onlineNewVersionFilePath);
-                if (File.Exists(localNewVersionFilePath))
+                localReleaseAssets = GithubProvider.DownloadReleaseAssets(App.OwnerName, App.RepoName, null, _latestRelease).Result;
+
+                if (File.Exists(localReleaseAssets.ReleasePath))
                 {
-                    _downloadedNewVersionFilePath = localNewVersionFilePath;
+                    _downloadedNewVersionFilePath = localReleaseAssets.ReleasePath;
                     Status = VersionUpdateStatus.Done;
                     LoggingService.Instance.Info($"Downloaded new version to {_downloadedNewVersionFilePath}");
                 }
@@ -165,52 +167,23 @@ namespace PowerTools.Models
                     LoggingService.Instance.Info("Failed to download new version");
                     Status = VersionUpdateStatus.HasNewVersion;
                 }
-            }
 
-            if (!string.IsNullOrEmpty(_onlineChangelogsFilePath))
-            {
-                var localChangelogsFilePath = await DownloadFile(_onlineChangelogsFilePath);
-                if (File.Exists(localChangelogsFilePath))
+                if (File.Exists(localReleaseAssets.ChangelogsPath))
                 {
-                    _downloadedChangelogsFilePath = localChangelogsFilePath;
+                    _downloadedChangelogsFilePath = localReleaseAssets.ChangelogsPath;
                     LoggingService.Instance.Info($"Downloaded Changelogs.md to {_downloadedChangelogsFilePath}");
                 }
-            }
 
-            if (!string.IsNullOrEmpty(_onlineReadmeFilePath))
-            {
-                var localReadmeFilePath = await DownloadFile(_onlineReadmeFilePath);
-                if (File.Exists(localReadmeFilePath))
+                if (File.Exists(localReleaseAssets.ReadmePath))
                 {
-                    _downloadedReadmeFilePath = localReadmeFilePath;
+                    _downloadedReadmeFilePath = localReleaseAssets.ReadmePath;
                     LoggingService.Instance.Info($"Downloaded Readme.md to {_downloadedReadmeFilePath}");
-                }
-            }
-        }
-
-        private async Task<string> DownloadFile(string onlineFilePath)
-        {
-            var tempFolder = ApplicationService.Instance.GetOrCreateTempFolder();
-            var localFilePath = Path.Combine(tempFolder, Path.GetRandomFileName());
-
-            var httpClient = new HttpClient();
-
-            try
-            {
-                using (var downloadStream = await httpClient.GetStreamAsync(onlineFilePath))
-                {
-                    using (var fileStream = new FileStream(localFilePath, System.IO.FileMode.Create, FileAccess.Write, FileShare.None))
-                    {
-                        await downloadStream.CopyToAsync(fileStream);
-                    }
                 }
             }
             catch (Exception e)
             {
-                LoggingService.Instance.Error($"Failed to download file {onlineFilePath}", e);
+                LoggingService.Instance.Error($"Failed to download latest release {_latestRelease.Name}", e);
             }
-
-            return localFilePath;
         }
 
         private bool ValidateVersions(IEnumerable<string> versionList)
@@ -260,66 +233,30 @@ namespace PowerTools.Models
         {
             taskReport.SetDescription($"Start checking versions of {App.AppName}");
 
-            var client = new GitHubClient(new ProductHeaderValue(App.AppName));
             try
             {
-                var releases = client.Repository.Release.GetAll(App.OwnerName, App.RepoName).Result;
-                if (releases.Count == 0)
+                var latestRelease = GithubProvider.GetLatestRelease(App.OwnerName, App.RepoName, null).Result;
+                if (latestRelease != null)
                 {
-                    LoggingService.Instance.Info($"Found no version of {App.AppName}");
-                    return;
-                }
+                    var versions = new List<string> { latestRelease.TagName.TrimStart('v') };
+                    ValidateVersions(versions);
 
-                var versions = releases.Select(p => p.TagName.TrimStart('v'));
-
-                ValidateVersions(versions);
-
-                if (Status == VersionUpdateStatus.HasNewVersion)
-                {
-                    FindDownloadNewVersionLink(releases);
-                    taskReport.SetDescription($"Found new version v{NewVersion} for {App.AppName}");
-                }
-                else
-                {
-                    Status = VersionUpdateStatus.NoUpdates;
-                    taskReport.SetDescription($"No updates found for {App.AppName}");
+                    if (Status == VersionUpdateStatus.HasNewVersion)
+                    {
+                        _latestRelease = latestRelease;
+                        taskReport.SetDescription($"Found new version v{NewVersion} for {App.AppName}");
+                    }
+                    else
+                    {
+                        Status = VersionUpdateStatus.NoUpdates;
+                        taskReport.SetDescription($"No updates found for {App.AppName}");
+                    }
                 }
             }
             catch (Exception e)
             {
                 LoggingService.Instance.Error("Failed to check versions", e);
                 Status = VersionUpdateStatus.NoUpdates;
-            }
-        }
-
-        private void FindDownloadNewVersionLink(IReadOnlyList<Release> releases)
-        {
-            lock (_lockObject)
-            {
-                if (Status == VersionUpdateStatus.HasNewVersion)
-                {
-                    var asset = releases.FirstOrDefault(p => p.TagName == NewVersion);
-                    if (asset != null)
-                    {
-                        var validAssetNewVersion = asset.Assets.FirstOrDefault(p => p.Name == $"PowerTools.v{NewVersion}.zip");
-                        if (validAssetNewVersion != null)
-                        {
-                            _onlineNewVersionFilePath = validAssetNewVersion.BrowserDownloadUrl;
-                        }
-
-                        var validAssetReadme = asset.Assets.FirstOrDefault(p => p.Name == $"Readme.md");
-                        if (validAssetReadme != null)
-                        {
-                            _onlineReadmeFilePath = validAssetReadme.BrowserDownloadUrl;
-                        }
-
-                        var validAssetChangelogs = asset.Assets.FirstOrDefault(p => p.Name == $"Changelogs.md");
-                        if (validAssetChangelogs != null)
-                        {
-                            _onlineChangelogsFilePath = validAssetChangelogs.BrowserDownloadUrl;
-                        }
-                    }
-                }
             }
         }
 

@@ -119,10 +119,10 @@
                     </StackPanel>
                     <Border Grid.Column="1" Grid.Row="4" Background="{StaticResource Background.WhiteSmoke}" BorderBrush="LightGray" BorderThickness="1" CornerRadius="3" Margin="0 20 20 80">
                         <TabControl Style="{StaticResource TabControl.Normal}" behaviours:TabControlBehavior.CanCloseTabItem="False" BorderThickness="0" Margin="2">
-                            <TabItem Style="{StaticResource TabItem.Normal}" Header="DETAILS">
+                            <TabItem Style="{StaticResource TabItem.Normal}" Header="Details">
 
                             </TabItem>
-                            <TabItem Style="{StaticResource TabItem.Normal}" Header="CHANGELOGS">
+                            <TabItem Style="{StaticResource TabItem.Normal}" Header="Changelogs">
 
                             </TabItem>
                         </TabControl>

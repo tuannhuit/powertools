@@ -39,7 +39,7 @@
                     <BlurEffect Radius="8" KernelType="Gaussian" RenderingBias="Performance"/>
                 </Border.Effect>
             </Border>-->
-            <Border Margin="0" Background="White" BorderBrush="Transparent" BorderThickness="0" CornerRadius="5" ClipToBounds="True">
+            <Border Style="{StaticResource Border.Normal}" Margin="0" Background="White" BorderThickness="0" ClipToBounds="True">
                 <Grid>
                     <ContentControl prism:RegionManager.RegionName="{x:Static configurations:Constants.ModuleRegionName}"
                                         Focusable="False"
@@ -49,8 +49,8 @@
             </Border>
         </Grid>
         <GridSplitter Style="{StaticResource GridSplitter.Normal}" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Stretch" Background="Transparent" Margin="5 0"/>
-        <Border Grid.Column="1" Grid.Row="2" Margin="5 0 5 0" BorderBrush="{StaticResource Background.Gray}" Background="{StaticResource Background.Default}">
-            <TabControl Style="{StaticResource TabControl.Normal}" ItemContainerStyle="{StaticResource TabItem.Simple}" behaviors:TabControlBehavior.CanCloseTabItem="False" Background="White" BorderBrush="{StaticResource Background.Gray}" Margin="0">
+        <Border Style="{StaticResource Border.Normal}" Grid.Column="1" Grid.Row="2" Margin="5 0 5 0">
+            <TabControl Style="{StaticResource TabControl.Normal}" ItemContainerStyle="{StaticResource TabItem.Simple}" behaviors:TabControlBehavior.CanCloseTabItem="False" Background="White" BorderThickness="0" Margin="0">
                 <TabItem Header="Logs">
                     <userControls:LogsView/>
                 </TabItem>
