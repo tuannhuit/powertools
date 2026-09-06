@@ -33,10 +33,12 @@ namespace PowerTools.Core.SharedServices
                             Name = remoteModule.Name,
                             DisplayName = remoteModule.DisplayName,
                             PublisherDisplayName = remoteModule.PublisherDisplayName,
+                            OwnerName = remoteModule.OwnerName,
+                            RepoName = remoteModule.RepoName,
                             RepoLink = remoteModule.RepoLink,
+                            RepoType = remoteModule.RepoType,
                             Description = remoteModule.Description,
                             ExecutionName = remoteModule.ExecutionName,
-                            AllVersions = remoteModule.AllVersions,
                             Icon = remoteModule.Icon,
                             IconColor = remoteModule.IconColor,
                             IconImageRelativeLocation = remoteModule.IconImageRelativeLocation
@@ -46,9 +48,11 @@ namespace PowerTools.Core.SharedServices
                     {
                         localModule.DisplayName = remoteModule.DisplayName;
                         localModule.PublisherDisplayName = remoteModule.PublisherDisplayName;
+                        localModule.OwnerName = remoteModule.OwnerName;
+                        localModule.RepoName = remoteModule.RepoName;
                         localModule.RepoLink = remoteModule.RepoLink;
+                        localModule.RepoType = remoteModule.RepoType;
                         localModule.Description = remoteModule.Description;
-                        localModule.AllVersions = remoteModule.AllVersions;
                         localModule.ExecutionName = remoteModule.ExecutionName;
                         localModule.Icon = remoteModule.Icon;
                         localModule.IconColor = remoteModule.IconColor;

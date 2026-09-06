@@ -20,10 +20,12 @@
     <SolidColorBrush x:Key="Background.Gray" Color="#ADADAD"/>
     <SolidColorBrush x:Key="Background.Red" Color="#C72E0F"/>
     <SolidColorBrush x:Key="Background.LightGray" Color="#E4E4E4"/>
-    <SolidColorBrush x:Key="Background.WhiteSmoke" Color="WhiteSmoke"/>
+    <SolidColorBrush x:Key="Background.WhiteSmoke" Color="#FFFFFF"/>
     <SolidColorBrush x:Key="Background.White" Color="#FFFFFF"/>
-    <SolidColorBrush x:Key="Background.Default" Color="#F8F8F8"/>
+    <SolidColorBrush x:Key="Background.Default" Color="#FFFFFF"/>
     <SolidColorBrush x:Key="Background.Black" Color="#2C2C2C"/>
+    <SolidColorBrush x:Key="Background.Bar" Color="#E1E7EC"/>
+    <SolidColorBrush x:Key="Background.LightBar" Color="#F0F3F6"/>
 
     <SolidColorBrush x:Key="TextBox.Background.Black" Color="#0C0C0C"/>
     <SolidColorBrush x:Key="TextBox.Foreground.Gray" Color="#FF585858"/>
@@ -401,7 +403,8 @@
     <Style x:Key="ComboBox.Flat" TargetType="{x:Type ComboBox}">
         <Setter Property="Margin" Value="5 5 0 0"/>
         <Setter Property="MinWidth" Value="100"/>
-        <Setter Property="MinHeight" Value="30"/>
+        <Setter Property="MinHeight" Value="25"/>
+        <Setter Property="Height" Value="25"/>
         <Setter Property="VerticalAlignment" Value="Top"/>
         <Setter Property="HorizontalAlignment" Value="Left"/>
         <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
@@ -515,7 +518,6 @@
         <Setter Property="Foreground" Value="{StaticResource TextBox.Foreground.Gray}"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="HorizontalContentAlignment" Value="Left"/>
-        <Setter Property="FontSize" Value="12"/>
     </Style>
 
     <Style x:Key="RadioButton.Normal" TargetType="{x:Type RadioButton}">
@@ -529,7 +531,7 @@
         <Setter Property="Margin" Value="5 5 0 0"/>
         <Setter Property="Padding" Value="5 0 5 0"/>
         <Setter Property="MinWidth" Value="30"/>
-        <Setter Property="MinHeight" Value="30"/>
+        <Setter Property="MinHeight" Value="25"/>
         <Setter Property="VerticalAlignment" Value="Top"/>
         <Setter Property="HorizontalAlignment" Value="Left"/>
         <Setter Property="Foreground" Value="{StaticResource TextBox.Foreground.Gray}"/>
@@ -544,7 +546,7 @@
                     <Border x:Name="border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="true" CornerRadius="{Binding RelativeSource={RelativeSource AncestorType={x:Type Button}}, Path=(behaviors:ButtonBehavior.CornerRadius), UpdateSourceTrigger=PropertyChanged}">
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="{TemplateBinding Padding}">
                             <TextBlock x:Name="textblock" FontFamily="Segoe UI Symbol" Foreground="{TemplateBinding Foreground}" FontSize="{TemplateBinding FontSize}" FontWeight="{TemplateBinding FontWeight}" Text="{TemplateBinding Content}" VerticalAlignment="Center" Margin="0"/>
-                            <TextBlock x:Name="textblockText" FontFamily="Segoe UI" Foreground="{TemplateBinding Foreground}" FontSize="11" FontWeight="{TemplateBinding FontWeight}" Text="{TemplateBinding Tag}" Padding="5 0 5 0" Visibility="{TemplateBinding Tag, Converter={StaticResource ValueToVisibilityConverter}}" VerticalAlignment="Center"/>
+                            <TextBlock x:Name="textblockText" FontFamily="Segoe UI" Foreground="{TemplateBinding Foreground}" FontSize="{TemplateBinding FontSize}" FontWeight="{TemplateBinding FontWeight}" Text="{TemplateBinding Tag}" Padding="5 0 5 0" Visibility="{TemplateBinding Tag, Converter={StaticResource ValueToVisibilityConverter}}" VerticalAlignment="Center"/>
                         </StackPanel>
                     </Border>
                     <ControlTemplate.Triggers>
@@ -572,7 +574,7 @@
     <Style x:Key="Button.IconActive" TargetType="{x:Type Button}">
         <Setter Property="Margin" Value="5 5 0 0"/>
         <Setter Property="MinWidth" Value="30"/>
-        <Setter Property="Height" Value="30"/>
+        <Setter Property="Height" Value="25"/>
         <Setter Property="VerticalAlignment" Value="Top"/>
         <Setter Property="HorizontalAlignment" Value="Left"/>
         <Setter Property="Foreground" Value="{StaticResource TextBox.Foreground.Gray}"/>
@@ -587,7 +589,7 @@
                     <Border x:Name="border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="{Binding RelativeSource={RelativeSource AncestorType={x:Type Button}}, Path=(behaviors:ButtonBehavior.CornerRadius), UpdateSourceTrigger=PropertyChanged}" SnapsToDevicePixels="true">
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="5 0 5 0">
                             <TextBlock x:Name="textblock" FontFamily="Segoe UI Symbol" Foreground="{TemplateBinding Foreground}" FontSize="{TemplateBinding FontSize}" FontWeight="{TemplateBinding FontWeight}" Text="{TemplateBinding Content}" VerticalAlignment="Center" Margin="0"/>
-                            <TextBlock x:Name="textblockText" FontFamily="Segoe UI" Foreground="{TemplateBinding Foreground}" FontSize="11" FontWeight="{TemplateBinding FontWeight}" Text="{TemplateBinding Tag}" Padding="5 0 5 0" Visibility="{TemplateBinding Tag, Converter={StaticResource ValueToVisibilityConverter}}" VerticalAlignment="Center"/>
+                            <TextBlock x:Name="textblockText" FontFamily="Segoe UI" Foreground="{TemplateBinding Foreground}" FontSize="{TemplateBinding FontSize}" FontWeight="{TemplateBinding FontWeight}" Text="{TemplateBinding Tag}" Padding="5 0 5 0" Visibility="{TemplateBinding Tag, Converter={StaticResource ValueToVisibilityConverter}}" VerticalAlignment="Center"/>
                         </StackPanel>
                     </Border>
                     <ControlTemplate.Triggers>
@@ -621,7 +623,7 @@
     <Style x:Key="Button.Normal" TargetType="{x:Type Button}">
         <Setter Property="Margin" Value="5 5 0 0"/>
         <Setter Property="MinWidth" Value="75"/>
-        <Setter Property="MinHeight" Value="30"/>
+        <Setter Property="MinHeight" Value="25"/>
         <Setter Property="VerticalAlignment" Value="Top"/>
         <Setter Property="HorizontalAlignment" Value="Left"/>
         <Setter Property="Foreground" Value="{StaticResource TextBox.Foreground.Gray}"/>
@@ -694,9 +696,9 @@
         </Setter>
     </Style>
 
-    <SolidColorBrush x:Key="Item.MouseOver.Background" Color="WhiteSmoke"/>
-    <SolidColorBrush x:Key="Item.SelectedActive.Background" Color="#E6E6E6"/>
-    <SolidColorBrush x:Key="Item.SelectedInactive.Background" Color="#3DDADADA"/>
+    <SolidColorBrush x:Key="Item.MouseOver.Background" Color="#FFFFFF"/>
+    <SolidColorBrush x:Key="Item.SelectedActive.Background" Color="#FFFFFF"/>
+    <SolidColorBrush x:Key="Item.SelectedInactive.Background" Color="#FFFFFF"/>
     <Style x:Key="ListViewItem.Normal" TargetType="{x:Type ListViewItem}">
         <Setter Property="SnapsToDevicePixels" Value="True"/>
         <Setter Property="Padding" Value="0"/>
@@ -704,7 +706,7 @@
         <Setter Property="VerticalContentAlignment" Value="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="BorderBrush" Value="Transparent"/>
-        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
         <Setter Property="Margin" Value="0 0 0 5"/>
         <Setter Property="Cursor" Value="Hand"/>
@@ -736,6 +738,7 @@
                                 <Condition Property="IsSelected" Value="True"/>
                             </MultiTrigger.Conditions>
                             <Setter Property="Background" TargetName="Bd" Value="{StaticResource Item.SelectedActive.Background}"/>
+                            <Setter Property="BorderBrush" TargetName="Bd" Value="{StaticResource Border.BorderBrush}"/>
                         </MultiTrigger>
                         <Trigger Property="IsEnabled" Value="False">
                             <Setter Property="TextElement.Foreground" TargetName="Bd" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
@@ -747,7 +750,7 @@
     </Style>
 
     <Style x:Key="Border.Normal" TargetType="{x:Type Border}">
-        <Setter Property="Background" Value="{StaticResource Background.Default}"/>
+        <Setter Property="Background" Value="{StaticResource Background.White}"/>
         <Setter Property="CornerRadius" Value="3"/>
         <Setter Property="BorderBrush" Value="{StaticResource Border.BorderBrush}"/>
         <Setter Property="BorderThickness" Value="1"/>
@@ -1452,7 +1455,7 @@
                                 <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource Mode=Self}}" Value="true"/>
                             </MultiDataTrigger.Conditions>
                             <Setter Property="Panel.ZIndex" Value="1"/>
-                            <Setter Property="TextElement.FontWeight" TargetName="contentPresenter" Value="SemiBold"/>
+                            <!--<Setter Property="TextElement.FontWeight" TargetName="contentPresenter" Value="SemiBold"/>-->
                             <Setter Property="CornerRadius" TargetName="mainBorder" Value="3"/>
                         </MultiDataTrigger>
                         <MultiDataTrigger>

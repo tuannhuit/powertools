@@ -2,6 +2,7 @@
 using PowerTools.Core.Configurations;
 using PowerTools.Core.Models;
 using PowerTools.Core.SharedServices;
+using PowerTools.Helpers;
 using PowerTools.Utils;
 using Prism.Commands;
 using Prism.Mvvm;
@@ -10,10 +11,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Net.Http;
-using System.Threading.Tasks;
 using System.Windows.Input;
-using PowerTools.Helpers;
 
 namespace PowerTools.Models
 {
@@ -35,31 +33,31 @@ namespace PowerTools.Models
             set
             {
                 SetProperty(ref _status, value);
-                RaisePropertyChanged(nameof(StatusAsString));
+                //RaisePropertyChanged(nameof(StatusAsString));
             }
         }
 
-        public string StatusAsString
-        {
-            get
-            {
-                switch (Status)
-                {
-                    case VersionUpdateStatus.NoUpdates:
-                        return "Check for Updates";
-                    case VersionUpdateStatus.CheckForUpdates:
-                        return "Checking new version";
-                    case VersionUpdateStatus.HasNewVersion:
-                        return $"Install v{NewVersion}";
-                    case VersionUpdateStatus.Updating:
-                        return "Downloading ...";
-                    case VersionUpdateStatus.Done:
-                        return "Restart";
-                    default:
-                        return "Unknown";
-                }
-            }
-        }
+        //public string StatusAsString
+        //{
+        //    get
+        //    {
+        //        switch (Status)
+        //        {
+        //            case VersionUpdateStatus.NoUpdates:
+        //                return "Check for Updates";
+        //            case VersionUpdateStatus.CheckForUpdates:
+        //                return "Checking new version";
+        //            case VersionUpdateStatus.HasNewVersion:
+        //                return $"Install v{NewVersion}";
+        //            case VersionUpdateStatus.Updating:
+        //                return "Downloading ...";
+        //            case VersionUpdateStatus.Done:
+        //                return "Restart";
+        //            default:
+        //                return "Unknown";
+        //        }
+        //    }
+        //}
 
         public string CurrentVersion => App.Version;
 
@@ -125,7 +123,7 @@ namespace PowerTools.Models
             if (Status == VersionUpdateStatus.NoUpdates)
             {
                 Status = VersionUpdateStatus.CheckForUpdates;
-                TaskExecution.Instance.RunAsync(OnCheckForUpdate);
+                TaskExecution.Instance.RunAsync(CheckForUpdate);
             }
             else if (Status == VersionUpdateStatus.HasNewVersion)
             {
@@ -216,20 +214,7 @@ namespace PowerTools.Models
         /// Start a new Task to check for new versions of the application.
         /// This method will run asynchronously and update the VersionUpdateStatus property accordingly.
         /// </summary>
-        public void CheckForUpdate()
-        {
-            TaskExecution.Instance.RunOnceAsync(
-                "Check Versions",
-                OnCheckForUpdate,
-                null,
-                null,
-                null,
-                false,
-                60 * 60 * 1000,
-                false);
-        }
-
-        private void OnCheckForUpdate(ITaskReport taskReport)
+        public void CheckForUpdate(ITaskReport taskReport)
         {
             taskReport.SetDescription($"Start checking versions of {App.AppName}");
 

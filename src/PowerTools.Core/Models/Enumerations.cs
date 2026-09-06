@@ -1,5 +1,11 @@
-﻿namespace PowerTools.Models
+﻿namespace PowerTools.Core.Models
 {
+    public enum ModuleIconStyle
+    {
+        FontStyle,
+        ImageStyle
+    }
+
     public enum VersionUpdateStatus
     {
         NoUpdates,

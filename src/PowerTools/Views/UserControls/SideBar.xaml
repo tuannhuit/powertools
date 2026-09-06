@@ -10,7 +10,7 @@
              x:Name="userControlSideBar"
              d:DesignHeight="450" d:DesignWidth="250"
              IsEnabled="{Binding Source={x:Static appModels:ApplicationService.Instance}, Path=IsFree, UpdateSourceTrigger=PropertyChanged}">
-    <Border HorizontalAlignment="Left" BorderThickness="0 0 1 0">
+    <Border HorizontalAlignment="Left" BorderThickness="0 0 1 0" Background="{StaticResource Background.Bar}">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>

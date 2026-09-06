@@ -34,10 +34,4 @@
         public static string Save = "\uE105";
         public static string Revert = "\uE149";
     }
-
-    public enum ModuleIconStyle
-    {
-        FontStyle,
-        ImageStyle
-    }
 }

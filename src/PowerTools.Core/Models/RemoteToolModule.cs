@@ -1,8 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Text.Json.Serialization;
-
-namespace PowerTools.Core.Models
+﻿namespace PowerTools.Core.Models
 {
     public class RemoteToolModule
     {
@@ -16,9 +12,6 @@ namespace PowerTools.Core.Models
         /// </summary>
         public string DisplayName { get; set; }
 
-        public string PublisherDisplayName { get; set; }
-        public string RepoLink { get; set; }
-
         /// <summary>
         /// Gets or sets description of the tool
         /// </summary>
@@ -29,29 +22,41 @@ namespace PowerTools.Core.Models
         /// </summary>
         public string ExecutionName { get; set; }
 
+        /// <summary>
+        /// The text icon of the tool, can be a unicode character or a string
+        /// </summary>
         public string Icon { get; set; }
 
+        /// <summary>
+        /// The color of the icon, can be a hex color code or a named color
+        /// </summary>
         public string IconColor { get; set; }
 
-        public string IconImageRelativeLocation { get; set; }
+        /// <summary>
+        /// The name of publisher of the tool, can be a person or an organization
+        /// </summary>
+        public string PublisherDisplayName { get; set; }
 
         /// <summary>
-        /// Gets or sets the list of versions of the tool
+        /// The link to the repository of the tool. Based on the RepoType (github, gitlab, bitbucket), the link can be constructed
         /// </summary>
-        public List<string> AllVersions { get; set; }
+        public string RepoLink { get; set; }
 
-        [JsonIgnore]
-        public string LatestVersion
-        {
-            get
-            {
-                if (AllVersions != null && AllVersions.Any())
-                {
-                    return AllVersions.First();
-                }
+        /// <summary>
+        /// The name of the owner of the tool, can be a person or an organization
+        /// </summary>
+        public string OwnerName { get; set; }
 
-                return string.Empty;
-            }
-        }
+        /// <summary>
+        /// The name of the repository of the tool
+        /// </summary>
+        public string RepoName { get; set; }
+
+        /// <summary>
+        /// The type of the repository of the tool (e.g., github, gitlab, bitbucket)
+        /// </summary>
+        public string RepoType { get; set; }
+
+        public string IconImageRelativeLocation { get; set; }
     }
 }

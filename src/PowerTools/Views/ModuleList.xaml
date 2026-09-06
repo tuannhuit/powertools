@@ -9,7 +9,7 @@
              xmlns:behaviours="clr-namespace:PowerTools.Core.Behaviours;assembly=PowerTools.Core"
              prism:ViewModelLocator.AutoWireViewModel="True"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="1000"
+             d:DesignHeight="450" d:DesignWidth="1200"
              x:Name="userControl">
     <Grid>
         <Grid.ColumnDefinitions>
@@ -17,7 +17,7 @@
             <ColumnDefinition Width="4" />
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <Border Style="{StaticResource Border.Normal}" Grid.Column="0">
+        <Border Style="{StaticResource Border.Normal}" Grid.Column="0" Background="{StaticResource Background.LightBar}">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
@@ -87,7 +87,7 @@
         <GridSplitter Style="{StaticResource GridSplitter.Normal}" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
         <Border Style="{StaticResource Border.Normal}" Grid.Column="2">
             <Grid Visibility="{Binding SelectedModule, Converter={StaticResource ValueToVisibilityConverter}}">
-                <Grid Grid.Row="0" Margin="0 20 0 0">
+                <Grid Grid.Row="0" Margin="20">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="*"/>
@@ -102,22 +102,188 @@
                     <Border Grid.Column="0" Grid.Row="0" Grid.RowSpan="4" Margin="5" MaxHeight="80" MaxWidth="80" Height="80" Width="80">
                         <TextBlock FontFamily="Segoe UI Symbol" FontSize="60" Text="{Binding SelectedModule.Icon}" Foreground="{Binding SelectedModule.IconColor, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource StringToBrushConverter}}" VerticalAlignment="Center" HorizontalAlignment="Center"  Margin="0"/>
                     </Border>
-                    <TextBlock Style="{StaticResource TextBlock.Header}" Grid.Column="1" Grid.Row="0" Text="{Binding SelectedModule.DisplayName}" FontWeight="SemiBold"/>
+                    <StackPanel Grid.Column="1" Grid.Row="0" Orientation="Horizontal">
+                        <TextBlock Style="{StaticResource TextBlock.Header}" Text="{Binding SelectedModule.DisplayName}" FontWeight="SemiBold"/>
+                        <Border Style="{StaticResource Border.Normal}" Margin="0" BorderThickness="0" BorderBrush="Transparent" Background="{StaticResource Button.Background}" CornerRadius="5" VerticalAlignment="Bottom" Visibility="{Binding SelectedModule.IsInstalled, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <TextBlock Style="{StaticResource TextBlock.ContentSmall}" Text="{Binding SelectedModule.Version, Converter={StaticResource StringFormatConverter}, ConverterParameter='\{0\}'}" FontSize="10" Margin="4 1" Foreground="White" FontWeight="SemiBold"/>
+                        </Border>
+                    </StackPanel>
                     <StackPanel Grid.Column="1" Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Left">
                         <TextBlock Style="{StaticResource TextBlock.Content}" Text="{Binding SelectedModule.PublisherDisplayName}"/>
                         <TextBlock Style="{StaticResource TextBlock.Content}" Margin="0 5 0 0">
-            <Hyperlink Command="{Binding ElementName=userControl, Path=DataContext.CmdNavigateRepoLink}" CommandParameter="{Binding SelectedModule.RepoLink}">Repository</Hyperlink>
+                            <Hyperlink  Command="{Binding ElementName=userControl, Path=DataContext.CmdNavigateRepoLink}" TextDecorations="{x:Null}">
+                                <TextBlock Text="{Binding Path=SelectedModule.RepoDisplayName, UpdateSourceTrigger=PropertyChanged}"/>
+                            </Hyperlink>
                         </TextBlock>
                     </StackPanel>
                     <TextBlock Style="{StaticResource TextBlock.Content}" Grid.Column="1" Grid.Row="2" Text="{Binding SelectedModule.Description}"/>
                     <StackPanel Grid.Column="1" Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Left" Margin="5">
-                        <ComboBox Style="{StaticResource ComboBox.Flat}" ItemsSource="{Binding Path=SelectedModule.AllVersions}" SelectedItem="{Binding Path=SelectedModule.Version, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Width="150" Margin="0"/>
-                        <Button Style="{StaticResource Button.IconActive}" Content="{x:Static models:ButtonIcons.Download}" Tag="Install" Command="{Binding Path=CmdInstallModule, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding SelectedModule.IsDownloading, Converter={StaticResource BoolToReverseConverter}}" Visibility="{Binding Path=SelectedModule.IsNotInstalled, Converter={StaticResource  BoolToVisibilityConverter}}" VerticalAlignment="Center" Width="85" Margin="5 0 0 0"/>
-                        <Button Style="{StaticResource Button.IconActive}" Content="{x:Static models:ButtonIcons.Delete}" Tag="Uninstall" Command="{Binding Path=CmdUninstallModule, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding Path=SelectedModule.IsInstalled, Converter={StaticResource  BoolToVisibilityConverter}}" VerticalAlignment="Center" Width="85" Margin="5 0 0 0" Padding="0"/>
-                        <Button Style="{StaticResource Button.IconActive}" Content="{x:Static models:ButtonIcons.None}" Tag="Disable" Command="{Binding Path=CmdDisableModule, UpdateSourceTrigger=PropertyChanged}" CommandParameter="{Binding SelectedModule.Name, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding Path=SelectedModule.IsActive}" Visibility="{Binding SelectedModule.IsInstalled, Converter={StaticResource BoolToVisibilityConverter}}" VerticalAlignment="Center" Margin="5 0 0 0"/>
-                        <Button Style="{StaticResource Button.IconActive}" Content="{x:Static models:ButtonIcons.Check}" Tag="Enable" Command="{Binding Path=CmdEnableModule, UpdateSourceTrigger=PropertyChanged}" CommandParameter="{Binding SelectedModule.Name, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding Path=SelectedModule.IsActive, Converter={StaticResource BoolToReverseConverter}}" Visibility="{Binding SelectedModule.IsInstalled, Converter={StaticResource BoolToVisibilityConverter}}" VerticalAlignment="Center" Margin="5 0 0 0"/>
+                        <!--<ComboBox Style="{StaticResource ComboBox.Flat}" ItemsSource="{Binding Path=SelectedModule.AllVersions}" SelectedItem="{Binding Path=SelectedModule.Version, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Width="150" Margin="0"/>-->
+                        <Button Command="{Binding Path=CmdInstallModule}" Margin="0">
+                            <Button.Style>
+                                <Style TargetType="{x:Type Button}" BasedOn="{StaticResource Button.IconActive}">
+                                    <Style.Triggers>
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding Path=SelectedModule.IsInstalled, UpdateSourceTrigger=PropertyChanged}" Value="False"/>
+                                                <Condition Binding="{Binding Path=SelectedModule.Version, UpdateSourceTrigger=PropertyChanged}" Value="{x:Null}"/>
+                                                <Condition Binding="{Binding Path=SelectedModule.NewVersion, UpdateSourceTrigger=PropertyChanged}" Value="{x:Null}"/>
+                                            </MultiDataTrigger.Conditions>
+                                            <MultiDataTrigger.Setters>
+                                                <Setter Property="IsEnabled" Value="False"/>
+                                            </MultiDataTrigger.Setters>
+                                        </MultiDataTrigger>
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding Path=SelectedModule.IsInstalled, UpdateSourceTrigger=PropertyChanged}" Value="False"/>
+                                            </MultiDataTrigger.Conditions>
+                                            <MultiDataTrigger.Setters>
+                                                <Setter Property="Background" Value="{StaticResource Button.MouseOver.Background}"/>
+                                                <Setter Property="BorderBrush" Value="LightGray"/>
+                                                <Setter Property="Foreground" Value="White"/>
+                                                <Setter Property="Tag" Value="Install"/>
+                                                <Setter Property="ToolTip" Value="Install the latest version"/>
+                                                <Setter Property="Width" Value="50"/>
+                                            </MultiDataTrigger.Setters>
+                                        </MultiDataTrigger>
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding Path=SelectedModule.IsInstalled, UpdateSourceTrigger=PropertyChanged}" Value="True"/>
+                                                <Condition Binding="{Binding Path=SelectedModule.VersionUpdateStatus, UpdateSourceTrigger=PropertyChanged}" Value="NoUpdates"/>
+                                            </MultiDataTrigger.Conditions>
+                                            <MultiDataTrigger.Setters>
+                                                <Setter Property="Background" Value="{StaticResource Background.LightGray}"/>
+                                                <Setter Property="Foreground" Value="{StaticResource TextBox.Foreground.Gray}"/>
+                                                <Setter Property="Tag" Value="Check for Updates"/>
+                                                <Setter Property="ToolTip" Value="Check for Updates"/>
+                                                <Setter Property="Width" Value="120"/>
+                                            </MultiDataTrigger.Setters>
+                                        </MultiDataTrigger>
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding Path=SelectedModule.IsInstalled, UpdateSourceTrigger=PropertyChanged}" Value="True"/>
+                                                <Condition Binding="{Binding Path=SelectedModule.VersionUpdateStatus, UpdateSourceTrigger=PropertyChanged}" Value="HasNewVersion"/>
+                                            </MultiDataTrigger.Conditions>
+                                            <MultiDataTrigger.Setters>
+                                                <Setter Property="FontWeight" Value="SemiBold"/>
+                                                <Setter Property="Tag" Value="{Binding Path=SelectedModule.NewVersion, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource StringFormatConverter}, ConverterParameter='Update v{0}'}"/>
+                                                <Setter Property="Background" Value="{StaticResource Button.MouseOver.Background}"/>
+                                                <Setter Property="BorderBrush" Value="LightGray"/>
+                                                <Setter Property="Foreground" Value="White"/>
+                                                <Setter Property="FontWeight" Value="SemiBold"/>
+                                            </MultiDataTrigger.Setters>
+                                        </MultiDataTrigger>
+                                        <DataTrigger Binding="{Binding Path=SelectedModule.VersionUpdateStatus, UpdateSourceTrigger=PropertyChanged}" Value="CheckForUpdates">
+                                            <Setter Property="Background" Value="{StaticResource Background.LightGray}"/>
+                                            <Setter Property="Foreground" Value="{StaticResource TextBox.Foreground.Gray}"/>
+                                            <Setter Property="IsEnabled" Value="false"/>
+                                            <Setter Property="Tag" Value="Checking new version"/>
+                                            <Setter Property="ToolTip" Value="Checking new version"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Path=SelectedModule.VersionUpdateStatus, UpdateSourceTrigger=PropertyChanged}" Value="Updating">
+                                            <Setter Property="Background" Value="{StaticResource Button.MouseOver.Background}"/>
+                                            <Setter Property="BorderBrush" Value="LightGray"/>
+                                            <Setter Property="Foreground" Value="White"/>
+                                            <Setter Property="IsEnabled" Value="false"/>
+                                            <Setter Property="Tag" Value="Downloading ..."/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Path=SelectedModule.VersionUpdateStatus, UpdateSourceTrigger=PropertyChanged}" Value="Done">
+                                            <Setter Property="Background" Value="{StaticResource Background.LightGray}"/>
+                                            <Setter Property="Foreground" Value="{StaticResource TextBox.Foreground.Gray}"/>
+                                            <Setter Property="Tag" Value="Restart"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+                        <Button Content="{x:Static models:ButtonIcons.Delete}" Tag="Uninstall" Command="{Binding Path=CmdUninstallModule, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Margin="5 0 0 0" Padding="0">
+                            <Button.Style>
+                                <Style TargetType="{x:Type Button}" BasedOn="{StaticResource Button.IconActive}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Path=SelectedModule.IsInstalled, UpdateSourceTrigger=PropertyChanged}" Value="False">
+                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Path=SelectedModule.IsInstalled, UpdateSourceTrigger=PropertyChanged}" Value="True">
+                                            <Setter Property="Visibility" Value="Visible"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+                        <Button Content="{x:Static models:ButtonIcons.None}" Tag="Disable" Command="{Binding Path=CmdDisableModule, UpdateSourceTrigger=PropertyChanged}" CommandParameter="{Binding SelectedModule.Name, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Margin="5 0 0 0">
+                            <Button.Style>
+                                <Style TargetType="{x:Type Button}" BasedOn="{StaticResource Button.IconActive}">
+                                    <Style.Triggers>
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding Path=SelectedModule.IsInstalled, UpdateSourceTrigger=PropertyChanged}" Value="True"/>
+                                                <Condition Binding="{Binding Path=SelectedModule.IsActive, UpdateSourceTrigger=PropertyChanged}" Value="True"/>
+                                            </MultiDataTrigger.Conditions>
+                                            <MultiDataTrigger.Setters>
+                                                <Setter Property="Visibility" Value="Visible"/>
+                                            </MultiDataTrigger.Setters>
+                                        </MultiDataTrigger>
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding Path=SelectedModule.IsInstalled, UpdateSourceTrigger=PropertyChanged}" Value="True"/>
+                                                <Condition Binding="{Binding Path=SelectedModule.IsActive, UpdateSourceTrigger=PropertyChanged}" Value="False"/>
+                                            </MultiDataTrigger.Conditions>
+                                            <MultiDataTrigger.Setters>
+                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                            </MultiDataTrigger.Setters>
+                                        </MultiDataTrigger>
+                                        <DataTrigger Binding="{Binding Path=SelectedModule.IsInstalled, UpdateSourceTrigger=PropertyChanged}" Value="False">
+                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+                        <Button Content="{x:Static models:ButtonIcons.Check}" Tag="Enable" Command="{Binding Path=CmdEnableModule, UpdateSourceTrigger=PropertyChanged}" CommandParameter="{Binding SelectedModule.Name, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Margin="5 0 0 0">
+                            <Button.Style>
+                                <Style TargetType="{x:Type Button}" BasedOn="{StaticResource Button.IconActive}">
+                                    <Style.Triggers>
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding Path=SelectedModule.IsInstalled, UpdateSourceTrigger=PropertyChanged}" Value="True"/>
+                                                <Condition Binding="{Binding Path=SelectedModule.IsActive, UpdateSourceTrigger=PropertyChanged}" Value="False"/>
+                                            </MultiDataTrigger.Conditions>
+                                            <MultiDataTrigger.Setters>
+                                                <Setter Property="Visibility" Value="Visible"/>
+                                            </MultiDataTrigger.Setters>
+                                        </MultiDataTrigger>
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding Path=SelectedModule.IsInstalled, UpdateSourceTrigger=PropertyChanged}" Value="True"/>
+                                                <Condition Binding="{Binding Path=SelectedModule.IsActive, UpdateSourceTrigger=PropertyChanged}" Value="True"/>
+                                            </MultiDataTrigger.Conditions>
+                                            <MultiDataTrigger.Setters>
+                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                            </MultiDataTrigger.Setters>
+                                        </MultiDataTrigger>
+                                        <DataTrigger Binding="{Binding Path=SelectedModule.IsInstalled, UpdateSourceTrigger=PropertyChanged}" Value="False">
+                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+                        <CheckBox Content="Auto Update">
+                            <CheckBox.Style>
+                                <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource CheckBox.Normal}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Path=SelectedModule.IsInstalled, UpdateSourceTrigger=PropertyChanged}" Value="True">
+                                            <Setter Property="Visibility" Value="Visible"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Path=SelectedModule.IsInstalled, UpdateSourceTrigger=PropertyChanged}" Value="False">
+                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </CheckBox.Style>
+                        </CheckBox>
                     </StackPanel>
-                    <Border Grid.Column="1" Grid.Row="4" Background="{StaticResource Background.WhiteSmoke}" BorderBrush="LightGray" BorderThickness="1" CornerRadius="3" Margin="0 20 20 80">
+                    <Border Grid.Column="1" Grid.Row="4" Background="{StaticResource Background.WhiteSmoke}" BorderBrush="LightGray" BorderThickness="1" CornerRadius="3" Margin="5 22 20 20">
                         <TabControl Style="{StaticResource TabControl.Normal}" behaviours:TabControlBehavior.CanCloseTabItem="False" BorderThickness="0" Margin="2">
                             <TabItem Style="{StaticResource TabItem.Normal}" Header="Details">
 

@@ -6,8 +6,6 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text.Json.Serialization;
-using System.Windows.Media;
-using PowerTools.Core.SharedServices;
 
 namespace PowerTools.Core.Models
 {
@@ -40,41 +38,6 @@ namespace PowerTools.Core.Models
             }
         }
 
-        private string _publisherDisplayName;
-        /// <summary> 
-        /// The display name of module
-        /// </summary>
-        public string PublisherDisplayName
-        {
-            get
-            {
-                if (string.IsNullOrWhiteSpace(_publisherDisplayName) || string.IsNullOrEmpty(_publisherDisplayName))
-                {
-                    return "Unknown Publisher";
-                }
-
-                return _publisherDisplayName;
-            }
-            set
-            {
-                _publisherDisplayName = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        private string _repoLink;
-
-        public string RepoLink
-        {
-            get => _repoLink;
-            set
-            {
-                _repoLink = value;
-                RaisePropertyChanged();
-            }
-        }
-
-
         private string _description;
         /// <summary>
         /// Gets or sets description of the tool
@@ -94,54 +57,6 @@ namespace PowerTools.Core.Models
             {
                 _description = value;
                 RaisePropertyChanged();
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the tool version which is running
-        /// </summary>
-        private string _version;
-        public string Version
-        {
-            get => _version;
-            set
-            {
-                _version = value;
-                RaisePropertyChanged();
-                RaisePropertyChanged("IsInstalled");
-                RaisePropertyChanged("IsNotInstalled");
-                RaisePropertyChanged("IsActive");
-            }
-        }
-
-        /// <summary>
-        /// Checks if the current running tool version is download
-        /// </summary>
-        [JsonIgnore]
-        public bool IsInstalled => File.Exists(ExecutionLocation);
-
-        /// <summary>
-        /// Checks if the current running tool version is download
-        /// </summary>
-        [JsonIgnore]
-        public bool IsNotInstalled => !IsInstalled;
-
-        /// <summary>
-        /// Gets or sets the list of versions of the tool
-        /// </summary>
-        public List<string> AllVersions { get; set; }
-
-        [JsonIgnore]
-        public string LatestVersion
-        {
-            get
-            {
-                if (AllVersions != null && AllVersions.Any())
-                {
-                    return AllVersions[AllVersions.Count() - 1];
-                }
-
-                return Version;
             }
         }
 
@@ -180,7 +95,158 @@ namespace PowerTools.Core.Models
             }
         }
 
+        private string _publisherDisplayName;
+        /// <summary> 
+        /// The display name of module
+        /// </summary>
+        public string PublisherDisplayName
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(_publisherDisplayName) || string.IsNullOrEmpty(_publisherDisplayName))
+                {
+                    return "Unknown Publisher";
+                }
+
+                return _publisherDisplayName;
+            }
+            set
+            {
+                _publisherDisplayName = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private string _repoLink;
+        public string RepoLink
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(_repoLink) || string.IsNullOrEmpty(_repoLink) || _repoLink == "No Repository Link")
+                {
+                    switch (RepoType)
+                    {
+                        case "github":
+                            return $"https://github.com/{OwnerName}/{RepoName}";
+                        case "gitlab":
+                            return $"https://gitlab.com/{OwnerName}/{RepoName}";
+                        case "bitbucket":
+                            return $"https://bitbucket.org/{OwnerName}/{RepoName}";
+                        default:
+                            return "No Repository Link";
+                    }
+                }
+
+                return _repoLink;
+            }
+            set
+            {
+                _repoLink = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private string _ownerName;
+        public string OwnerName
+        {
+            get => _ownerName;
+            set
+            {
+                _ownerName = value;
+                RaisePropertyChanged();
+                RaisePropertyChanged("RepoDisplayName");
+            }
+        }
+
+        private string _repoName;
+        public string RepoName
+        {
+            get => _repoName;
+            set
+            {
+                _repoName = value;
+                RaisePropertyChanged();
+                RaisePropertyChanged("RepoDisplayName");
+            }
+        }
+
+        public string RepoDisplayName => $"{OwnerName}/{RepoName}";
+
+        private string _repoType;
+        public string RepoType
+        {
+            get => _repoType;
+            set
+            {
+                _repoType = value;
+                RaisePropertyChanged();
+            }
+        }
+
         public string IconImageRelativeLocation { get; set; }
+
+        /// <summary>
+        /// Gets or sets the tool version which is running
+        /// </summary>
+        private string _version;
+        public string Version
+        {
+            get => _version;
+            set
+            {
+                _version = value;
+                RaisePropertyChanged();
+                RaisePropertyChanged("IsInstalled");
+                RaisePropertyChanged("IsNotInstalled");
+                RaisePropertyChanged("IsActive");
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the tool version which is running
+        /// </summary>
+        private string _newVersion;
+        public string NewVersion
+        {
+            get => _newVersion;
+            set
+            {
+                _newVersion = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        /// <summary>
+        /// Checks if the current running tool version is download
+        /// </summary>
+        [JsonIgnore]
+        public bool IsInstalled => File.Exists(ExecutionLocation);
+
+        /// <summary>
+        /// Checks if the current running tool version is download
+        /// </summary>
+        [JsonIgnore]
+        public bool IsNotInstalled => !IsInstalled;
+
+        /// <summary>
+        /// Gets or sets the list of versions of the tool
+        /// </summary>
+        [JsonIgnore]
+        public List<string> AllVersions { get; set; }
+
+        [JsonIgnore]
+        public string LatestVersion
+        {
+            get
+            {
+                if (AllVersions != null && AllVersions.Any())
+                {
+                    return AllVersions[AllVersions.Count() - 1];
+                }
+
+                return Version;
+            }
+        }
 
         [JsonIgnore]
         public ModuleIconStyle IconStyle
@@ -213,7 +279,18 @@ namespace PowerTools.Core.Models
             get
             {
                 var assembly = Assembly.GetAssembly(typeof(ToolModule));
-                var modulePath = Path.Combine(Path.GetDirectoryName(assembly.Location), $"{ModuleGlobalSettings.Instance.RepositoryLocalName}\\{Name}-{Version}");
+                if(assembly == null)
+                {
+                    throw new Exception("Not found assembly for ToolModule");
+                }
+
+                var assemblyLocation = Path.GetDirectoryName(assembly.Location);
+                if(string.IsNullOrEmpty(assemblyLocation))
+                {
+                    throw new Exception("Not found assembly location for ToolModule");
+                }
+
+                var modulePath = Path.Combine(assemblyLocation, $"{ModuleGlobalSettings.Instance.RepositoryLocalName}\\{Name}-{Version}");
 
                 return modulePath;
             }
@@ -228,14 +305,24 @@ namespace PowerTools.Core.Models
             get
             {
                 var assembly = Assembly.GetAssembly(typeof(ToolModule));
-                var modulePath = Path.Combine(Path.GetDirectoryName(assembly.Location), $"{ModuleGlobalSettings.Instance.DataStoreLocalName}\\{Name}");
+                if(assembly == null)
+                {
+                    throw new Exception("Not found assembly for ToolModule");
+                }
+
+                var assemblyLocation = Path.GetDirectoryName(assembly.Location);
+                if(string.IsNullOrEmpty(assemblyLocation))
+                {
+                    throw new Exception("Not found assembly location for ToolModule");
+                }
+
+                var modulePath = Path.Combine(assemblyLocation, $"{ModuleGlobalSettings.Instance.DataStoreLocalName}\\{Name}");
 
                 return modulePath;
             }
         }
 
         private bool _isLoadedProperly;
-
         [JsonIgnore]
         public bool IsLoadedProperly
         {
@@ -251,18 +338,6 @@ namespace PowerTools.Core.Models
         [JsonIgnore]
         public bool IsLoadedFailed => !IsLoadedProperly;
 
-        private bool _isDownloading;
-        [JsonIgnore]
-        public bool IsDownloading
-        {
-            get => _isDownloading;
-            set
-            {
-                _isDownloading = value;
-                RaisePropertyChanged();
-            }
-        }
-
         private bool _isActive;
         public bool IsActive
         {
@@ -271,8 +346,11 @@ namespace PowerTools.Core.Models
             {
                 _isActive = value;
                 RaisePropertyChanged();
+                RaisePropertyChanged("IsNotActive");
             }
         }
+
+        public bool IsNotActive => !IsActive;
 
         private bool _isMarkDeleted;
         public bool IsMarkDeleted
@@ -308,6 +386,18 @@ namespace PowerTools.Core.Models
             }
         }
 
+        private VersionUpdateStatus _versionUpdateStatus;
+        [JsonIgnore]
+        public VersionUpdateStatus VersionUpdateStatus
+        {
+            get => _versionUpdateStatus;
+            set
+            {
+                _versionUpdateStatus = value;
+                RaisePropertyChanged();
+            }
+        }
+
         public object Clone()
         {
             return new ToolModule
@@ -315,6 +405,9 @@ namespace PowerTools.Core.Models
                 Name = Name,
                 DisplayName = DisplayName,
                 PublisherDisplayName = PublisherDisplayName,
+                OwnerName = OwnerName,
+                RepoName = RepoName,
+                RepoType = RepoType,
                 RepoLink = RepoLink,
                 Description = Description,
                 Version = Version,
@@ -327,7 +420,6 @@ namespace PowerTools.Core.Models
                 IsSelected = IsSelected,
                 IsLoaded = IsLoaded,
                 IsMarkDeleted = IsMarkDeleted,
-                IsDownloading = IsDownloading,
                 IconColor = IconColor
             };
         }

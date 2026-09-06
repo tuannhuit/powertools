@@ -2,6 +2,7 @@
 using PowerTools.Core.SharedServices;
 using PowerTools.Models;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -35,6 +36,14 @@ namespace PowerTools.Helpers
             var release = await client.Repository.Release.GetLatest(owner, repo);
 
             return release;
+        }
+
+        public static async Task<IReadOnlyList<Release>> GetAllReleases(string owner, string repo, string token)
+        {
+            var client = GetClient(token);
+            var releases = await client.Repository.Release.GetAll(owner, repo);
+
+            return releases;
         }
 
         public static async Task<LocalReleaseAssets> DownloadReleaseAssets(string owner, string repo, string token, Release githubRelease)

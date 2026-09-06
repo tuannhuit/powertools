@@ -2,6 +2,8 @@
 using PowerTools.Core.Models;
 using PowerTools.Core.SharedServices;
 using PowerTools.Helpers;
+using PowerTools.Jobs;
+using PowerTools.Models;
 using Prism.Commands;
 using Prism.Ioc;
 using Prism.Mvvm;
@@ -74,7 +76,7 @@ namespace PowerTools.ViewModels
             CmdRefreshModules = new DelegateCommand(OnCmdRefreshModules);
             CmdInstallModule = new DelegateCommand(OnCmdInstallModule);
             CmdUninstallModule = new DelegateCommand(OnCmdUninstallModule);
-            CmdNavigateRepoLink = new DelegateCommand<string>(OnCmdNavigateRepoLink);
+            CmdNavigateRepoLink = new DelegateCommand(OnCmdNavigateRepoLink);
             CmdDisableModule = new DelegateCommand<string>(OnCmdDisableModule);
             CmdEnableModule = new DelegateCommand<string>(OnCmdEnableModule);
 
@@ -105,14 +107,21 @@ namespace PowerTools.ViewModels
             }
         }
 
-        private void OnCmdNavigateRepoLink(string repoLink)
+        private void OnCmdNavigateRepoLink()
         {
-            if (string.IsNullOrWhiteSpace(repoLink) || string.IsNullOrEmpty(repoLink))
+            if (SelectedModule == null || string.IsNullOrWhiteSpace(SelectedModule.RepoLink) || string.IsNullOrEmpty(SelectedModule.RepoLink))
             {
                 return;
             }
 
-            Process.Start(new ProcessStartInfo(repoLink) { UseShellExecute = true });
+            try
+            {
+                Process.Start(new ProcessStartInfo(SelectedModule.RepoLink) { UseShellExecute = true });
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Failed to open the repository link: {ex.Message}");
+            }
         }
 
         private void OnCmdInstallModule()
@@ -206,7 +215,7 @@ namespace PowerTools.ViewModels
                 return;
             }
 
-            module.IsDownloading = true;
+            module.VersionUpdateStatus = VersionUpdateStatus.Updating;
             var tempFolder = ApplicationService.Instance.GetOrCreateTempFolder();
             var tempModuleFile = Path.Combine(tempFolder, downloadModuleName);
 
@@ -223,11 +232,11 @@ namespace PowerTools.ViewModels
             catch (Exception e)
             {
                 LoggingService.Instance.Info($"Cannot extract the module {tempModuleFile} to {localModuleFolder}");
-                module.IsDownloading = false;
+                module.VersionUpdateStatus = VersionUpdateStatus.CheckForUpdates;
                 return;
             }
 
-            module.IsDownloading = false;
+            module.VersionUpdateStatus = VersionUpdateStatus.Done;
 
             var foundModule = Repositories.RepositoryLocal.ModuleList.First(p => p.Name == module.Name);
             foundModule.Version = module.Version;
@@ -267,6 +276,10 @@ namespace PowerTools.ViewModels
                 RaisePropertyChanged("InstalledModuleList");
                 RaisePropertyChanged("AdditionalInstalledInfo");
                 RaisePropertyChanged("AdditionalRecommendedInfo");
+
+                BackgroundJobs.New()
+                    .AddJob(new CheckModuleVersions("Check Modules version when refreshing",0))
+                    .Process();
             });
         }
     }

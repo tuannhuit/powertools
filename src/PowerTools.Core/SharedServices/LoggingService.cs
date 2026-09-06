@@ -55,7 +55,7 @@ namespace PowerTools.Core.SharedServices
             }
         }
 
-        private bool _doTextWrapping;   
+        private bool _doTextWrapping;
         public bool DoTextWrapping
         {
             get => _doTextWrapping;
@@ -66,7 +66,7 @@ namespace PowerTools.Core.SharedServices
             }
         }
 
-        private bool _doShowTime;   
+        private bool _doShowTime;
         public bool DoShowTime
         {
             get => _doShowTime;
@@ -80,7 +80,16 @@ namespace PowerTools.Core.SharedServices
         private string _status;
         public string Status
         {
-            get => _status;
+            get
+            {
+                if(string.IsNullOrEmpty(_status))
+                {
+                    return string.Empty;
+                }
+
+                var parts = _status.Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
+                return parts.First();
+            }
             private set
             {
                 _status = value;

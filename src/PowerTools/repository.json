@@ -6,115 +6,109 @@
       "DisplayName": "Kafka Client",
       "Description": "Kafka Client is used for read/create/delet topics and messages of a Kafka Server.",
       "Version": "1.0.0.0",
-      "AllVersions": [
-        "1.0.0.0"
-      ],
       "ExecutionName": "PowerTools.KafkaClientTool.dll",
       "Icon": "𝞙",
       "IconColor": "DarkCyan",
-      "PublisherDisplayName": "Peter Nguyen",
-      "RepoLink": "https://github.com/hansen-technologies/ccb-i-pm-kafka-client-tool"
+      "PublisherDisplayName": "HansenCX",
+      "RepoLink": "",
+      "OwnerName": "hansen-technologies",
+      "RepoName": "ccb-i-pm-kafka-client-tool",
+      "RepoType": "github"
     },
     {
       "Name": "elasticsearch-tool",
       "DisplayName": "Elasticsearch Tool",
       "Description": "Elasicsearch is used for read/delete indices",
-      "Version": "1.0.0.0",
-      "AllVersions": [
-        "1.0.0.0"
-      ],
       "ExecutionName": "PowerTools.ElasticsearchTool.dll",
       "Icon": "𝑬",
       "IconColor": "DeepPink",
       "PublisherDisplayName": "Peter Nguyen",
-      "RepoLink": "https://github.com/Peter-Nguyen_hansen/ccb-i-pm-elasticsearch-tool"
+      "RepoLink": "",
+      "OwnerName": "Peter-Nguyen_hansen",
+      "RepoName": "ccb-i-pm-elasticsearch-tool",
+      "RepoType": "github"
     },
     {
       "Name": "event-viewer-tool",
       "DisplayName": "Windows Event Viewer",
       "Description": "Elasicsearch is used for read/delete indices",
-      "Version": "1.0.0.0",
-      "AllVersions": [
-        "1.0.0.0"
-      ],
       "ExecutionName": "PowerTools.EventViewerTool.dll",
       "Icon": "📚",
       "IconColor": "OrangeRed",
       "PublisherDisplayName": "Peter Nguyen",
-      "RepoLink": "https://github.com/Peter-Nguyen_hansen/ccb-i-pm-event-viewer-tool"
+      "RepoLink": "",
+      "OwnerName": "Peter-Nguyen_hansen",
+      "RepoName": "ccb-i-pm-event-viewer-tool",
+      "RepoType": "github"
     },
     {
       "Name": "icx-configuration-update",
       "DisplayName": "ICX Configuration Update",
       "Description": "This tool is used for update configurations of ICX folder",
-      "Version": "1.0.0.0",
       "Icon": "\ue0D8",
-      "AllVersions": [
-        "1.0.0.0"
-      ],
       "ExecutionName": "PowerTools.ICXConfigurationUpdate.dll",
       "PublisherDisplayName": "Peter Nguyen",
-      "RepoLink": "https://github.com/Peter-Nguyen_hansen/ccb-i-pm-icx-configuration-update"
+      "RepoLink": "",
+      "OwnerName": "Peter-Nguyen_hansen",
+      "RepoName": "ccb-i-pm-icx-configuration-update",
+      "RepoType": "github"
     },
     {
       "Name": "Base64ToString Converter",
       "Description": "A way to convert base64 string to Unicode string",
-      "Version": "1.0.0.0",
-      "AllVersions": [
-        "1.0.0.0"
-      ],
-      "ExecutionName": "PowerTool.Base64ToString.dll"
+      "ExecutionName": "PowerTool.Base64ToString.dll",
+      "PublisherDisplayName": "Peter Nguyen",
+      "RepoLink": "",
+      "OwnerName": "Peter-Nguyen_hansen",
+      "RepoName": "ccb-i-pm-base64-to-string-converter",
+      "RepoType": "github"
     },
     {
       "Name": "simple-server",
       "DisplayName": "Simple Server",
       "Description": "",
-      "Version": "1.0.0.0",
-      "AllVersions": [
-        "1.0.0.0"
-      ],
       "ExecutionName": "PowerTools.SimpleServer.dll",
       "PublisherDisplayName": "Peter Nguyen",
-      "RepoLink": "https://github.com/Peter-Nguyen_hansen/ccb-i-pm-simple-server"
+      "RepoLink": "",
+      "OwnerName": "Peter-Nguyen_hansen",
+      "RepoName": "ccb-i-pm-simple-server",
+      "RepoType": "github"
     },
     {
       "Name": "server-management-tool",
       "DisplayName": "Server Management",
       "Description": "",
-      "Version": "1.0.0.0",
-      "AllVersions": [
-        "1.0.0.0"
-      ],
       "ExecutionName": "PowerTools.ServerManagementTool.dll",
       "Icon": "\ue2E0",
       "PublisherDisplayName": "Peter Nguyen",
-      "RepoLink": "https://github.com/Peter-Nguyen_hansen/ccb-i-pm-server-management-tool"
+      "RepoLink": "",
+      "OwnerName": "Peter-Nguyen_hansen",
+      "RepoName": "ccb-i-pm-server-management-tool",
+      "RepoType": "github"
     },
     {
       "Name": "QAutomation Tool",
       "DisplayName": "QAutomation Tool",
       "Description": "",
-      "Version": "1.0.0.0",
-      "AllVersions": [
-        "1.0.0.0"
-      ],
       "ExecutionName": "PowerTools.QAutomationTool.dll",
       "PublisherDisplayName": "Peter Nguyen",
-      "RepoLink": "https://github.com/Peter-Nguyen_hansen/ccb-i-pm-qautomation-tool"
+      "RepoLink": "",
+      "OwnerName": "Peter-Nguyen_hansen",
+      "RepoName": "ccb-i-pm-qautomation-tool",
+      "RepoType": "github"
     },
     {
       "Name": "qautomation-tool",
       "DisplayName": "QAutomation",
       "Description": "",
-      "Version": "1.0.0.0",
-      "AllVersions": [
-        "1.0.0.0"
-      ],
       "ExecutionName": "PowerTools.QAutomationTool.dll",
       "Icon": "𝙌",
       "IconColor": "DarkRed",
       "PublisherDisplayName": "Peter Nguyen",
-      "RepoLink": "https://github.com/Peter-Nguyen_hansen/ccb-i-pm-qautomation-tool"
+      "RepoLink": "",
+      "OwnerName": "Peter-Nguyen_hansen",
+      "RepoName": "ccb-i-pm-qautomation-tool",
+      "RepoType": "github"
     }
   ]
 }

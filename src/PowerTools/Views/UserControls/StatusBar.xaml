@@ -24,46 +24,50 @@
             </Grid>
             <Button Style="{StaticResource Button.Icon}" Command="{Binding CmdShowLog}" Content="{x:Static models:ButtonIcons.ShowLogs}" ToolTip="Click to view logs" Margin="10 0 0 0" Height="20" MinHeight="20" />
             <!--<Border Margin="10 0 " CornerRadius="3" Background="{StaticResource Background.LightGray}">-->
-                <StackPanel Margin="10 0" Orientation="Horizontal">
-                    <Button Tag="{Binding Path=AppVersion.StatusAsString, UpdateSourceTrigger=PropertyChanged}" 
-                            ToolTip="{Binding Path=AppVersion.NewVersionUpdateAsString, UpdateSourceTrigger=PropertyChanged}"
-                            Command="{Binding Path=AppVersion.CmdUpdateToLatestVersion}"
-                            Margin="0" Height="20" MinHeight="20" BorderThickness="0 0 1 0" BorderBrush="{StaticResource Background.Gray}"
-                            behaviours:ButtonBehavior.CornerRadius="3 0 0 3"
-                            Width="120">
-                        <Button.Style>
-                            <Style TargetType="{x:Type Button}" BasedOn="{StaticResource Button.IconHighlight}">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding Path=AppVersion.Status, UpdateSourceTrigger=PropertyChanged}" Value="NoUpdates">
-                                        <Setter Property="Background" Value="{StaticResource Background.LightGray}"/>
-                                        <Setter Property="Foreground" Value="{StaticResource TextBox.Foreground.Gray}"/>
-                                    </DataTrigger>
-                                    <DataTrigger Binding="{Binding Path=AppVersion.Status, UpdateSourceTrigger=PropertyChanged}" Value="CheckForUpdates">
-                                        <Setter Property="Background" Value="{StaticResource Background.LightGray}"/>
-                                        <Setter Property="Foreground" Value="{StaticResource TextBox.Foreground.Gray}"/>
-                                        <Setter Property="IsEnabled" Value="false"/>
-                                    </DataTrigger>
-                                    <DataTrigger Binding="{Binding Path=AppVersion.Status, UpdateSourceTrigger=PropertyChanged}" Value="Updating">
-                                        <Setter Property="IsEnabled" Value="false"/>
-                                    </DataTrigger>
-                                    <DataTrigger Binding="{Binding Path=AppVersion.Status, UpdateSourceTrigger=PropertyChanged}" Value="HasNewVersion">
-                                        <Setter Property="FontWeight" Value="SemiBold"/>
-                                    </DataTrigger>
-                                    <DataTrigger Binding="{Binding Path=AppVersion.Status, UpdateSourceTrigger=PropertyChanged}" Value="Done">
-                                        <Setter Property="Background" Value="{StaticResource Background.LightGray}"/>
-                                        <Setter Property="Foreground" Value="{StaticResource TextBox.Foreground.Gray}"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Button.Style>
-                    </Button>
-                    <Button Style="{StaticResource Button.IconActive}"
+            <StackPanel Margin="10 0" Orientation="Horizontal">
+                <Button ToolTip="{Binding Path=AppVersion.NewVersionUpdateAsString, UpdateSourceTrigger=PropertyChanged}"
+                        Command="{Binding Path=AppVersion.CmdUpdateToLatestVersion}"
+                        Margin="0" Height="20" MinHeight="20" BorderThickness="0 0 1 0" BorderBrush="{StaticResource Background.Gray}"
+                        behaviours:ButtonBehavior.CornerRadius="3 0 0 3"
+                        Width="120">
+                    <Button.Style>
+                        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource Button.IconHighlight}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Path=AppVersion.Status, UpdateSourceTrigger=PropertyChanged}" Value="NoUpdates">
+                                    <Setter Property="Background" Value="{StaticResource Background.LightGray}"/>
+                                    <Setter Property="Foreground" Value="{StaticResource TextBox.Foreground.Gray}"/>
+                                    <Setter Property="Tag" Value="Check for Updates"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Path=AppVersion.Status, UpdateSourceTrigger=PropertyChanged}" Value="CheckForUpdates">
+                                    <Setter Property="Background" Value="{StaticResource Background.LightGray}"/>
+                                    <Setter Property="Foreground" Value="{StaticResource TextBox.Foreground.Gray}"/>
+                                    <Setter Property="IsEnabled" Value="false"/>
+                                    <Setter Property="Tag" Value="Checking new version"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Path=AppVersion.Status, UpdateSourceTrigger=PropertyChanged}" Value="Updating">
+                                    <Setter Property="IsEnabled" Value="false"/>
+                                    <Setter Property="Tag" Value="Downloading ..."/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Path=AppVersion.Status, UpdateSourceTrigger=PropertyChanged}" Value="HasNewVersion">
+                                    <Setter Property="FontWeight" Value="SemiBold"/>
+                                    <Setter Property="Tag" Value="{Binding Path=AppVersion.NewVersion, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource StringFormatConverter}, ConverterParameter='Update v{0}'}"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Path=AppVersion.Status, UpdateSourceTrigger=PropertyChanged}" Value="Done">
+                                    <Setter Property="Background" Value="{StaticResource Background.LightGray}"/>
+                                    <Setter Property="Foreground" Value="{StaticResource TextBox.Foreground.Gray}"/>
+                                    <Setter Property="Tag" Value="Restart"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+                <Button Style="{StaticResource Button.IconActive}"
                             Tag="{Binding Path=AppVersion.CurrentVersion, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource StringFormatConverter}, ConverterParameter='v{0}'}" 
                             Command="{Binding Path=AppVersion.CmdShowReleaseInformation}"
                             Margin="0" Height="20" MinHeight="20" MinWidth="50"
                             BorderThickness="0"
                             behaviours:ButtonBehavior.CornerRadius="0 3 3 0"/>
-                </StackPanel>
+            </StackPanel>
             <!--</Border>-->
         </StackPanel>
     </Grid>

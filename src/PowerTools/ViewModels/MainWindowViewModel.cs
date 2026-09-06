@@ -15,6 +15,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
+using PowerTools.Jobs;
 using PowerTools.Models;
 using Application = System.Windows.Application;
 using ModuleSettings = PowerTools.Views.UserControls.ModuleSettings;
@@ -23,7 +24,6 @@ namespace PowerTools.ViewModels
 {
     public class MainWindowViewModel : BindableBase
     {
-        private IDialogService _dialogService;
         private AppVersion _appVersion;
 
         private GridLength _viewLogGridLength;
@@ -73,8 +73,6 @@ namespace PowerTools.ViewModels
             //{
             //    webClient.DownloadFile("file://hsnicx-fg01/icxteamcitybucket/Teams/Delta/Tools/PowerTool/modules/repository-v3.0.0.0-PREVIEW.json", localFile);
             //}
-
-            _dialogService = dialogService;
 
             LoggingService.Instance.DoShowLogCallback = DoShowLogCallback;
             //ApplicationService.Instance.DoBusy = DoBusy;
@@ -128,12 +126,16 @@ namespace PowerTools.ViewModels
             Repositories.RepositoriesChanged += Repositories_RepositoriesChanged;
             
             AppVersion = new AppVersion();
-            AppVersion.CheckForUpdate();
 
             ApplicationService.Instance.RegisterDisposableAction(() =>
             {
                 AppVersion.InstallNewVersion();
             });
+
+            BackgroundJobs.New()
+                .AddJob(new CheckAppVersion(AppVersion))
+                .AddJob(new CheckModuleVersions())
+                .Process();
         }
 
 
