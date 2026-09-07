@@ -32,6 +32,7 @@
       "Name": "event-viewer-tool",
       "DisplayName": "Windows Event Viewer",
       "Description": "Elasicsearch is used for read/delete indices",
+      "Version": "1.0.0.0",
       "ExecutionName": "PowerTools.EventViewerTool.dll",
       "Icon": "📚",
       "IconColor": "OrangeRed",

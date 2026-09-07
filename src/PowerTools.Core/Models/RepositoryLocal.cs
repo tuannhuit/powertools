@@ -28,11 +28,7 @@ namespace PowerTools.Core.Models
 
         protected override RepositoryInformation<ToolModule> AfterLoad(RepositoryInformation<ToolModule> repositoryInformation)
         {
-            // Remove all local modules marked as Deleted
-            // After storing modules
-
             var markDeletedModules = repositoryInformation.ModuleList.Where(p => p.IsMarkDeleted).ToArray();
-
             if (markDeletedModules.Any())
             {
                 for (int i = 0; i < markDeletedModules.Length; i++)
@@ -50,10 +46,24 @@ namespace PowerTools.Core.Models
                     }
 
                     markDeletedModules[i].IsMarkDeleted = false;
-                    //repositoryInformation.ModuleList.Remove(markDeletedModules[i]);
+                    markDeletedModules[i].VersionUpdateStatus = VersionUpdateStatus.NoUpdates;
                 }
 
                 Store();
+            }
+
+            var remainingModules = repositoryInformation.ModuleList.Where(p => !p.IsMarkDeleted).ToList();
+            if (remainingModules.Any())
+            {
+                foreach (var module in remainingModules)
+                {
+                    if (module.VersionUpdateStatus == VersionUpdateStatus.NoUpdates &&
+                        string.IsNullOrEmpty(module.Version) && 
+                        !string.IsNullOrEmpty(module.NewVersion))
+                    {
+                        module.VersionUpdateStatus = VersionUpdateStatus.HasNewVersion;
+                    }
+                }
             }
 
             return repositoryInformation;

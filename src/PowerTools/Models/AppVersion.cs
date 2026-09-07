@@ -119,20 +119,23 @@ namespace PowerTools.Models
 
         private void OnCmdUpdateToLatestVersion()
         {
-            // Start downloading latest version of the application
-            if (Status == VersionUpdateStatus.NoUpdates)
+            switch (Status)
             {
-                Status = VersionUpdateStatus.CheckForUpdates;
-                TaskExecution.Instance.RunAsync(CheckForUpdate);
-            }
-            else if (Status == VersionUpdateStatus.HasNewVersion)
-            {
-                Status = VersionUpdateStatus.Updating;
-                TaskExecution.Instance.RunAsync(OnDownloadNewVersion);
-            }
-            else if (Status == VersionUpdateStatus.Done)
-            {
-                ApplicationService.Instance.Shutdown();
+                case VersionUpdateStatus.NoUpdates:
+                    Status = VersionUpdateStatus.CheckForUpdates;
+                    TaskExecution.Instance.RunAsync(CheckForUpdate);
+                    break;
+
+                case VersionUpdateStatus.HasNewVersion:
+                    Status = VersionUpdateStatus.Updating;
+                    TaskExecution.Instance.RunAsync(OnDownloadNewVersion);
+                    break;
+
+                case VersionUpdateStatus.Done:
+                    ApplicationService.Instance.Shutdown();
+                    break;
+
+                default:break;
             }
         }
 

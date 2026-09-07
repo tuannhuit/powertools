@@ -3,7 +3,7 @@ using PowerTools.Core.Models;
 using PowerTools.Core.SharedServices;
 using PowerTools.Helpers;
 using PowerTools.Jobs;
-using PowerTools.Models;
+using PowerTools.Utils;
 using Prism.Commands;
 using Prism.Ioc;
 using Prism.Mvvm;
@@ -128,34 +128,105 @@ namespace PowerTools.ViewModels
         {
             if (SelectedModule == null)
             {
-                MessageBox.Show("Please select a module before installing!");
+                MessageBox.Show("Please select a module before install!");
                 return;
             }
 
-            if (string.IsNullOrWhiteSpace(SelectedModule.Version))
+            var clonedModule = (ToolModule)SelectedModule.Clone();
+            var taskName = $"Check for updates - Module {SelectedModule.Name}";
+
+            switch (SelectedModule.VersionUpdateStatus)
             {
-                MessageBox.Show("Please select a version before installing!");
+                case VersionUpdateStatus.NoUpdates:
+                    SelectedModule.VersionUpdateStatus = VersionUpdateStatus.CheckForUpdates;
+                    TaskExecution.Instance.RunOnceAsync(taskName, (taskReport) => CheckForUpdate(taskReport, clonedModule));
+                    break;
+
+                case VersionUpdateStatus.HasNewVersion:
+                    SelectedModule.VersionUpdateStatus = VersionUpdateStatus.Updating;
+                    TaskExecution.Instance.RunOnceAsync(taskName, (taskReport) => InstallLatestVersion(taskReport, clonedModule));
+                    break;
+
+                case VersionUpdateStatus.Done:
+                    ApplicationService.Instance.Restart();
+                    break;
+
+                default: break;
+            }
+        }
+
+        private void InstallLatestVersion(ITaskReport taskReport, ToolModule module)
+        {
+            LoggingService.Instance.Info($"Installing module {module.Name}...");
+
+            var toolModule = Repositories.RepositoryLocal.ModuleList.FirstOrDefault(p => p.Name == module.Name);
+            if (toolModule == null)
+            {
                 return;
             }
 
-            Task.Run(() =>
+            module.Version = module.NewVersion;
+            if (module.IsInstalled)
             {
-                LoggingService.Instance.Info($"Installing module {SelectedModule.Name}...");
-
-                var moduleName = SelectedModule.Name;
-                DownloadModule(SelectedModule);
-
-                RaisePropertyChanged("ModuleList");
-                RaisePropertyChanged("InstalledModuleList");
-                RaisePropertyChanged("AdditionalInstalledInfo");
-                RaisePropertyChanged("AdditionalRecommendedInfo");
-
-                var installedModule = InstalledModuleList.FirstOrDefault(p => p.Name == moduleName);
-                if (installedModule != null)
+                ApplicationService.Instance.InvokeUIAction(() =>
                 {
-                    SelectedModule = installedModule;
+                    toolModule.Version = toolModule.NewVersion;
+                    toolModule.NewVersion = null;
+                    toolModule.VersionUpdateStatus = VersionUpdateStatus.NoUpdates;
+                    
+                    RaisePropertyChanged("ModuleList");
+                    RaisePropertyChanged("InstalledModuleList");
+                    RaisePropertyChanged("AdditionalInstalledInfo");
+                    RaisePropertyChanged("AdditionalRecommendedInfo");
+
+                    var installedModule = InstalledModuleList.FirstOrDefault(p => p.Name == module.Name);
+                    if (installedModule != null)
+                    {
+                        SelectedModule = installedModule;
+                    }
+
+                    OnCmdEnableModule(toolModule.Name);
+                });
+            }
+        }
+
+        private void CheckForUpdate(ITaskReport taskReport, ToolModule module)
+        {
+            taskReport.SetDescription($"Checking versions of module {module.DisplayName}");
+
+            var toolModule = Repositories.RepositoryLocal.ModuleList.FirstOrDefault(p => p.Name == module.Name);
+            if (toolModule == null)
+            {
+                return;
+            }
+
+            try
+            {
+                var token = ModuleGlobalSettings.Instance.GetModuleConfigurationsByKey($"github.token.{module.RepoName}");
+                if (string.IsNullOrEmpty(token))
+                {
+                    token = ModuleGlobalSettings.Instance.GetModuleConfigurationsByKey("github.token");
                 }
-            });
+
+                var latestRelease = GithubProvider.GetLatestRelease(module.OwnerName, module.RepoName, token).Result;
+                if (latestRelease != null)
+                {
+                    var newVersion = latestRelease.TagName.TrimStart('v');
+                    if (newVersion.GetVersionValue() > module.Version.GetVersionValue())
+                    {
+                        toolModule.VersionUpdateStatus = VersionUpdateStatus.HasNewVersion;
+                        toolModule.NewVersion = newVersion;
+                        return;
+                    }
+                }
+
+                toolModule.VersionUpdateStatus = VersionUpdateStatus.NoUpdates;
+            }
+            catch (Exception ex)
+            {
+                taskReport.SetDescription($"Failed to check versions of module {module.Name}: {ex.Message}");
+                toolModule.VersionUpdateStatus = VersionUpdateStatus.NoUpdates;
+            }
         }
 
         private void OnCmdUninstallModule()
@@ -278,7 +349,7 @@ namespace PowerTools.ViewModels
                 RaisePropertyChanged("AdditionalRecommendedInfo");
 
                 BackgroundJobs.New()
-                    .AddJob(new CheckModuleVersions("Check Modules version when refreshing",0))
+                    .AddJob(new CheckModuleVersions("Check Modules version when refreshing", 0))
                     .Process();
             });
         }

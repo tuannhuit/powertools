@@ -44,7 +44,7 @@ namespace PowerTools.Jobs
 
                 foreach (var module in allModules)
                 {
-                    taskReport.SetDescription($"Start checking versions of {module.DisplayName}");
+                    taskReport.SetDescription($"Start checking versions of module {module.DisplayName}");
 
                     try
                     {

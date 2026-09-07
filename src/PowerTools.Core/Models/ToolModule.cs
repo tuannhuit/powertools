@@ -220,7 +220,16 @@ namespace PowerTools.Core.Models
         /// Checks if the current running tool version is download
         /// </summary>
         [JsonIgnore]
-        public bool IsInstalled => File.Exists(ExecutionLocation);
+        public bool IsInstalled
+        {
+            get
+            {
+                if(string.IsNullOrEmpty(Version))
+                    return false;
+
+                return File.Exists(ExecutionLocation);
+            }
+        }
 
         /// <summary>
         /// Checks if the current running tool version is download
@@ -420,7 +429,9 @@ namespace PowerTools.Core.Models
                 IsSelected = IsSelected,
                 IsLoaded = IsLoaded,
                 IsMarkDeleted = IsMarkDeleted,
-                IconColor = IconColor
+                IconColor = IconColor,
+                VersionUpdateStatus = VersionUpdateStatus,
+                NewVersion = NewVersion
             };
         }
     }

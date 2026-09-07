@@ -143,7 +143,6 @@
                                                 <Setter Property="Foreground" Value="White"/>
                                                 <Setter Property="Tag" Value="Install"/>
                                                 <Setter Property="ToolTip" Value="Install the latest version"/>
-                                                <Setter Property="Width" Value="50"/>
                                             </MultiDataTrigger.Setters>
                                         </MultiDataTrigger>
                                         <MultiDataTrigger>
@@ -156,7 +155,6 @@
                                                 <Setter Property="Foreground" Value="{StaticResource TextBox.Foreground.Gray}"/>
                                                 <Setter Property="Tag" Value="Check for Updates"/>
                                                 <Setter Property="ToolTip" Value="Check for Updates"/>
-                                                <Setter Property="Width" Value="120"/>
                                             </MultiDataTrigger.Setters>
                                         </MultiDataTrigger>
                                         <MultiDataTrigger>
