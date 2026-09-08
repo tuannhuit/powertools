@@ -188,6 +188,127 @@ namespace PowerTools.ViewModels
                     OnCmdEnableModule(toolModule.Name);
                 });
             }
+            else
+            {
+                if (module.RepoType == "github")
+                {
+                    DownloadModuleFromGithub(module);
+                }
+                else
+                {
+                    DownloadModule(module);
+                }
+            }
+        }
+
+        private void DownloadModuleFromGithub(ToolModule module)
+        {
+            if (string.IsNullOrEmpty(module.NewVersion))
+            {
+                return;
+            }
+
+            LoggingService.Instance.Info($"Downloading... module{module.Name} - {module.NewVersion}");
+
+            try
+            {
+                if (module.TokenRequired && string.IsNullOrEmpty(module.Token))
+                {
+                    LoggingService.Instance.Info($"Token is required for module {module.Name} but is missing.");
+                    return;
+                }
+
+                var latestRelease = GithubProvider.GetLatestRelease(module.OwnerName, module.RepoName, module.Token).Result;
+                var localReleaseAssets = GithubProvider.DownloadReleaseAssets(module.OwnerName, module.RepoName, module.Token, latestRelease).Result;
+
+                if (!File.Exists(localReleaseAssets.ReleasePath))
+                {
+                    LoggingService.Instance.Info($"Module {module.Name} is not downloaded!");
+                    return;
+                }
+
+                var _7zPath = Get7zExecutionPath();
+                var tempExtractedNewVersion = ApplicationService.Instance.GetOrCreateTempFolder();
+
+                var process = new Process
+                {
+                    StartInfo = new ProcessStartInfo
+                    {
+                        FileName = _7zPath,
+                        Arguments = $"x \"{localReleaseAssets.ReleasePath}\" -o\"{tempExtractedNewVersion}\" -y",
+                        RedirectStandardError = true,
+                        RedirectStandardOutput = true,
+                        UseShellExecute = false,
+                        CreateNoWindow = true,
+                    }
+                };
+
+                process.Start();
+
+                process.WaitForExit();
+                process.Close();
+                process.Dispose();
+
+                if (File.Exists(localReleaseAssets.ChangelogsPath))
+                {
+                    var destChangelogsFile = Path.Combine(tempExtractedNewVersion, "Changelogs.md");
+                    File.Copy(localReleaseAssets.ChangelogsPath, destChangelogsFile, true);
+                }
+
+                if (File.Exists(localReleaseAssets.ReadmePath))
+                {
+                    var destReadmeFile = Path.Combine(tempExtractedNewVersion, "Readme.md");
+                    File.Copy(localReleaseAssets.ReadmePath, destReadmeFile, true);
+                }
+
+                module.Version = module.NewVersion;
+
+                CopyDirectory(tempExtractedNewVersion, module.ModuleLocation);
+            }
+            catch (Exception ex)
+            {
+                LoggingService.Instance.Error($"Failed to download module {module.Name}: {ex.Message}", ex);
+            }
+        }
+        private void CopyDirectory(string sourceDir, string destinationDir, bool overwrite = true)
+        {
+            // 1. Get information about the source directory
+            var dir = new DirectoryInfo(sourceDir);
+
+            if (!dir.Exists)
+            {
+                throw new DirectoryNotFoundException($"Source directory not found: {dir.FullName}");
+            }
+
+            // 2. Create the destination directory if it doesn't exist
+            Directory.CreateDirectory(destinationDir);
+
+            // 3. Copy all files in the current directory
+            foreach (FileInfo file in dir.GetFiles())
+            {
+                string targetFilePath = Path.Combine(destinationDir, file.Name);
+                file.CopyTo(targetFilePath, overwrite);
+            }
+
+            // 4. Recursively copy all subdirectories
+            foreach (DirectoryInfo subDir in dir.GetDirectories())
+            {
+                string targetSubDirPath = Path.Combine(destinationDir, subDir.Name);
+                CopyDirectory(subDir.FullName, targetSubDirPath, overwrite);
+            }
+        }
+        private string Get7zExecutionPath()
+        {
+            var seventZipPath = ModuleGlobalSettings.Instance.GetModuleConfigurationsByKey("7zExecutionPath");
+            if (string.IsNullOrEmpty(seventZipPath))
+            {
+                var executionFolder = Path.GetDirectoryName(typeof(PowerTools.App).Assembly.Location);
+                seventZipPath = Path.Combine(executionFolder, @"tools\7z\7z.exe");
+
+                ModuleGlobalSettings.Instance.SaveModuleConfigurationsByKey("7zExecutionPath", seventZipPath);
+            }
+
+            return seventZipPath;
         }
 
         private void CheckForUpdate(ITaskReport taskReport, ToolModule module)
