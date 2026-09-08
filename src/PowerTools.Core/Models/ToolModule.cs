@@ -407,6 +407,27 @@ namespace PowerTools.Core.Models
             }
         }
 
+        public bool TokenRequired { get; set; }
+
+        public string Token
+        {
+            get
+            {
+                if(!TokenRequired)
+                {
+                    return null;
+                }
+
+                string token = ModuleGlobalSettings.Instance.GetApplicationConfigurationsByKey($"{RepoType}.token.{RepoName}");
+                if (string.IsNullOrEmpty(token))
+                {
+                    token = ModuleGlobalSettings.Instance.GetApplicationConfigurationsByKey($"{RepoType}.token");
+                }
+
+                return token;
+            }
+        }
+
         public object Clone()
         {
             return new ToolModule
@@ -431,7 +452,8 @@ namespace PowerTools.Core.Models
                 IsMarkDeleted = IsMarkDeleted,
                 IconColor = IconColor,
                 VersionUpdateStatus = VersionUpdateStatus,
-                NewVersion = NewVersion
+                NewVersion = NewVersion,
+                TokenRequired = TokenRequired
             };
         }
     }

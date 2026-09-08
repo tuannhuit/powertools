@@ -37,7 +37,7 @@ namespace PowerTools.Jobs
             {
                 IsStarted = true;
                 var allModules = Repositories.RepositoryLocal.ModuleList;
-                if(!allModules.Any())
+                if (!allModules.Any())
                 {
                     return;
                 }
@@ -48,22 +48,25 @@ namespace PowerTools.Jobs
 
                     try
                     {
-                        var token = ModuleGlobalSettings.Instance.GetModuleConfigurationsByKey($"github.token.{module.RepoName}");
-                        if (string.IsNullOrEmpty(token))
+                        if (module.TokenRequired && string.IsNullOrEmpty(module.Token))
                         {
-                            token = ModuleGlobalSettings.Instance.GetModuleConfigurationsByKey("github.token");
+                            continue;
                         }
 
-                        var latestRelease = GithubProvider.GetLatestRelease(module.OwnerName, module.RepoName, token).Result;
-                        if (latestRelease != null)
+                        var latestRelease = GithubProvider.GetLatestRelease(module.OwnerName, module.RepoName, module.Token).Result;
+                        if (latestRelease == null)
                         {
-                            var newVersion = latestRelease.TagName.TrimStart('v');
-                            if (newVersion.GetVersionValue() > module.Version.GetVersionValue())
-                            {
-                                module.VersionUpdateStatus = VersionUpdateStatus.HasNewVersion;
-                                module.NewVersion = newVersion;
-                            }
+                            return;
                         }
+
+                        var newVersion = latestRelease.TagName.TrimStart('v');
+                        if (newVersion.GetVersionValue() <= module.Version.GetVersionValue())
+                        {
+                            return;
+                        }
+
+                        module.VersionUpdateStatus = VersionUpdateStatus.HasNewVersion;
+                        module.NewVersion = newVersion;
                     }
                     catch (Exception e)
                     {

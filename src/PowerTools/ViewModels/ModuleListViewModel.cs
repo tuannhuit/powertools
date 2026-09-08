@@ -173,7 +173,7 @@ namespace PowerTools.ViewModels
                     toolModule.Version = toolModule.NewVersion;
                     toolModule.NewVersion = null;
                     toolModule.VersionUpdateStatus = VersionUpdateStatus.NoUpdates;
-                    
+
                     RaisePropertyChanged("ModuleList");
                     RaisePropertyChanged("InstalledModuleList");
                     RaisePropertyChanged("AdditionalInstalledInfo");
@@ -202,25 +202,28 @@ namespace PowerTools.ViewModels
 
             try
             {
-                var token = ModuleGlobalSettings.Instance.GetModuleConfigurationsByKey($"github.token.{module.RepoName}");
-                if (string.IsNullOrEmpty(token))
+                if (module.TokenRequired && string.IsNullOrEmpty(module.Token))
                 {
-                    token = ModuleGlobalSettings.Instance.GetModuleConfigurationsByKey("github.token");
+                    toolModule.VersionUpdateStatus = VersionUpdateStatus.NoUpdates;
+                    return;
                 }
 
-                var latestRelease = GithubProvider.GetLatestRelease(module.OwnerName, module.RepoName, token).Result;
-                if (latestRelease != null)
+                var latestRelease = GithubProvider.GetLatestRelease(module.OwnerName, module.RepoName, module.Token).Result;
+                if (latestRelease == null)
                 {
-                    var newVersion = latestRelease.TagName.TrimStart('v');
-                    if (newVersion.GetVersionValue() > module.Version.GetVersionValue())
-                    {
-                        toolModule.VersionUpdateStatus = VersionUpdateStatus.HasNewVersion;
-                        toolModule.NewVersion = newVersion;
-                        return;
-                    }
+                    toolModule.VersionUpdateStatus = VersionUpdateStatus.NoUpdates;
+                    return;
                 }
 
-                toolModule.VersionUpdateStatus = VersionUpdateStatus.NoUpdates;
+                var newVersion = latestRelease.TagName.TrimStart('v');
+                if (newVersion.GetVersionValue() <= module.Version.GetVersionValue())
+                {
+                    toolModule.VersionUpdateStatus = VersionUpdateStatus.NoUpdates;
+                    return;
+                }
+
+                toolModule.VersionUpdateStatus = VersionUpdateStatus.HasNewVersion;
+                toolModule.NewVersion = newVersion;
             }
             catch (Exception ex)
             {

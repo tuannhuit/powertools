@@ -58,5 +58,10 @@
         public string RepoType { get; set; }
 
         public string IconImageRelativeLocation { get; set; }
+
+        /// <summary>
+        /// PowerTools use Token to query Remote Module
+        /// </summary>
+        public bool TokenRequired { get; set; }
     }
 }

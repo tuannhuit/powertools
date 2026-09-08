@@ -41,7 +41,8 @@ namespace PowerTools.Core.SharedServices
                             ExecutionName = remoteModule.ExecutionName,
                             Icon = remoteModule.Icon,
                             IconColor = remoteModule.IconColor,
-                            IconImageRelativeLocation = remoteModule.IconImageRelativeLocation
+                            IconImageRelativeLocation = remoteModule.IconImageRelativeLocation,
+                            TokenRequired = remoteModule.TokenRequired
                         });
                     }
                     else
@@ -57,6 +58,7 @@ namespace PowerTools.Core.SharedServices
                         localModule.Icon = remoteModule.Icon;
                         localModule.IconColor = remoteModule.IconColor;
                         localModule.IconImageRelativeLocation = remoteModule.IconImageRelativeLocation;
+                        localModule.TokenRequired = remoteModule.TokenRequired;
                     }
                 }
             }

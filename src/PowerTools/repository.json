@@ -13,7 +13,8 @@
       "RepoLink": "",
       "OwnerName": "hansen-technologies",
       "RepoName": "ccb-i-pm-kafka-client-tool",
-      "RepoType": "github"
+      "RepoType": "github",
+      "TokenRequired":  true
     },
     {
       "Name": "elasticsearch-tool",
@@ -26,7 +27,8 @@
       "RepoLink": "",
       "OwnerName": "Peter-Nguyen_hansen",
       "RepoName": "ccb-i-pm-elasticsearch-tool",
-      "RepoType": "github"
+      "RepoType": "github",
+      "TokenRequired": true
     },
     {
       "Name": "event-viewer-tool",
@@ -40,7 +42,8 @@
       "RepoLink": "",
       "OwnerName": "Peter-Nguyen_hansen",
       "RepoName": "ccb-i-pm-event-viewer-tool",
-      "RepoType": "github"
+      "RepoType": "github",
+      "TokenRequired": true
     },
     {
       "Name": "icx-configuration-update",
@@ -52,7 +55,8 @@
       "RepoLink": "",
       "OwnerName": "Peter-Nguyen_hansen",
       "RepoName": "ccb-i-pm-icx-configuration-update",
-      "RepoType": "github"
+      "RepoType": "github",
+      "TokenRequired": true
     },
     {
       "Name": "Base64ToString Converter",
@@ -62,7 +66,8 @@
       "RepoLink": "",
       "OwnerName": "Peter-Nguyen_hansen",
       "RepoName": "ccb-i-pm-base64-to-string-converter",
-      "RepoType": "github"
+      "RepoType": "github",
+      "TokenRequired": true
     },
     {
       "Name": "simple-server",
@@ -73,7 +78,8 @@
       "RepoLink": "",
       "OwnerName": "Peter-Nguyen_hansen",
       "RepoName": "ccb-i-pm-simple-server",
-      "RepoType": "github"
+      "RepoType": "github",
+      "TokenRequired": true
     },
     {
       "Name": "server-management-tool",
@@ -85,7 +91,8 @@
       "RepoLink": "",
       "OwnerName": "Peter-Nguyen_hansen",
       "RepoName": "ccb-i-pm-server-management-tool",
-      "RepoType": "github"
+      "RepoType": "github",
+      "TokenRequired": true
     },
     {
       "Name": "QAutomation Tool",
@@ -96,7 +103,8 @@
       "RepoLink": "",
       "OwnerName": "Peter-Nguyen_hansen",
       "RepoName": "ccb-i-pm-qautomation-tool",
-      "RepoType": "github"
+      "RepoType": "github",
+      "TokenRequired": true
     },
     {
       "Name": "qautomation-tool",
@@ -109,7 +117,8 @@
       "RepoLink": "",
       "OwnerName": "Peter-Nguyen_hansen",
       "RepoName": "ccb-i-pm-qautomation-tool",
-      "RepoType": "github"
+      "RepoType": "github",
+      "TokenRequired": true
     }
   ]
 }
