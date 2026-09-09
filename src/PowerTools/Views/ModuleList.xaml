@@ -22,8 +22,9 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="{Binding ElementName=eInstalled, Path=IsExpanded, Converter={StaticResource BooleanToGridSizeConverter}}"/>
-                    <RowDefinition Height="{Binding ElementName=eRecommended, Path=IsExpanded, Converter={StaticResource BooleanToGridSizeConverter}}"/>
+                    <RowDefinition Height="{Binding ElementName=eInstalled, Path=IsExpanded, Converter={StaticResource BooleanToGridSizeConverter}, ConverterParameter='1*'}" MinHeight="30"/>
+                    <RowDefinition Height="4"/>
+                    <RowDefinition Height="{Binding ElementName=eRecommended, Path=IsExpanded, Converter={StaticResource BooleanToGridSizeConverter}, ConverterParameter='2*'}" MinHeight="30"/>
                 </Grid.RowDefinitions>
                 <TextBlock Style="{StaticResource TextBlock.ContentSmall}" Grid.Row="0" Text="EXTENSIONS" />
                 <Button Style="{StaticResource Button.Icon}" Grid.Row="0" Content="{x:Static models:ButtonIcons.Refresh}" Command="{Binding CmdRefreshModules}" Tag="Refresh" Margin="5" HorizontalAlignment="Right"/>
@@ -33,7 +34,7 @@
                     </commonControls:TextPlaceHolder.InputBindings>
                 </commonControls:TextPlaceHolder>
                 <Expander x:Name="eInstalled" Style="{StaticResource Expander.Normal}" Grid.Row="2" Header="INSTALLED" Tag="{Binding AdditionalInstalledInfo, UpdateSourceTrigger=PropertyChanged}" IsExpanded="True">
-                    <ListView Style="{StaticResource ListView.Normal}" ItemsSource="{Binding InstalledModuleList}" SelectedItem="{Binding Path=SelectedModule, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemContainerStyle="{StaticResource ListViewItem.Normal}" HorizontalContentAlignment="Stretch" Margin="5" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto">
+                    <ListView Style="{StaticResource ListView.Normal}" ItemsSource="{Binding InstalledModuleList}" SelectedItem="{Binding Path=SelectedInstalledModule, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemContainerStyle="{StaticResource ListViewItem.Normal}" HorizontalContentAlignment="Stretch" Margin="5" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto">
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <Grid Margin="0 0 0 5">
@@ -57,8 +58,9 @@
                         </ListView.ItemTemplate>
                     </ListView>
                 </Expander>
-                <Expander x:Name="eRecommended" Style="{StaticResource Expander.Normal}" Grid.Row="3" Header="RECOMMENDED" Tag="{Binding AdditionalRecommendedInfo, UpdateSourceTrigger=PropertyChanged}" BorderThickness="0" IsExpanded="True">
-                    <ListView Style="{StaticResource ListView.Normal}" ItemsSource="{Binding ModuleList}" SelectedItem="{Binding Path=SelectedModule, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemContainerStyle="{StaticResource ListViewItem.Normal}" HorizontalContentAlignment="Stretch" Margin="5" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto">
+                <GridSplitter Style="{StaticResource GridSplitter.Normal}" Grid.Row="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Transparent"/>
+                <Expander x:Name="eRecommended" Style="{StaticResource Expander.Normal}" Grid.Row="4" Header="RECOMMENDED" Tag="{Binding AdditionalRecommendedInfo, UpdateSourceTrigger=PropertyChanged}" BorderThickness="0" IsExpanded="True">
+                    <ListView Style="{StaticResource ListView.Normal}" ItemsSource="{Binding ModuleList}" SelectedItem="{Binding Path=SelectedRecommendedModule, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemContainerStyle="{StaticResource ListViewItem.Normal}" HorizontalContentAlignment="Stretch" Margin="5" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto">
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <Grid Margin="0 0 0 5">
@@ -104,7 +106,7 @@
                     </Border>
                     <StackPanel Grid.Column="1" Grid.Row="0" Orientation="Horizontal">
                         <TextBlock Style="{StaticResource TextBlock.Header}" Text="{Binding SelectedModule.DisplayName}" FontWeight="SemiBold"/>
-                        <Border Style="{StaticResource Border.Normal}" Margin="0" BorderThickness="0" BorderBrush="Transparent" Background="{StaticResource Button.Background}" CornerRadius="5" VerticalAlignment="Bottom" Visibility="{Binding SelectedModule.IsInstalled, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <Border Style="{StaticResource Border.Normal}" Margin="0" BorderThickness="0" BorderBrush="Transparent" Background="{StaticResource Button.Background}" CornerRadius="5" VerticalAlignment="Bottom" Visibility="{Binding SelectedModule.IsVersionAllocated, Converter={StaticResource BooleanToVisibilityConverter}}">
                             <TextBlock Style="{StaticResource TextBlock.ContentSmall}" Text="{Binding SelectedModule.Version, Converter={StaticResource StringFormatConverter}, ConverterParameter='\{0\}'}" FontSize="10" Margin="4 1" Foreground="White" FontWeight="SemiBold"/>
                         </Border>
                     </StackPanel>
@@ -125,7 +127,7 @@
                                     <Style.Triggers>
                                         <MultiDataTrigger>
                                             <MultiDataTrigger.Conditions>
-                                                <Condition Binding="{Binding Path=SelectedModule.IsInstalled, UpdateSourceTrigger=PropertyChanged}" Value="False"/>
+                                                <Condition Binding="{Binding Path=SelectedModule.IsVersionAllocated, UpdateSourceTrigger=PropertyChanged}" Value="False"/>
                                                 <Condition Binding="{Binding Path=SelectedModule.Version, UpdateSourceTrigger=PropertyChanged}" Value="{x:Null}"/>
                                                 <Condition Binding="{Binding Path=SelectedModule.NewVersion, UpdateSourceTrigger=PropertyChanged}" Value="{x:Null}"/>
                                             </MultiDataTrigger.Conditions>
@@ -135,7 +137,7 @@
                                         </MultiDataTrigger>
                                         <MultiDataTrigger>
                                             <MultiDataTrigger.Conditions>
-                                                <Condition Binding="{Binding Path=SelectedModule.IsInstalled, UpdateSourceTrigger=PropertyChanged}" Value="False"/>
+                                                <Condition Binding="{Binding Path=SelectedModule.IsVersionAllocated, UpdateSourceTrigger=PropertyChanged}" Value="False"/>
                                             </MultiDataTrigger.Conditions>
                                             <MultiDataTrigger.Setters>
                                                 <Setter Property="Background" Value="{StaticResource Button.MouseOver.Background}"/>
@@ -147,7 +149,7 @@
                                         </MultiDataTrigger>
                                         <MultiDataTrigger>
                                             <MultiDataTrigger.Conditions>
-                                                <Condition Binding="{Binding Path=SelectedModule.IsInstalled, UpdateSourceTrigger=PropertyChanged}" Value="True"/>
+                                                <Condition Binding="{Binding Path=SelectedModule.IsVersionAllocated, UpdateSourceTrigger=PropertyChanged}" Value="True"/>
                                                 <Condition Binding="{Binding Path=SelectedModule.VersionUpdateStatus, UpdateSourceTrigger=PropertyChanged}" Value="NoUpdates"/>
                                             </MultiDataTrigger.Conditions>
                                             <MultiDataTrigger.Setters>
@@ -159,7 +161,7 @@
                                         </MultiDataTrigger>
                                         <MultiDataTrigger>
                                             <MultiDataTrigger.Conditions>
-                                                <Condition Binding="{Binding Path=SelectedModule.IsInstalled, UpdateSourceTrigger=PropertyChanged}" Value="True"/>
+                                                <Condition Binding="{Binding Path=SelectedModule.IsVersionAllocated, UpdateSourceTrigger=PropertyChanged}" Value="True"/>
                                                 <Condition Binding="{Binding Path=SelectedModule.VersionUpdateStatus, UpdateSourceTrigger=PropertyChanged}" Value="HasNewVersion"/>
                                             </MultiDataTrigger.Conditions>
                                             <MultiDataTrigger.Setters>
@@ -198,10 +200,10 @@
                             <Button.Style>
                                 <Style TargetType="{x:Type Button}" BasedOn="{StaticResource Button.IconActive}">
                                     <Style.Triggers>
-                                        <DataTrigger Binding="{Binding Path=SelectedModule.IsInstalled, UpdateSourceTrigger=PropertyChanged}" Value="False">
+                                        <DataTrigger Binding="{Binding Path=SelectedModule.IsVersionAllocated, UpdateSourceTrigger=PropertyChanged}" Value="False">
                                             <Setter Property="Visibility" Value="Collapsed"/>
                                         </DataTrigger>
-                                        <DataTrigger Binding="{Binding Path=SelectedModule.IsInstalled, UpdateSourceTrigger=PropertyChanged}" Value="True">
+                                        <DataTrigger Binding="{Binding Path=SelectedModule.IsVersionAllocated, UpdateSourceTrigger=PropertyChanged}" Value="True">
                                             <Setter Property="Visibility" Value="Visible"/>
                                         </DataTrigger>
                                     </Style.Triggers>
@@ -214,7 +216,7 @@
                                     <Style.Triggers>
                                         <MultiDataTrigger>
                                             <MultiDataTrigger.Conditions>
-                                                <Condition Binding="{Binding Path=SelectedModule.IsInstalled, UpdateSourceTrigger=PropertyChanged}" Value="True"/>
+                                                <Condition Binding="{Binding Path=SelectedModule.IsVersionAllocated, UpdateSourceTrigger=PropertyChanged}" Value="True"/>
                                                 <Condition Binding="{Binding Path=SelectedModule.IsActive, UpdateSourceTrigger=PropertyChanged}" Value="True"/>
                                             </MultiDataTrigger.Conditions>
                                             <MultiDataTrigger.Setters>
@@ -223,14 +225,14 @@
                                         </MultiDataTrigger>
                                         <MultiDataTrigger>
                                             <MultiDataTrigger.Conditions>
-                                                <Condition Binding="{Binding Path=SelectedModule.IsInstalled, UpdateSourceTrigger=PropertyChanged}" Value="True"/>
+                                                <Condition Binding="{Binding Path=SelectedModule.IsVersionAllocated, UpdateSourceTrigger=PropertyChanged}" Value="True"/>
                                                 <Condition Binding="{Binding Path=SelectedModule.IsActive, UpdateSourceTrigger=PropertyChanged}" Value="False"/>
                                             </MultiDataTrigger.Conditions>
                                             <MultiDataTrigger.Setters>
                                                 <Setter Property="Visibility" Value="Collapsed"/>
                                             </MultiDataTrigger.Setters>
                                         </MultiDataTrigger>
-                                        <DataTrigger Binding="{Binding Path=SelectedModule.IsInstalled, UpdateSourceTrigger=PropertyChanged}" Value="False">
+                                        <DataTrigger Binding="{Binding Path=SelectedModule.IsVersionAllocated, UpdateSourceTrigger=PropertyChanged}" Value="False">
                                             <Setter Property="Visibility" Value="Collapsed"/>
                                         </DataTrigger>
                                     </Style.Triggers>
@@ -243,7 +245,7 @@
                                     <Style.Triggers>
                                         <MultiDataTrigger>
                                             <MultiDataTrigger.Conditions>
-                                                <Condition Binding="{Binding Path=SelectedModule.IsInstalled, UpdateSourceTrigger=PropertyChanged}" Value="True"/>
+                                                <Condition Binding="{Binding Path=SelectedModule.IsVersionAllocated, UpdateSourceTrigger=PropertyChanged}" Value="True"/>
                                                 <Condition Binding="{Binding Path=SelectedModule.IsActive, UpdateSourceTrigger=PropertyChanged}" Value="False"/>
                                             </MultiDataTrigger.Conditions>
                                             <MultiDataTrigger.Setters>
@@ -252,14 +254,14 @@
                                         </MultiDataTrigger>
                                         <MultiDataTrigger>
                                             <MultiDataTrigger.Conditions>
-                                                <Condition Binding="{Binding Path=SelectedModule.IsInstalled, UpdateSourceTrigger=PropertyChanged}" Value="True"/>
+                                                <Condition Binding="{Binding Path=SelectedModule.IsVersionAllocated, UpdateSourceTrigger=PropertyChanged}" Value="True"/>
                                                 <Condition Binding="{Binding Path=SelectedModule.IsActive, UpdateSourceTrigger=PropertyChanged}" Value="True"/>
                                             </MultiDataTrigger.Conditions>
                                             <MultiDataTrigger.Setters>
                                                 <Setter Property="Visibility" Value="Collapsed"/>
                                             </MultiDataTrigger.Setters>
                                         </MultiDataTrigger>
-                                        <DataTrigger Binding="{Binding Path=SelectedModule.IsInstalled, UpdateSourceTrigger=PropertyChanged}" Value="False">
+                                        <DataTrigger Binding="{Binding Path=SelectedModule.IsVersionAllocated, UpdateSourceTrigger=PropertyChanged}" Value="False">
                                             <Setter Property="Visibility" Value="Collapsed"/>
                                         </DataTrigger>
                                     </Style.Triggers>
@@ -270,10 +272,10 @@
                             <CheckBox.Style>
                                 <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource CheckBox.Normal}">
                                     <Style.Triggers>
-                                        <DataTrigger Binding="{Binding Path=SelectedModule.IsInstalled, UpdateSourceTrigger=PropertyChanged}" Value="True">
+                                        <DataTrigger Binding="{Binding Path=SelectedModule.IsVersionAllocated, UpdateSourceTrigger=PropertyChanged}" Value="True">
                                             <Setter Property="Visibility" Value="Visible"/>
                                         </DataTrigger>
-                                        <DataTrigger Binding="{Binding Path=SelectedModule.IsInstalled, UpdateSourceTrigger=PropertyChanged}" Value="False">
+                                        <DataTrigger Binding="{Binding Path=SelectedModule.IsVersionAllocated, UpdateSourceTrigger=PropertyChanged}" Value="False">
                                             <Setter Property="Visibility" Value="Collapsed"/>
                                         </DataTrigger>
                                     </Style.Triggers>

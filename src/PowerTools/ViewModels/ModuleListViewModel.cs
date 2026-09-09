@@ -24,18 +24,40 @@ namespace PowerTools.ViewModels
     public class ModuleListViewModel : BindableBase
     {
         private List<ToolModule> _allModules => Repositories.RepositoryLocal.ModuleList;
-        public ObservableCollection<ToolModule> ModuleList => new(_allModules.Where(p => !p.IsInstalled && (string.IsNullOrEmpty(SearchingText) || p.Name.ToLower().Contains(SearchingText.ToLower()))));
-        public ObservableCollection<ToolModule> InstalledModuleList => new(_allModules.Where(p => p.IsInstalled && (string.IsNullOrEmpty(SearchingText) || p.Name.ToLower().Contains(SearchingText.ToLower()))));
+        public ObservableCollection<ToolModule> ModuleList => new(_allModules.Where(p => !p.IsVersionAllocated && (string.IsNullOrEmpty(SearchingText) || p.Name.ToLower().Contains(SearchingText.ToLower()))));
+        public ObservableCollection<ToolModule> InstalledModuleList => new(_allModules.Where(p => p.IsVersionAllocated && (string.IsNullOrEmpty(SearchingText) || p.Name.ToLower().Contains(SearchingText.ToLower()))));
 
-        private ToolModule _selectedModule;
+        private ToolModule _selectedInstalledModule;
+        private ToolModule _selectedRecommendedModule;
 
         public ToolModule SelectedModule
         {
-            get => _selectedModule;
+            get => _selectedInstalledModule ?? _selectedRecommendedModule;
+        }
+
+        public ToolModule SelectedInstalledModule
+        {
+            get => _selectedInstalledModule;
             set
             {
-                _selectedModule = value;
+                _selectedInstalledModule = value;
+                _selectedRecommendedModule = null;
                 RaisePropertyChanged();
+                RaisePropertyChanged("SelectedModule");
+                RaisePropertyChanged("SelectedRecommendedModule");
+            }
+        }
+
+        public ToolModule SelectedRecommendedModule
+        {
+            get => _selectedRecommendedModule;
+            set
+            {
+                _selectedRecommendedModule = value;
+                _selectedInstalledModule = null;
+                RaisePropertyChanged();
+                RaisePropertyChanged("SelectedModule");
+                RaisePropertyChanged("SelectedInstalledModule");
             }
         }
 
@@ -166,7 +188,7 @@ namespace PowerTools.ViewModels
             }
 
             module.Version = module.NewVersion;
-            if (module.IsInstalled)
+            if (module.IsVersionAllocated)
             {
                 ApplicationService.Instance.InvokeUIAction(() =>
                 {
@@ -182,7 +204,7 @@ namespace PowerTools.ViewModels
                     var installedModule = InstalledModuleList.FirstOrDefault(p => p.Name == module.Name);
                     if (installedModule != null)
                     {
-                        SelectedModule = installedModule;
+                        SelectedInstalledModule = installedModule;
                     }
 
                     OnCmdEnableModule(toolModule.Name);

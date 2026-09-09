@@ -4,7 +4,6 @@
     
     <converters:BooleanReversalConverter x:Key="BooleanReversalConverter"/>
     <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
-    <converters:ToolModuleVersionConverter x:Key="ToolModuleVersionConverter"/>
     <converters:StringToBrushConverter x:Key="StringToBrushConverter"/>
 
 </ResourceDictionary>

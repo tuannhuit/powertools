@@ -197,15 +197,15 @@ namespace PowerTools.Core.Models
                 _version = value;
                 RaisePropertyChanged();
                 RaisePropertyChanged("IsInstalled");
-                RaisePropertyChanged("IsNotInstalled");
                 RaisePropertyChanged("IsActive");
             }
         }
 
-        /// <summary>
-        /// Gets or sets the tool version which is running
-        /// </summary>
         private string _newVersion;
+        /// <summary>
+        /// Gets or sets the new tool version which should be installed
+        /// </summary>
+        [JsonIgnore]
         public string NewVersion
         {
             get => _newVersion;
@@ -220,40 +220,14 @@ namespace PowerTools.Core.Models
         /// Checks if the current running tool version is download
         /// </summary>
         [JsonIgnore]
-        public bool IsInstalled
+        public bool IsVersionAllocated
         {
             get
             {
-                if(string.IsNullOrEmpty(Version))
+                if (string.IsNullOrEmpty(Version))
                     return false;
 
                 return File.Exists(ExecutionLocation);
-            }
-        }
-
-        /// <summary>
-        /// Checks if the current running tool version is download
-        /// </summary>
-        [JsonIgnore]
-        public bool IsNotInstalled => !IsInstalled;
-
-        /// <summary>
-        /// Gets or sets the list of versions of the tool
-        /// </summary>
-        [JsonIgnore]
-        public List<string> AllVersions { get; set; }
-
-        [JsonIgnore]
-        public string LatestVersion
-        {
-            get
-            {
-                if (AllVersions != null && AllVersions.Any())
-                {
-                    return AllVersions[AllVersions.Count() - 1];
-                }
-
-                return Version;
             }
         }
 
@@ -288,13 +262,13 @@ namespace PowerTools.Core.Models
             get
             {
                 var assembly = Assembly.GetAssembly(typeof(ToolModule));
-                if(assembly == null)
+                if (assembly == null)
                 {
                     throw new Exception("Not found assembly for ToolModule");
                 }
 
                 var assemblyLocation = Path.GetDirectoryName(assembly.Location);
-                if(string.IsNullOrEmpty(assemblyLocation))
+                if (string.IsNullOrEmpty(assemblyLocation))
                 {
                     throw new Exception("Not found assembly location for ToolModule");
                 }
@@ -314,13 +288,13 @@ namespace PowerTools.Core.Models
             get
             {
                 var assembly = Assembly.GetAssembly(typeof(ToolModule));
-                if(assembly == null)
+                if (assembly == null)
                 {
                     throw new Exception("Not found assembly for ToolModule");
                 }
 
                 var assemblyLocation = Path.GetDirectoryName(assembly.Location);
-                if(string.IsNullOrEmpty(assemblyLocation))
+                if (string.IsNullOrEmpty(assemblyLocation))
                 {
                     throw new Exception("Not found assembly location for ToolModule");
                 }
@@ -359,16 +333,49 @@ namespace PowerTools.Core.Models
             }
         }
 
+        [JsonIgnore]
         public bool IsNotActive => !IsActive;
 
-        private bool _isMarkDeleted;
-        public bool IsMarkDeleted
+        private List<string> _markedUninstalledVersions = new List<string>();
+        public List<string> MarkedUninstalledVersions
         {
-            get => _isMarkDeleted;
+            get => _markedUninstalledVersions;
             set
             {
-                _isMarkDeleted = value;
+                _markedUninstalledVersions = value;
                 RaisePropertyChanged();
+            }
+        }
+
+        [JsonIgnore]
+        public List<string> UninstalledVersionLocations
+        {
+            get
+            {
+                if (_markedUninstalledVersions == null || !_markedUninstalledVersions.Any())
+                {
+                    return new List<string>();
+                }
+
+                var uninstalledVersions = _markedUninstalledVersions.Distinct().ToArray();
+                if (!uninstalledVersions.Any())
+                {
+                    return new List<string>();
+                }
+
+                var assembly = Assembly.GetAssembly(typeof(ToolModule));
+                if (assembly == null)
+                {
+                    return new List<string>();
+                }
+
+                var assemblyLocation = Path.GetDirectoryName(assembly.Location);
+                if (string.IsNullOrEmpty(assemblyLocation))
+                {
+                    return new List<string>();
+                }
+
+                return uninstalledVersions.Select(p => Path.Combine(assemblyLocation, $"{ModuleGlobalSettings.Instance.RepositoryLocalName}\\{Name}-{p}")).ToList();
             }
         }
 
@@ -409,11 +416,12 @@ namespace PowerTools.Core.Models
 
         public bool TokenRequired { get; set; }
 
+        [JsonIgnore]
         public string Token
         {
             get
             {
-                if(!TokenRequired)
+                if (!TokenRequired)
                 {
                     return null;
                 }
@@ -424,7 +432,7 @@ namespace PowerTools.Core.Models
                     token = ModuleGlobalSettings.Instance.GetApplicationConfigurationsByKey($"{RepoType}.token");
                 }
 
-                return token;
+                return string.IsNullOrEmpty(token) ? null : token;
             }
         }
 
@@ -441,7 +449,6 @@ namespace PowerTools.Core.Models
                 RepoLink = RepoLink,
                 Description = Description,
                 Version = Version,
-                AllVersions = AllVersions,
                 ExecutionName = ExecutionName,
                 Icon = Icon,
                 IconImageRelativeLocation = IconImageRelativeLocation,
@@ -449,7 +456,7 @@ namespace PowerTools.Core.Models
                 IsActive = IsActive,
                 IsSelected = IsSelected,
                 IsLoaded = IsLoaded,
-                IsMarkDeleted = IsMarkDeleted,
+                MarkedUninstalledVersions = MarkedUninstalledVersions,
                 IconColor = IconColor,
                 VersionUpdateStatus = VersionUpdateStatus,
                 NewVersion = NewVersion,

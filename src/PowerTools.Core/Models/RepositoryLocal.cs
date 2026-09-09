@@ -28,42 +28,37 @@ namespace PowerTools.Core.Models
 
         protected override RepositoryInformation<ToolModule> AfterLoad(RepositoryInformation<ToolModule> repositoryInformation)
         {
-            var markDeletedModules = repositoryInformation.ModuleList.Where(p => p.IsMarkDeleted).ToArray();
-            if (markDeletedModules.Any())
+            var uninstalledModules = repositoryInformation.ModuleList.Where(p => p.MarkedUninstalledVersions.Any()).ToList();
+            foreach (var module in uninstalledModules)
             {
-                for (int i = 0; i < markDeletedModules.Length; i++)
+                var locations = module.UninstalledVersionLocations;
+                foreach (var location in locations)
                 {
-                    if (Directory.Exists(markDeletedModules[i].ModuleLocation))
+                    if (Directory.Exists(location))
                     {
                         try
                         {
-                            Directory.Delete(markDeletedModules[i].ModuleLocation, true);
+                            Directory.Delete(location, true);
                         }
                         catch (Exception e)
                         {
-                            LoggingService.Instance.Error($"Failed to delete physical module '{markDeletedModules[i].ModuleLocation}'", e);
+                            LoggingService.Instance.Error($"Failed to delete physical module '{location}'", e);
                         }
                     }
-
-                    markDeletedModules[i].IsMarkDeleted = false;
-                    markDeletedModules[i].VersionUpdateStatus = VersionUpdateStatus.NoUpdates;
                 }
 
-                Store();
+                if (module.MarkedUninstalledVersions.Contains(module.Version))
+                {
+                    module.Version = null;
+                }
+
+                module.MarkedUninstalledVersions.Clear();
             }
 
-            var remainingModules = repositoryInformation.ModuleList.Where(p => !p.IsMarkDeleted).ToList();
-            if (remainingModules.Any())
+            if (uninstalledModules.Any())
             {
-                foreach (var module in remainingModules)
-                {
-                    if (module.VersionUpdateStatus == VersionUpdateStatus.NoUpdates &&
-                        string.IsNullOrEmpty(module.Version) && 
-                        !string.IsNullOrEmpty(module.NewVersion))
-                    {
-                        module.VersionUpdateStatus = VersionUpdateStatus.HasNewVersion;
-                    }
-                }
+                var repoPath = GetRepositoryPath();
+                File.WriteAllText(repoPath, JsonSerializer.Serialize(repositoryInformation));
             }
 
             return repositoryInformation;

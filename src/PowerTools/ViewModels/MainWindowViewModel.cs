@@ -55,7 +55,7 @@ namespace PowerTools.ViewModels
             set => SetProperty(ref _appVersion, value);
         }
 
-        public ObservableCollection<ToolModule> ModuleList => new(Repositories.RepositoryLocal.ModuleList.Where(p => p.IsInstalled));
+        public ObservableCollection<ToolModule> ModuleList => new(Repositories.RepositoryLocal.ModuleList.Where(p => p.IsVersionAllocated));
 
         #region Commands
         public ICommand CmdShowSettings { get; set; }

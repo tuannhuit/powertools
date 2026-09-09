@@ -153,7 +153,7 @@ namespace PowerTools.Helpers
             var module = Repositories.RepositoryLocal.ModuleList.FirstOrDefault(p => p.Name == moduleName);
             if (module != null)
             {
-                module.IsMarkDeleted = true;
+                module.MarkedUninstalledVersions.Add(version);
                 module.Version = version;
             }
 
