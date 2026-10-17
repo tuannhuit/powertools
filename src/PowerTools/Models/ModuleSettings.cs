@@ -37,7 +37,7 @@ namespace PowerTools.Models
 
         public void RevertSettings()
         {
-            foreach (var moduleSetting in Settings.ItemSource)
+            foreach (var moduleSetting in Settings.ItemSourceWithFilters)
             {
                 moduleSetting.Value = moduleSetting.OriginalValue;
             }
@@ -46,7 +46,7 @@ namespace PowerTools.Models
         public Dictionary<string, string> GetModuleSettingsAsDictionary()
         {
             var settings = new Dictionary<string, string>();
-            foreach (var item in Settings.ItemSource)
+            foreach (var item in Settings.ItemSourceWithFilters)
             {
                 settings.Add(item.Key, item.Value);
             }

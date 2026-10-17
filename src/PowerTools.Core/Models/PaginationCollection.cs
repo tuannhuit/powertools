@@ -67,9 +67,23 @@ namespace PowerTools.Core.Models
         }
 
         private List<T> _previousItems;
+        private Func<IEnumerable<T>, IEnumerable<T>> _filterFunction;
+        private Func<IEnumerable<T>, IEnumerable<T>> _sortFunction;
 
+        /// <summary>
+        /// Gets items source
+        /// </summary>
         public List<T> ItemSource { get; private set; }
 
+        private List<long> _filteredKeys;
+        /// <summary>
+        /// Gets filtered items from source
+        /// </summary>
+        public List<T> ItemSourceWithFilters { get; private set; }
+
+        /// <summary>
+        /// Gets item collection which is used for UI binding
+        /// </summary>
         public ObservableCollection<T> Items { get; private set; }
 
         /// <summary>
@@ -88,17 +102,17 @@ namespace PowerTools.Core.Models
 
         public int TotalItems
         {
-            get => ItemSource.Count();
+            get => ItemSourceWithFilters.Count;
         }
 
         public int ItemStart
         {
-            get => ItemSource.Any() ? PageSize.GetValueOrDefault() * (Page - 1) + 1 : 0;
+            get => ItemSourceWithFilters.Count > 0 ? PageSize.GetValueOrDefault() * (Page - 1) + 1 : 0;
         }
 
         public int ItemEnd
         {
-            get => ItemSource.Any() ? ItemStart + Items.Count - 1 : 0;
+            get => ItemSourceWithFilters.Count > 0 ? ItemStart + Items.Count - 1 : 0;
         }
 
         public string PageInformation => $"{ItemStart}-{ItemEnd} of {TotalItems}";
@@ -137,10 +151,16 @@ namespace PowerTools.Core.Models
             }
         }
 
-        public bool IsFirstPage => ItemSource.Any() ? _page == 1 : _page == 0;
-        public bool IsLastPage => ItemSource.Any() ? _page == _totalPage : _page == 0;
+        public bool IsFirstPage => ItemSourceWithFilters.Count > 0 ? _page == 1 : _page == 0;
+        public bool IsLastPage => ItemSourceWithFilters.Count > 0 ? _page == _totalPage : _page == 0;
 
         public ICommand InvokeAction { get; private set; }
+
+        public PaginationCollection()
+            : this(new List<T>(), null, null)
+        {
+
+        }
 
         public PaginationCollection(IEnumerable<CustomAction> actions = null, ICommand refreshItemsCommand = null)
             : this(new List<T>(), actions, refreshItemsCommand)
@@ -157,11 +177,12 @@ namespace PowerTools.Core.Models
 
             Items = new ObservableCollection<T>();
             ItemSource = new List<T>(items);
+            ItemSourceWithFilters = ItemSource.ToList();
 
             _previousItems = new List<T>();
             _page = 1;
 
-
+            ApplyFilterToItemSource();
             RecalculateItems();
 
             Actions = new ObservableCollection<CustomAction>
@@ -205,13 +226,13 @@ namespace PowerTools.Core.Models
         private void OnInvokeAction(string actionName)
         {
             var foundAction = Actions.FirstOrDefault(p => p.Name == actionName);
-            if(foundAction==null)
+            if (foundAction == null)
             {
                 LoggingService.Instance.Info($"Action '{actionName}' not found.");
                 return;
             }
 
-            if(foundAction.Command == null)
+            if (foundAction.Command == null)
             {
                 LoggingService.Instance.Info($"Action '{actionName}' does not have a command.");
                 return;
@@ -249,6 +270,70 @@ namespace PowerTools.Core.Models
             MoveToPage(Page);
         }
 
+        public void SetFilter(Func<IEnumerable<T>, IEnumerable<T>> filterFunction)
+        {
+            _filterFunction = filterFunction;
+        }
+
+        public void SetSorter(Func<IEnumerable<T>, IEnumerable<T>> sortFunction)
+        {
+            _sortFunction = sortFunction;
+        }
+
+        /// <summary>
+        /// Applies sort function to <see cref="ItemSourceWithFilters"/>
+        /// </summary>
+        /// <returns>Sorted results</returns>
+        private List<T> ApplySort()
+        {
+            if (_sortFunction == null)
+            {
+                return ItemSourceWithFilters;
+            }
+
+            ItemSourceWithFilters = _sortFunction.Invoke(ItemSourceWithFilters).ToList();
+            return ItemSourceWithFilters;
+        }
+
+        private List<T> ApplyFilterToItemSource()
+        {
+            if (_filterFunction == null)
+            {
+                ItemSourceWithFilters = ItemSource.ToList();
+                return ItemSourceWithFilters;
+            }
+
+            ItemSourceWithFilters = _filterFunction.Invoke(ItemSource).ToList();
+            return ItemSourceWithFilters;
+        }
+
+        /// <summary>
+        /// Applies filters on input items and add filtered results to <see cref="ItemSourceWithFilters"/>
+        /// </summary>
+        /// <returns>Returns filtered results of input items</returns>
+        private List<T> ApplyFilterAndAddRange(IEnumerable<T> items)
+        {
+            if (items == null)
+            {
+                return null;
+            }
+
+            List<T> filteredItems;
+
+            if (_filterFunction == null)
+            {
+                filteredItems = items.ToList();
+            }
+            else
+            {
+                filteredItems = _filterFunction.Invoke(items).ToList();
+            }
+
+            ItemSourceWithFilters.AddRange(filteredItems);
+            
+            return filteredItems;
+        }
+
         private int GetPageSize()
         {
             return _pageSize.GetValueOrDefault() > 0 ? _pageSize.GetValueOrDefault() : PageSizeDefault;
@@ -258,7 +343,7 @@ namespace PowerTools.Core.Models
         {
             _pageSize = GetPageSize();
 
-            var itemCount = ItemSource.Count;
+            var itemCount = ItemSourceWithFilters.Count;
             _totalPage = itemCount / _pageSize.GetValueOrDefault();
             if (itemCount > _totalPage * _pageSize.GetValueOrDefault())
             {
@@ -275,7 +360,7 @@ namespace PowerTools.Core.Models
                 _page = _totalPage;
             }
 
-            var newItems = ItemSource.Skip(_pageSize.GetValueOrDefault() * (Page - 1)).Take(_pageSize.GetValueOrDefault()).ToList();
+            var newItems = ItemSourceWithFilters.Skip(_pageSize.GetValueOrDefault() * (Page - 1)).Take(_pageSize.GetValueOrDefault()).ToList();
 
             if (newItems.Any())
             {
@@ -284,7 +369,7 @@ namespace PowerTools.Core.Models
                 {
                     foreach (var item in newItems)
                     {
-                        ((ITransformableObject)item).Transform();
+                        (item as ITransformableObject)?.Transform();
                     }
                 }
             }
@@ -307,62 +392,76 @@ namespace PowerTools.Core.Models
             RaisePropertyChanged(nameof(IsLastPage));
         }
 
-        public void AddItem(T newItem)
+        public List<T> AddItem(T newItem)
         {
-            if (ItemSource == null)
-            {
-                ItemSource = new List<T>();
-            }
-
-            _previousItems = Items.ToList();
-            ItemSource.Add(newItem);
-
-            RecalculateItems();
+            return AddItemRange(new List<T>{ newItem });
         }
 
-        public void AddItemRange(IEnumerable<T> newItems)
+        public List<T> AddItemRange(IEnumerable<T> newItems)
         {
             if (newItems == null)
             {
-                return;
+                return null;
             }
 
-            if (ItemSource == null)
+            var addedItems = newItems as ICollection<T> ?? newItems.ToList();
+            if (addedItems.Count == 0)
             {
-                ItemSource = new List<T>();
+                return new List<T>();
             }
 
             _previousItems = Items.ToList();
-            ItemSource.AddRange(newItems);
+            ItemSource.AddRange(addedItems);
 
+            var filteredItems = ApplyFilterAndAddRange(addedItems);
+
+            ApplySort();
             RecalculateItems();
+
+            return filteredItems;
         }
 
-        public void SetItems(IEnumerable<T> newItems)
+        public List<T> SetItems(IEnumerable<T> newItems)
         {
             if (newItems == null)
             {
-                return;
+                return null;
+            }
+
+            var itemSource = new List<T>(newItems);
+            if (itemSource.Count == 0)
+            {
+                return new List<T>();
             }
 
             _previousItems = Items.ToList();
+            ItemSource = itemSource;
 
-            ItemSource = new List<T>(newItems);
+            var filteredItems = ApplyFilterToItemSource();
 
+            ApplySort();
+            RecalculateItems();
+
+            return filteredItems;
+        }
+
+        /// <summary>
+        /// Applies filters and sort on <see cref="ItemSource"/>, then apply pagination.
+        /// </summary>
+        public void ApplyFilter()
+        {
+            _previousItems = Items.ToList();
+
+            ApplyFilterToItemSource();
+            ApplySort();
             RecalculateItems();
         }
 
         public void Clear()
         {
-            if (_previousItems != null)
-            {
-                _previousItems.Clear();
-            }
-
-            if (ItemSource != null)
-            {
-                ItemSource.Clear();
-            }
+            _previousItems = new List<T>();
+            ItemSource = new List<T>();
+            ItemSourceWithFilters = new List<T>();
 
             if (Items != null)
             {

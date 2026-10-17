@@ -102,7 +102,7 @@
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                <Border Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Background="{StaticResource Background.Default}" CornerRadius="5 5 0 0"/>
+                <Border Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Background="{StaticResource Background.LightBar}" CornerRadius="5 5 0 0"/>
                 <TextBlock Style="{StaticResource TextBlock.ContentSmall}" Grid.Row="0" Grid.Column="0" Text="{Binding Title, UpdateSourceTrigger=PropertyChanged}" FontWeight="Medium" Margin="10 10 5 5" VerticalAlignment="Center" HorizontalAlignment="Left"/>
                 <ItemsControl Grid.Row="0" Grid.Column="1" ItemsSource="{Binding Actions}" Margin="0" VerticalAlignment="Center" HorizontalAlignment="Right">
                     <ItemsControl.ItemsPanel>

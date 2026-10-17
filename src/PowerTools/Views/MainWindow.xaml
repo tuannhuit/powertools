@@ -30,15 +30,10 @@
             <RowDefinition Height="*" MinHeight="250"/>
             <RowDefinition Height="5"/>
             <RowDefinition Height="{Binding ViewLogGridLength, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-            <RowDefinition Height="22"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <userControls:SideBar Grid.Column="0" Grid.Row="0" Grid.RowSpan="3"/>
         <Grid Grid.Column="1" Grid.Row="0" Margin="5 5 5 0" >
-            <!--<Border Background="DarkGray" BorderBrush="Transparent" BorderThickness="0" CornerRadius="5">
-                <Border.Effect>
-                    <BlurEffect Radius="8" KernelType="Gaussian" RenderingBias="Performance"/>
-                </Border.Effect>
-            </Border>-->
             <Border Style="{StaticResource Border.Normal}" Margin="0" Background="White" BorderThickness="0" ClipToBounds="True">
                 <Grid>
                     <ContentControl prism:RegionManager.RegionName="{x:Static configurations:Constants.ModuleRegionName}"
@@ -48,7 +43,7 @@
                 </Grid>
             </Border>
         </Grid>
-        <GridSplitter Style="{StaticResource GridSplitter.Normal}" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Stretch" Background="Transparent" Margin="5 0"/>
+        <GridSplitter Style="{StaticResource GridSplitter.Normal}" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Stretch" Background="Transparent"/>
         <Border Style="{StaticResource Border.Normal}" Grid.Column="1" Grid.Row="2" Margin="5 0 5 0">
             <TabControl Style="{StaticResource TabControl.Normal}" ItemContainerStyle="{StaticResource TabItem.Simple}" behaviors:TabControlBehavior.CanCloseTabItem="False" Background="White" BorderThickness="0" Margin="0">
                 <TabItem Header="Logs">
@@ -65,10 +60,10 @@
                             prism:RegionManager.RegionManager="{x:Static helpers:ModuleLoader.DialogRegionManager}"
                             Focusable="False"/>
         </Grid>
-        <userControls:StatusBar Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="3" />
+        <userControls:StatusBar Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="3"/>
         <!--<Grid Grid.Row="0" Grid.RowSpan="4" Grid.Column="0" Grid.ColumnSpan="2" Margin="0" Background="White">
             <StackPanel>
-                --><!--<ComboBox Style="{StaticResource ComboBox.Flat}" IsDropDownOpen="True">
+                <ComboBox Style="{StaticResource ComboBox.Flat}" IsDropDownOpen="True">
                     <ComboBoxItem>abc</ComboBoxItem>
                     <ComboBoxItem>abc</ComboBoxItem>
                     <ComboBoxItem>abc</ComboBoxItem>
@@ -85,7 +80,7 @@
                         <controls:PaginationDataGridTextColumn Name="Partition" Header="Partition" Binding="{Binding Partition.Value}" IsReadOnly="True" MinWidth="85"/>
                         <controls:PaginationDataGridTextColumn Name="CurrentOffset" Header="Current Offset" Binding="{Binding CurrentOffset, Converter={StaticResource OffsetFormatter}}" IsReadOnly="True" MinWidth="100"/>
                     </controls:PaginationDataGrid.Columns>
-                </controls:PaginationDataGrid>--><!--
+                </controls:PaginationDataGrid>
                 <TabControl Style="{StaticResource TabControl.Normal}"  ItemContainerStyle="{StaticResource TabItem.Normal}" Height="150">
                     <TabItem Header="Header">ABC</TabItem>
                     <TabItem Header="Header">ABC</TabItem>

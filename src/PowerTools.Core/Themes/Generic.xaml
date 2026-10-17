@@ -917,7 +917,8 @@
                                         </Grid.ColumnDefinitions>
                                         <TextBlock Style="{StaticResource TextBlock.ContentSmall}" 
                                                                Text="{Binding RelativeSource={RelativeSource AncestorType={x:Type controls:PaginationDataGrid}}, Path=Header, UpdateSourceTrigger=PropertyChanged}" 
-                                                               FontWeight="SemiBold" Margin="5 8 5 8" VerticalAlignment="Center"/>
+                                                               FontWeight="SemiBold" Margin="5 8 5 8" VerticalAlignment="Center"
+                                                               Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type controls:PaginationDataGrid}}, Path=Header, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource ValueToVisibilityConverter}}"/>
                                         <ContentPresenter Grid.Column="1" 
                                                           Content="{Binding RelativeSource={RelativeSource AncestorType={x:Type controls:PaginationDataGrid}}, Path=HeaderExtendContent, UpdateSourceTrigger=PropertyChanged}" 
                                                           Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type controls:PaginationDataGrid}}, Path=HeaderExtendContent, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource ValueToVisibilityConverter}}"
