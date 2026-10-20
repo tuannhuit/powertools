@@ -61,9 +61,13 @@
                             Focusable="False"/>
         </Grid>
         <userControls:StatusBar Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="3"/>
-        <!--Sample controls--><!--
-        <Grid Grid.Row="0" Grid.RowSpan="4" Grid.Column="0" Grid.ColumnSpan="2" Margin="0" Background="White">
+        <!--Sample controls-->
+        <!--<Grid Grid.Row="0" Grid.RowSpan="4" Grid.Column="0" Grid.ColumnSpan="2" Margin="0" Background="White">
             <StackPanel>
+                <controls:TextPlaceHolder VerticalAlignment="Center" HorizontalAlignment="Left" Title="Control" Text="ABC"  Margin="5"/>
+                <controls:TextPlaceHolder VerticalAlignment="Center" HorizontalAlignment="Left" Title="Control" PlaceHolder="ABC"  Margin="5"/>
+                <controls:TextPlaceHolder VerticalAlignment="Center" HorizontalAlignment="Left" Title="Control" Text="ABC"  Margin="5" IsEnabled="False"/>
+                <controls:TextPlaceHolder VerticalAlignment="Center" HorizontalAlignment="Left" Text="abc" Margin="5"/>
                 <ComboBox Style="{StaticResource ComboBox.Flat}" IsDropDownOpen="True">
                     <ComboBoxItem>abc</ComboBoxItem>
                     <ComboBoxItem>abc</ComboBoxItem>
@@ -75,11 +79,11 @@
                     <ComboBoxItem>abc</ComboBoxItem>
                 </ComboBox>
                 <controls:PaginationDataGrid Width="500" Height="150">
-                    --><!--<controls:PaginationDataGrid.ExtendContentGrid>
+                    <controls:PaginationDataGrid.ExtendContentGrid>
                         <Grid Background="Yellow" Width="200">
 
                         </Grid>
-                    </controls:PaginationDataGrid.ExtendContentGrid>--><!--
+                    </controls:PaginationDataGrid.ExtendContentGrid>
                     <controls:PaginationDataGrid.Columns>
                         <controls:PaginationDataGridTextColumn Name="ConsumerGroupId" Header="Consumer Group" Binding="{Binding ConsumerGroupId}" IsReadOnly="True" MinWidth="100"/>
                         <controls:PaginationDataGridTextColumn Name="ConsumerId" Header="Consumer ID" Binding="{Binding ConsumerId}" IsReadOnly="True" MinWidth="100"/>

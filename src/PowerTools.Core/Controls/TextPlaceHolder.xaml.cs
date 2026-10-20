@@ -12,6 +12,18 @@ namespace PowerTools.Core.Controls
     public partial class TextPlaceHolder : UserControl
     {
         private bool _isEnter;
+        public string Title
+        {
+            get { return (string)GetValue(TitleProperty); }
+            set { SetValue(TitleProperty, value); }
+        }
+
+        public bool IsReadOnly
+        {
+            get { return (bool)GetValue(IsReadOnlyProperty); }
+            set { SetValue(IsReadOnlyProperty, value); }
+        }
+
         public string PlaceHolder
         {
             get { return (string)GetValue(PlaceHolderProperty); }
@@ -38,6 +50,8 @@ namespace PowerTools.Core.Controls
         public ICommand CmdEnterKeyPressed { get; set; }
 
         public static readonly DependencyProperty PlaceHolderProperty = DependencyProperty.Register("PlaceHolder", typeof(string), typeof(TextPlaceHolder), new PropertyMetadata(null));
+        public static readonly DependencyProperty TitleProperty = DependencyProperty.Register("Title", typeof(string), typeof(TextPlaceHolder), new PropertyMetadata(null));
+        public static readonly DependencyProperty IsReadOnlyProperty = DependencyProperty.Register("IsReadOnly", typeof(bool), typeof(TextPlaceHolder), new PropertyMetadata(false));
         public static readonly DependencyProperty TextProperty = DependencyProperty.Register("Text", typeof(string), typeof(TextPlaceHolder), new PropertyMetadata(null, null));
         public static readonly DependencyProperty ModelProperty = DependencyProperty.Register("Model", typeof(object), typeof(TextPlaceHolder), new PropertyMetadata(null, OnModelChanged));
         public static readonly DependencyProperty CmdClearTextProperty = DependencyProperty.Register("CmdClearText", typeof(ICommand), typeof(TextPlaceHolder), new PropertyMetadata(null));
@@ -75,7 +89,7 @@ namespace PowerTools.Core.Controls
         private void btnClear_OnClick(object sender, RoutedEventArgs e)
         {
             _isEnter = true;
-            SetValue(TextProperty, string.Empty);
+            SetValue(TextProperty, null);
             CmdClearText?.Execute(this);
             _isEnter = false;
         }

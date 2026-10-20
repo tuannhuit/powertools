@@ -12,6 +12,7 @@
     <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
     <converters:BoolToReverseConverter x:Key="BoolToReverseConverter"/>
     <converters:MultiValueToVisibilityConverter x:Key="MultiValueToVisibilityConverter"/>
+    <converters:MultiValueToBooleanConverter x:Key="MultiValueToBooleanConverter"/>
     <converters:BooleanToGridSizeConverter x:Key="BooleanToGridSizeConverter"/>
     <converters:BoolToStringConverter x:Key="BoolToStringConverter"/>
     <converters:StringJsonFormatConverter x:Key="StringJsonFormatConverter"/>
@@ -309,9 +310,6 @@
                             BorderBrush="{StaticResource ComboBox.Static.Border}" 
                             MinWidth="{Binding ActualWidth, ElementName=templateRoot}"
                             MaxHeight="{TemplateBinding MaxDropDownHeight}">
-                    <!--<Border.Effect>
-                        <DropShadowEffect Color="LightGray" BlurRadius="3" ShadowDepth="2"/>
-                    </Border.Effect>-->
                     <ScrollViewer x:Name="DropDownScrollViewer" Margin="2">
                         <Grid x:Name="grid" RenderOptions.ClearTypeHint="Enabled">
                             <Canvas x:Name="canvas" HorizontalAlignment="Left" Height="0" VerticalAlignment="Top" Width="0">
@@ -323,7 +321,7 @@
                 </Border>
             </Popup>
             <ToggleButton x:Name="toggleButton" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Grid.ColumnSpan="2" IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" Style="{StaticResource ComboBoxToggleButton}"/>
-            <Border x:Name="border" Background="{StaticResource TextBox.Static.Background}" Margin="{TemplateBinding BorderThickness}">
+            <Border x:Name="border" Background="{StaticResource TextBox.Static.Background}" Margin="{TemplateBinding BorderThickness}" CornerRadius="3">
                 <TextBox x:Name="PART_EditableTextBox" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" IsReadOnly="{Binding IsReadOnly, RelativeSource={RelativeSource TemplatedParent}}" Margin="{TemplateBinding Padding}" Style="{StaticResource ComboBoxEditableTextBox}" VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>
             </Border>
         </Grid>
