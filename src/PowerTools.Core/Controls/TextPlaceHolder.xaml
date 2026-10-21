@@ -19,8 +19,8 @@
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <Border Grid.Column="0" Visibility="{Binding ElementName=UserControl, Path=Title, Converter={StaticResource ValueToVisibilityConverter}}" HorizontalAlignment="Left" VerticalAlignment="Center" BorderThickness="0 0 1 0" BorderBrush="Black">
-            <TextBlock Text="{Binding ElementName=UserControl, Path=Title, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" FontSize="11" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5 0" FontWeight="Normal"/>
+        <Border Grid.Column="0" Visibility="{Binding ElementName=UserControl, Path=Title, Converter={StaticResource ValueToVisibilityConverter}}" HorizontalAlignment="Left" VerticalAlignment="Center" BorderThickness="0 0 1 0" BorderBrush="Gray">
+            <TextBlock Text="{Binding ElementName=UserControl, Path=Title, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" FontSize="11" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5 0" FontWeight="Normal" Foreground="Gray"/>
         </Border>
         <Grid Grid.Column="1" Background="{Binding ElementName=UserControl, Path=Background}" HorizontalAlignment="Stretch" VerticalAlignment="Top">
             <TextBlock Text="{Binding ElementName=UserControl, Path=PlaceHolder, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Margin="0 0 28 0" Padding="5 7 28 3" Visibility="{Binding ElementName=UserControl, Path=Text, Converter={StaticResource StringNullOrEmptyToVisibilityConverter}}" Foreground="Gray" FontSize="11"/>
