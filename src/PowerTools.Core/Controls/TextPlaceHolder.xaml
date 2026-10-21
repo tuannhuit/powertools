@@ -27,6 +27,7 @@
             <TextBox Style="{StaticResource TextBox.ContentSmall}" 
                      Text="{Binding ElementName=UserControl, Path=Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                      IsReadOnly="{Binding ElementName=UserControl, Path=IsReadOnly, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                     FontWeight="{Binding ElementName=UserControl, Path=FontWeight, UpdateSourceTrigger=PropertyChanged}"
                      HorizontalAlignment="Stretch" VerticalAlignment="Center" Background="Transparent" Margin="0" Padding="3 3 28 3" BorderThickness="0" BorderBrush="Transparent"/>
             <Button Style="{StaticResource Button.Icon}"  Content="&#xE0A4;" VerticalAlignment="Center" HorizontalAlignment="Right" FontSize="11" Margin="4" MinHeight="20" Height="20" MinWidth="20" Width="20"
                     Click="btnClear_OnClick">
