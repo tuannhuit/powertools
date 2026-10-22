@@ -24,6 +24,25 @@ namespace PowerTools.ViewModels
 {
     public class MainWindowViewModel : BindableBase
     {
+
+        private ObservableCollection<string> _supportedTokensCollection = new ObservableCollection<string>
+        {
+            "{null}",
+            "{datetime}"
+        };
+        public ObservableCollection<string> SupportedTokensCollection
+        {
+            get => _supportedTokensCollection;
+            set => SetProperty(ref _supportedTokensCollection, value);
+        }
+
+        private string _mainEditorText;
+        public string MainEditorText
+        {
+            get => _mainEditorText;
+            set => SetProperty(ref _mainEditorText, value);
+        }
+
         private AppVersion _appVersion;
 
         private GridLength _viewLogGridLength;

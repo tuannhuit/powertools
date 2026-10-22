@@ -10,6 +10,7 @@
         xmlns:controls="clr-namespace:PowerTools.Core.Controls;assembly=PowerTools.Core"
         xmlns:models="clr-namespace:PowerTools.Core.SharedServices;assembly=PowerTools.Core"
         xmlns:behaviors="clr-namespace:PowerTools.Core.Behaviours;assembly=PowerTools.Core"
+        xmlns:behaviours="clr-namespace:PowerTools.Core.Behaviours;assembly=PowerTools.Core"
         prism:ViewModelLocator.AutoWireViewModel="True"
         mc:Ignorable="d"
         d:DesignHeight="1200" d:DesignWidth="800"
@@ -63,8 +64,8 @@
         <userControls:StatusBar Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="3"/>
         <!--Sample controls-->
         <!--<Grid Grid.Row="0" Grid.RowSpan="4" Grid.Column="0" Grid.ColumnSpan="2" Margin="0" Background="White">
-            <StackPanel>
-                <controls:TextPlaceHolder VerticalAlignment="Center" HorizontalAlignment="Left" Title="Control" Text="ABC"  Margin="5"/>
+            --><!--<StackPanel>-->
+                <!--<controls:TextPlaceHolder VerticalAlignment="Center" HorizontalAlignment="Left" Title="Control" Text="ABC"  Margin="5"/>
                 <controls:TextPlaceHolder VerticalAlignment="Center" HorizontalAlignment="Left" Title="Control" PlaceHolder="ABC"  Margin="5"/>
                 <controls:TextPlaceHolder VerticalAlignment="Center" HorizontalAlignment="Left" Title="Control" Text="ABC"  Margin="5" IsEnabled="False"/>
                 <controls:TextPlaceHolder VerticalAlignment="Center" HorizontalAlignment="Left" Text="abc" Margin="5"/>
@@ -114,8 +115,53 @@
                 <TabControl Style="{StaticResource TabControl.Normal}" Height="150" TabStripPlacement="Right" ItemContainerStyle="{StaticResource TabItem.Simple}">
                     <TabItem Header="Header">ABC</TabItem>
                     <TabItem Header="Header">ABC</TabItem>
-                </TabControl>
-            </StackPanel>
+                </TabControl>-->
+            <!--<ScrollViewer>
+                <Grid Margin="5">
+                    --><!-- LAYER 1: The Visual Style Canvas (Behind) --><!--
+                    <RichTextBox x:Name="HighlighterVisualPanel"
+                                 IsReadOnly="True"
+                                 IsHitTestVisible="False"
+                                 Background="White"
+                                 BorderThickness="0"
+                                 FontFamily="Consolas"
+                                 FontSize="13"
+                                 Padding="2,2,2,2" 
+                                 VerticalScrollBarVisibility="Disabled"
+                                 HorizontalScrollBarVisibility="Disabled">
+                        <RichTextBox.Resources>
+                            <Style TargetType="{x:Type Paragraph}">
+                                <Setter Property="Margin" Value="0"/>
+                            </Style>
+                        </RichTextBox.Resources>
+                    </RichTextBox>
+
+                    --><!-- LAYER 2: The actual, responsive typing container (In Front) -->
+                    <!-- 
+  By assigning Foreground="Transparent" and CaretBrush="Black", 
+  your actual input text stays completely hidden, allowing the bold, 
+  colored Segoe UI text layers below to show through flawlessly.
+--><!--
+                    <TextBox Text="{Binding MainEditorText, UpdateSourceTrigger=PropertyChanged}"
+                             behaviors:RichTextBoxBehavior.HighlighterTarget="{Binding ElementName=HighlighterVisualPanel}"
+                             behaviors:RichTextBoxBehavior.ActiveTokens="{Binding SupportedTokensCollection}"
+                             AcceptsReturn="True"
+                             FontFamily="Consolas"
+                             FontSize="13"
+                             Padding="4,2,4,2" 
+                             Background="Transparent"
+                             BorderBrush="#CCCCCC"
+                             CaretBrush="Black"
+                             Foreground="Transparent">
+                    </TextBox>
+                </Grid>
+            </ScrollViewer>-->
+
+
+
+
+
+            <!--</StackPanel>--><!--
         </Grid>-->
     </Grid>
 </Window>
