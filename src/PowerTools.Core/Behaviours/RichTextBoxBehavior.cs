@@ -38,9 +38,8 @@ namespace PowerTools.Core.Behaviours
                 if (e.NewValue is RichTextBox rtb)
                 {
                     textBox.TextChanged += TextBox_TextChanged;
-                    textBox.Loaded += TextBox_Loaded; // FIX: Handle Loaded event for initial data templates
+                    textBox.Loaded += TextBox_Loaded;
 
-                    // Run immediately if the control is already loaded
                     if (textBox.IsLoaded)
                     {
                         InitializeAndFormat(textBox, rtb);
@@ -53,7 +52,7 @@ namespace PowerTools.Core.Behaviours
         {
             if (d is TextBox textBox && GetHighlighterTarget(textBox) is RichTextBox rtb)
             {
-                ApplyTokenFormatting(rtb, GetActiveTokens(textBox));
+                InitializeAndFormat(textBox, rtb);
             }
         }
 
@@ -94,27 +93,31 @@ namespace PowerTools.Core.Behaviours
                 string[] lines = targetText.Replace("\r\n", "\n").Split('\n');
                 for (int i = 0; i < lines.Length; i++)
                 {
-                    if (!string.IsNullOrEmpty(lines[i])) p.Inlines.Add(new Run(lines[i]));
+                    if (!string.IsNullOrEmpty(lines[i]))
+                    {
+                        // CRITICAL FIX: Explicitly assign the layout font metrics directly to the
+                        // Run containers as they are generated so it stays Consolas immediately on load.
+                        var run = new Run(lines[i])
+                        {
+                            FontFamily = textBox.FontFamily,
+                            FontSize = textBox.FontSize,
+                            //Foreground = Brushes.Black
+                        };
+                        p.Inlines.Add(run);
+                    }
                     if (i < lines.Length - 1) p.Inlines.Add(new LineBreak());
                 }
                 rtb.Document.Blocks.Add(p);
             }
 
-            ApplyTokenFormatting(rtb, GetActiveTokens(textBox));
+            ApplyTokenFormatting(rtb, GetActiveTokens(textBox), textBox.FontFamily, textBox.FontSize);
 
             _isInternalChange = false;
         }
 
-        private static void ApplyTokenFormatting(RichTextBox rtb, IEnumerable<string> tokens)
+        private static void ApplyTokenFormatting(RichTextBox rtb, IEnumerable<string> tokens, FontFamily editorFont, double editorSize)
         {
             var allowedTokens = tokens?.ToList() ?? new List<string>();
-
-            var fullRange = new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd);
-            fullRange.ApplyPropertyValue(TextElement.BackgroundProperty, Brushes.Transparent);
-            fullRange.ApplyPropertyValue(TextElement.ForegroundProperty, Brushes.Black);
-            fullRange.ApplyPropertyValue(TextElement.FontWeightProperty, FontWeights.Normal);
-
-            if (!allowedTokens.Any()) return;
 
             TextPointer position = rtb.Document.ContentStart;
             while (position != null && position.CompareTo(rtb.Document.ContentEnd) < 0)
@@ -122,6 +125,17 @@ namespace PowerTools.Core.Behaviours
                 if (position.GetPointerContext(LogicalDirection.Forward) == TextPointerContext.Text)
                 {
                     string textRun = position.GetTextInRun(LogicalDirection.Forward);
+
+                    TextPointer endOfRun = position.GetPositionAtOffset(textRun.Length, LogicalDirection.Forward);
+                    var cleanRange = new TextRange(position, endOfRun);
+                    cleanRange.ApplyPropertyValue(TextElement.BackgroundProperty, Brushes.Transparent);
+                    //cleanRange.ApplyPropertyValue(TextElement.ForegroundProperty, Brushes.Black);
+                    cleanRange.ApplyPropertyValue(TextElement.FontWeightProperty, FontWeights.Normal);
+
+                    // CRITICAL FIX: Force standard plain text segments to retain Consolas font families
+                    cleanRange.ApplyPropertyValue(TextElement.FontFamilyProperty, editorFont);
+                    cleanRange.ApplyPropertyValue(TextElement.FontSizeProperty, editorSize);
+
                     int earliestIndex = int.MaxValue;
                     string matchedToken = null;
 
@@ -142,9 +156,13 @@ namespace PowerTools.Core.Behaviours
 
                         var tokenRange = new TextRange(startMatch, endMatch);
 
-                        tokenRange.ApplyPropertyValue(TextElement.BackgroundProperty, new SolidColorBrush((Color)ColorConverter.ConvertFromString("#EAEAEA")));
-                        tokenRange.ApplyPropertyValue(TextElement.ForegroundProperty, new SolidColorBrush((Color)ColorConverter.ConvertFromString("#333333")));
+                        tokenRange.ApplyPropertyValue(TextElement.BackgroundProperty, new SolidColorBrush((Color)ColorConverter.ConvertFromString("#E4E4E4")));
+                        //tokenRange.ApplyPropertyValue(TextElement.ForegroundProperty, new SolidColorBrush((Color)ColorConverter.ConvertFromString("#333333")));
                         tokenRange.ApplyPropertyValue(TextElement.FontWeightProperty, FontWeights.SemiBold);
+
+                        // CRITICAL FIX: Retain exact font metrics on styled spans so text alignment matches perfectly
+                        tokenRange.ApplyPropertyValue(TextElement.FontFamilyProperty, editorFont);
+                        tokenRange.ApplyPropertyValue(TextElement.FontSizeProperty, editorSize);
 
                         position = endMatch;
                         continue;
