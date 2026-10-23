@@ -5,12 +5,14 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
+using System.Windows.Threading;
 
 namespace PowerTools.Core.Behaviours
 {
     public static class RichTextBoxBehavior
     {
         private static bool _isInternalChange = false;
+        private static DispatcherTimer _debounceTimer;
 
         // 1. Links the editable front TextBox to the background coloring panel
         public static readonly DependencyProperty HighlighterTargetProperty =
@@ -70,7 +72,45 @@ namespace PowerTools.Core.Behaviours
 
             if (sender is TextBox textBox && GetHighlighterTarget(textBox) is RichTextBox rtb)
             {
-                InitializeAndFormat(textBox, rtb);
+                _isInternalChange = true;
+
+                // Fast Sync: Instantly reflect structural line elements into the document
+                var textRange = new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd);
+                string targetText = textBox.Text ?? string.Empty;
+
+                rtb.Document.Blocks.Clear();
+                var p = new Paragraph { Margin = new Thickness(0) };
+
+                string[] lines = targetText.Replace("\r\n", "\n").Split('\n');
+                for (int i = 0; i < lines.Length; i++)
+                {
+                    if (!string.IsNullOrEmpty(lines[i]))
+                    {
+                        p.Inlines.Add(new Run(lines[i])
+                        {
+                            FontFamily = textBox.FontFamily,
+                            FontSize = textBox.FontSize
+                        });
+                    }
+                    if (i < lines.Length - 1) p.Inlines.Add(new LineBreak());
+                }
+                rtb.Document.Blocks.Add(p);
+
+                _isInternalChange = false;
+
+                // HIGH-PERFORMANCE DEBOUNCE: Stop mid-keystroke scanning passes
+                if (_debounceTimer == null)
+                {
+                    _debounceTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(200) };
+                    _debounceTimer.Tick += (s, args) =>
+                    {
+                        _debounceTimer.Stop();
+                        ApplyTokenFormatting(rtb, GetActiveTokens(textBox), textBox.FontFamily, textBox.FontSize);
+                    };
+                }
+
+                _debounceTimer.Stop();
+                _debounceTimer.Start();
             }
         }
 
@@ -81,34 +121,24 @@ namespace PowerTools.Core.Behaviours
             var textRange = new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd);
             string targetText = textBox.Text ?? string.Empty;
 
-            string currentRtbText = textRange.Text;
-            if (currentRtbText.EndsWith(Environment.NewLine))
-                currentRtbText = currentRtbText.Substring(0, currentRtbText.Length - Environment.NewLine.Length);
+            rtb.Document.Blocks.Clear();
+            var p = new Paragraph { Margin = new Thickness(0) };
 
-            if (currentRtbText != targetText)
+            string[] lines = targetText.Replace("\r\n", "\n").Split('\n');
+            for (int i = 0; i < lines.Length; i++)
             {
-                rtb.Document.Blocks.Clear();
-                var p = new Paragraph { Margin = new Thickness(0) };
-
-                string[] lines = targetText.Replace("\r\n", "\n").Split('\n');
-                for (int i = 0; i < lines.Length; i++)
+                if (!string.IsNullOrEmpty(lines[i]))
                 {
-                    if (!string.IsNullOrEmpty(lines[i]))
+                    var run = new Run(lines[i])
                     {
-                        // CRITICAL FIX: Explicitly assign the layout font metrics directly to the
-                        // Run containers as they are generated so it stays Consolas immediately on load.
-                        var run = new Run(lines[i])
-                        {
-                            FontFamily = textBox.FontFamily,
-                            FontSize = textBox.FontSize,
-                            //Foreground = Brushes.Black
-                        };
-                        p.Inlines.Add(run);
-                    }
-                    if (i < lines.Length - 1) p.Inlines.Add(new LineBreak());
+                        FontFamily = textBox.FontFamily,
+                        FontSize = textBox.FontSize
+                    };
+                    p.Inlines.Add(run);
                 }
-                rtb.Document.Blocks.Add(p);
+                if (i < lines.Length - 1) p.Inlines.Add(new LineBreak());
             }
+            rtb.Document.Blocks.Add(p);
 
             ApplyTokenFormatting(rtb, GetActiveTokens(textBox), textBox.FontFamily, textBox.FontSize);
 
@@ -118,24 +148,23 @@ namespace PowerTools.Core.Behaviours
         private static void ApplyTokenFormatting(RichTextBox rtb, IEnumerable<string> tokens, FontFamily editorFont, double editorSize)
         {
             var allowedTokens = tokens?.ToList() ?? new List<string>();
+            if (!allowedTokens.Any()) return;
 
+            // BATCH OPTIMIZATION 1: Clear everything globally in one single operation 
+            // instead of resetting properties iteratively run-by-run.
+            var fullRange = new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd);
+            fullRange.ApplyPropertyValue(TextElement.BackgroundProperty, Brushes.Transparent);
+            fullRange.ApplyPropertyValue(TextElement.FontWeightProperty, FontWeights.Normal);
+            fullRange.ApplyPropertyValue(TextElement.FontFamilyProperty, editorFont);
+            fullRange.ApplyPropertyValue(TextElement.FontSizeProperty, editorSize);
+
+            // BATCH OPTIMIZATION 2: Fast forward scan loop
             TextPointer position = rtb.Document.ContentStart;
             while (position != null && position.CompareTo(rtb.Document.ContentEnd) < 0)
             {
                 if (position.GetPointerContext(LogicalDirection.Forward) == TextPointerContext.Text)
                 {
                     string textRun = position.GetTextInRun(LogicalDirection.Forward);
-
-                    TextPointer endOfRun = position.GetPositionAtOffset(textRun.Length, LogicalDirection.Forward);
-                    var cleanRange = new TextRange(position, endOfRun);
-                    cleanRange.ApplyPropertyValue(TextElement.BackgroundProperty, Brushes.Transparent);
-                    //cleanRange.ApplyPropertyValue(TextElement.ForegroundProperty, Brushes.Black);
-                    cleanRange.ApplyPropertyValue(TextElement.FontWeightProperty, FontWeights.Normal);
-
-                    // CRITICAL FIX: Force standard plain text segments to retain Consolas font families
-                    cleanRange.ApplyPropertyValue(TextElement.FontFamilyProperty, editorFont);
-                    cleanRange.ApplyPropertyValue(TextElement.FontSizeProperty, editorSize);
-
                     int earliestIndex = int.MaxValue;
                     string matchedToken = null;
 
@@ -155,12 +184,8 @@ namespace PowerTools.Core.Behaviours
                         TextPointer endMatch = startMatch.GetPositionAtOffset(matchedToken.Length, LogicalDirection.Forward);
 
                         var tokenRange = new TextRange(startMatch, endMatch);
-
                         tokenRange.ApplyPropertyValue(TextElement.BackgroundProperty, new SolidColorBrush((Color)ColorConverter.ConvertFromString("#E4E4E4")));
-                        //tokenRange.ApplyPropertyValue(TextElement.ForegroundProperty, new SolidColorBrush((Color)ColorConverter.ConvertFromString("#333333")));
                         tokenRange.ApplyPropertyValue(TextElement.FontWeightProperty, FontWeights.SemiBold);
-
-                        // CRITICAL FIX: Retain exact font metrics on styled spans so text alignment matches perfectly
                         tokenRange.ApplyPropertyValue(TextElement.FontFamilyProperty, editorFont);
                         tokenRange.ApplyPropertyValue(TextElement.FontSizeProperty, editorSize);
 
