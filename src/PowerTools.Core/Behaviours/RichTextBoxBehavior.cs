@@ -14,18 +14,21 @@ namespace PowerTools.Core.Behaviours
         private static bool _isInternalChange = false;
         private static DispatcherTimer _debounceTimer;
 
-        // 1. Links the editable front TextBox to the background coloring panel
-        public static readonly DependencyProperty HighlighterTargetProperty =
-            DependencyProperty.RegisterAttached("HighlighterTarget", typeof(RichTextBox), typeof(RichTextBoxBehavior),
-                new PropertyMetadata(null, OnHighlighterTargetChanged));
+        public static readonly DependencyProperty HighlighterTargetProperty = DependencyProperty.RegisterAttached(
+            "HighlighterTarget",
+            typeof(RichTextBox),
+            typeof(RichTextBoxBehavior),
+            new PropertyMetadata(null, OnHighlighterTargetChanged));
 
         public static RichTextBox GetHighlighterTarget(DependencyObject obj) => (RichTextBox)obj.GetValue(HighlighterTargetProperty);
         public static void SetHighlighterTarget(DependencyObject obj, RichTextBox value) => obj.SetValue(HighlighterTargetProperty, value);
 
-        // 2. The dynamic list of tokens that get the gray background and bold text
-        public static readonly DependencyProperty ActiveTokensProperty =
-            DependencyProperty.RegisterAttached("ActiveTokens", typeof(IEnumerable<string>), typeof(RichTextBoxBehavior),
-                new PropertyMetadata(null, OnActiveTokensChanged));
+        
+        public static readonly DependencyProperty ActiveTokensProperty = DependencyProperty.RegisterAttached(
+            "ActiveTokens",
+            typeof(IEnumerable<string>),
+            typeof(RichTextBoxBehavior),
+            new PropertyMetadata(null, OnActiveTokensChanged));
 
         public static IEnumerable<string> GetActiveTokens(DependencyObject obj) => (IEnumerable<string>)obj.GetValue(ActiveTokensProperty);
         public static void SetActiveTokens(DependencyObject obj, IEnumerable<string> value) => obj.SetValue(ActiveTokensProperty, value);
@@ -154,7 +157,7 @@ namespace PowerTools.Core.Behaviours
             // instead of resetting properties iteratively run-by-run.
             var fullRange = new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd);
             fullRange.ApplyPropertyValue(TextElement.BackgroundProperty, Brushes.Transparent);
-            fullRange.ApplyPropertyValue(TextElement.FontWeightProperty, FontWeights.Normal);
+            //fullRange.ApplyPropertyValue(TextElement.FontWeightProperty, FontWeights.Normal);
             fullRange.ApplyPropertyValue(TextElement.FontFamilyProperty, editorFont);
             fullRange.ApplyPropertyValue(TextElement.FontSizeProperty, editorSize);
 
@@ -184,8 +187,8 @@ namespace PowerTools.Core.Behaviours
                         TextPointer endMatch = startMatch.GetPositionAtOffset(matchedToken.Length, LogicalDirection.Forward);
 
                         var tokenRange = new TextRange(startMatch, endMatch);
-                        tokenRange.ApplyPropertyValue(TextElement.BackgroundProperty, new SolidColorBrush((Color)ColorConverter.ConvertFromString("#E4E4E4")));
-                        tokenRange.ApplyPropertyValue(TextElement.FontWeightProperty, FontWeights.SemiBold);
+                        tokenRange.ApplyPropertyValue(TextElement.BackgroundProperty, new SolidColorBrush((Color)ColorConverter.ConvertFromString("#F8C9AB")));
+                        //tokenRange.ApplyPropertyValue(TextElement.FontWeightProperty, FontWeights.SemiBold);
                         tokenRange.ApplyPropertyValue(TextElement.FontFamilyProperty, editorFont);
                         tokenRange.ApplyPropertyValue(TextElement.FontSizeProperty, editorSize);
 

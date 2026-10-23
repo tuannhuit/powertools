@@ -106,7 +106,7 @@
                     </Border>
                     <StackPanel Grid.Column="1" Grid.Row="0" Orientation="Horizontal">
                         <TextBlock Style="{StaticResource TextBlock.Header}" Text="{Binding SelectedModule.DisplayName}" FontWeight="SemiBold"/>
-                        <Border Style="{StaticResource Border.Normal}" Margin="0" BorderThickness="0" BorderBrush="Transparent" Background="{StaticResource Button.Background}" CornerRadius="5" VerticalAlignment="Bottom" Visibility="{Binding SelectedModule.IsVersionAllocated, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <Border Style="{StaticResource Border.Normal}" Margin="0" BorderThickness="0" BorderBrush="Transparent" Background="{StaticResource Button.Background}" CornerRadius="5" VerticalAlignment="Bottom" Visibility="{Binding SelectedModule.IsVersionAllocated, Converter={StaticResource BoolToVisibilityConverter}}">
                             <TextBlock Style="{StaticResource TextBlock.ContentSmall}" Text="{Binding SelectedModule.Version, Converter={StaticResource StringFormatConverter}, ConverterParameter='\{0\}'}" FontSize="10" Margin="4 1" Foreground="White" FontWeight="SemiBold"/>
                         </Border>
                     </StackPanel>

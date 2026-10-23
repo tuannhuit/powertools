@@ -8,7 +8,7 @@
              xmlns:sharedServices="clr-namespace:PowerTools.Core.SharedServices;assembly=PowerTools.Core"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid Visibility="{Binding Source={x:Static appModels:ApplicationService.Instance}, Path=IsBusy, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}">
+    <Grid Visibility="{Binding Source={x:Static appModels:ApplicationService.Instance}, Path=IsBusy, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolToVisibilityConverter}}">
         <Rectangle Fill="WhiteSmoke" Opacity="0.2"/>
         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" >
             <TextBlock Style="{StaticResource TextBlock.Icon}" Text="{x:Static models:ButtonIcons.Loading}" VerticalAlignment="Center" HorizontalAlignment="Center"  FontWeight="SemiBold" Margin="5"/>

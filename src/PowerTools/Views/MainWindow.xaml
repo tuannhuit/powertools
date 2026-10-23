@@ -116,42 +116,10 @@
                     <TabItem Header="Header">ABC</TabItem>
                     <TabItem Header="Header">ABC</TabItem>
                 </TabControl>--><!--
-                <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
-                    <Grid>
-                        <RichTextBox x:Name="HighlighterVisualPanel"
-                                     IsReadOnly="True"
-                                     IsHitTestVisible="False"
-                                     Background="White"
-                                     BorderThickness="0"
-                                     FontFamily="Consolas"
-                                     FontSize="13"
-                                     Padding="2,4,2,2" 
-                                     VerticalScrollBarVisibility="Disabled"
-                                     HorizontalScrollBarVisibility="Disabled">
-                            <RichTextBox.Resources>
-                                <Style TargetType="{x:Type Paragraph}">
-                                    <Setter Property="Margin" Value="0"/>
-                                </Style>
-                            </RichTextBox.Resources>
-                        </RichTextBox>
-                        <TextBox 
-                            behaviours:TextBoxBehavior.IsFocusedOnLoad="True"
-                            behaviours:TextBoxBehavior.InjectTextAtCursor="{Binding InsertedDynamicValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                            Text="Binding ValueTemplate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource StringJsonFormatConverter {null}Binding ValueTemplate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource StringJsonFormatConverter {null}Binding ValueTemplate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource StringJsonFormatConverter {null}Binding ValueTemplate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource StringJsonFormatConverter {null}Binding ValueTemplate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource StringJsonFormatConverter {null}Binding ValueTemplate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource StringJsonFormatConverter {null}Binding ValueTemplate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource StringJsonFormatConverter {null}Binding ValueTemplate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource StringJsonFormatConverter {null}Binding ValueTemplate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource StringJsonFormatConverter {null}Binding ValueTemplate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource StringJsonFormatConverter {null}Binding ValueTemplate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource StringJsonFormatConverter {null}Binding ValueTemplate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource StringJsonFormatConverter {null}Binding ValueTemplate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource StringJsonFormatConverter {null}Binding ValueTemplate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource StringJsonFormatConverter {null}"
-                            behaviours:RichTextBoxBehavior.HighlighterTarget="{Binding ElementName=HighlighterVisualPanel}"
-                            behaviours:RichTextBoxBehavior.ActiveTokens="{Binding DynamicContentTokens, UpdateSourceTrigger=PropertyChanged}"
-                            AcceptsReturn="True"
-                            FontFamily="Consolas"
-                            TextWrapping="Wrap"
-                            FontSize="13"
-                            Padding="4,3,4,2" 
-                            Background="Transparent"
-                            BorderBrush="#CCCCCC"
-                            CaretBrush="Black"
-                            Foreground="Green">
-                        </TextBox>
-                    </Grid>
-                </ScrollViewer>
+                <controls:TokenTextEditor Width="500" Height="150" Margin="5"
+                                          Foreground="Red" DoShowTokens="False"
+                                          Text="abc {null}abc {null}abc {null}abc {null}abc {null}abc {null}abc {null}abc {null}abc {null}abc {null}abc {null}abc {null}abc {null}abc {null}abc {null}abc {null}abc {null}abc {null}abc {null}abc {null}abc {null}abc {null}abc {null}abc {null}abc {null}abc {null}abc {null}abc {null}abc {null}abc {null}abc {null}abc {null}abc {null}abc {null}abc {null}abc {null}"
+                                          HighlightTokens="{Binding SupportedTokensCollection, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
             </StackPanel>
         </Grid>-->
     </Grid>

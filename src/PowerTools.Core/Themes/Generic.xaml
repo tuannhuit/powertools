@@ -137,6 +137,31 @@
             <Trigger Property="IsKeyboardFocusWithin" Value="True">
                 <Setter Property="BorderBrush" Value="{StaticResource ComboBox.Pressed.Border}" />
             </Trigger>
+            <Trigger Property="IsFocused" Value="True">
+                <Setter Property="BorderBrush" Value="{StaticResource ComboBox.MouseOver.Border}" />
+            </Trigger>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="BorderBrush" Value="{StaticResource ComboBox.MouseOver.Border}" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style TargetType="{x:Type controls:TokenTextEditor}">
+        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        <Setter Property="VerticalAlignment" Value="Stretch"/>
+        <Setter Property="Background" Value="White"/>
+        <Setter Property="FontFamily" Value="Consolas"/>
+        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="PaddingHighlighter" Value="2 4 4 2"/>
+        <Setter Property="PaddingTextEditor" Value="5 4 4 2"/>
+        <Setter Property="ForegroundTextEditor" Value="Transparent"/>
+        <Setter Property="BorderBrush" Value="LightGray"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Style.Triggers>
+            <Trigger Property="IsKeyboardFocusWithin" Value="True">
+                <Setter Property="BorderBrush" Value="{StaticResource ComboBox.Pressed.Border}" />
+            </Trigger>
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="BorderBrush" Value="{StaticResource ComboBox.MouseOver.Border}" />
             </Trigger>

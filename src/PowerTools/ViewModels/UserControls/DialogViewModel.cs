@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using PowerTools.Core.SharedServices;
 
 namespace PowerTools.ViewModels.UserControls
 {
@@ -117,6 +118,7 @@ namespace PowerTools.ViewModels.UserControls
                 ViewModel = dialogInformation.ViewModel;
 
                 ViewNavigator.Instance.NavigateToDialogView(dialogInformation.ViewType, dialogInformation);
+
             }
         }
     }
