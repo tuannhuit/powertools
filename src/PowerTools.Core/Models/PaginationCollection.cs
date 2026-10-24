@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows.Automation;
 using System.Windows.Input;
 
 namespace PowerTools.Core.Models
@@ -29,6 +30,8 @@ namespace PowerTools.Core.Models
                 RaisePropertyChanged();
                 RaisePropertyChanged(nameof(ActiveActions));
                 RaisePropertyChanged(nameof(AdditionalActions));
+                RaisePropertyChanged(nameof(DoSupportRefreshAction));
+                RaisePropertyChanged(nameof(DoSupportExportAction));
             }
         }
 
@@ -43,6 +46,9 @@ namespace PowerTools.Core.Models
             get => _additionalActions;
             private set => SetProperty(ref _additionalActions, value);
         }
+
+        public bool DoSupportRefreshAction => Actions?.Any(p => p.Name == "RefreshItems" && p.Command != null) ?? false;
+        public bool DoSupportExportAction => Actions?.Any(p => p.Name == "ExportItems" && p.Command!=null) ?? false;
 
         private void CacheActionProperties()
         {
@@ -175,18 +181,18 @@ namespace PowerTools.Core.Models
         public ICommand InvokeAction { get; private set; }
 
         public PaginationCollection()
-            : this(new List<T>(), null, null)
+            : this(new List<T>())
         {
 
         }
 
-        public PaginationCollection(IEnumerable<CustomAction> actions = null, ICommand refreshItemsCommand = null)
-            : this(new List<T>(), actions, refreshItemsCommand)
+        public PaginationCollection(IEnumerable<CustomAction> actions = null, ICommand refreshItemsCommand = null, ICommand exportItemsCommand = null)
+            : this(new List<T>(), actions, refreshItemsCommand, exportItemsCommand)
         {
 
         }
 
-        public PaginationCollection(IEnumerable<T> items, IEnumerable<CustomAction> actions = null, ICommand refreshItemsCommand = null)
+        public PaginationCollection(IEnumerable<T> items, IEnumerable<CustomAction> actions = null, ICommand refreshItemsCommand = null, ICommand exportItemsCommand = null)
         {
             if (items == null)
             {
@@ -211,6 +217,11 @@ namespace PowerTools.Core.Models
                 {
                     Name = "RefreshItems",
                     Command = refreshItemsCommand
+                },
+                new PageAction
+                {
+                    Name = "ExportItems",
+                    Command = exportItemsCommand
                 }
             };
 
