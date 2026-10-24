@@ -717,6 +717,8 @@
     </Style>
 
     <Style x:Key="GridSplitter.Vertical" TargetType="{x:Type GridSplitter}">
+        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        <Setter Property="VerticalAlignment" Value="Stretch"/>
         <Setter Property="Background" Value="{StaticResource Background.WhiteSmoke}"/>
         <Setter Property="Margin" Value="0"/>
         <Setter Property="PreviewStyle" Value="{StaticResource GridSplitterPreviewStyle}"/>
@@ -724,7 +726,11 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type GridSplitter}">
                     <Border x:Name="border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
-                        <TextBlock Style="{StaticResource TextBlock.Icon}" Text="⁝" Foreground="{StaticResource TextBox.Foreground.Grey}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <Border Width="2" Height="2" CornerRadius="2" Background="Gray"/>
+                            <Border Width="2" Height="2" CornerRadius="2" Background="Gray" Margin="0 3"/>
+                            <Border Width="2" Height="2" CornerRadius="2" Background="Gray"/>
+                        </StackPanel>
                     </Border>
                     <ControlTemplate.Triggers>
                         <MultiDataTrigger>
@@ -740,6 +746,8 @@
     </Style>
 
     <Style x:Key="GridSplitter.Horizontal" TargetType="{x:Type GridSplitter}">
+        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        <Setter Property="VerticalAlignment" Value="Stretch"/>
         <Setter Property="Background" Value="{StaticResource Background.WhiteSmoke}"/>
         <Setter Property="Margin" Value="0"/>
         <Setter Property="PreviewStyle" Value="{StaticResource GridSplitterPreviewStyle}"/>
@@ -747,7 +755,11 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type GridSplitter}">
                     <Border x:Name="border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
-                        <TextBlock Style="{StaticResource TextBlock.Icon}" Text="⋯" Foreground="{StaticResource TextBox.Foreground.Grey}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <Border Width="2" Height="2" CornerRadius="2" Background="Gray"/>
+                            <Border Width="2" Height="2" CornerRadius="2" Background="Gray" Margin="3 0"/>
+                            <Border Width="2" Height="2" CornerRadius="2" Background="Gray"/>
+                        </StackPanel>
                     </Border>
                     <ControlTemplate.Triggers>
                         <MultiDataTrigger>
