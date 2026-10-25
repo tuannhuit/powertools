@@ -5,6 +5,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:sharedServices="clr-namespace:PowerTools.Core.SharedServices;assembly=PowerTools.Core"
              xmlns:models="clr-namespace:PowerTools.Core.Models;assembly=PowerTools.Core"
+             xmlns:controls="clr-namespace:PowerTools.Core.Controls;assembly=PowerTools.Core"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
@@ -24,6 +25,7 @@
                           IsChecked="{Binding Source={x:Static sharedServices:LoggingService.Instance}, Path=DoShowTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                           FontSize="12" Margin="0 0 5 0" MinWidth="25" MinHeight="25" Height="25"
                           VerticalAlignment="Center"/>
+            <!--<controls:TextPlaceHolder FontWeight="Normal" HorizontalAlignment="Left" Text="{Binding FromTimestampEnd, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Title="Log" PlaceHolder="type to search..." IsEnabled="{Binding ConsumeMode, Converter={StaticResource BoolToStringConverter}, ConverterParameter='FromTimestamp:True:False'}" Width="300" Margin="5 0" Height="25"/>-->
         </StackPanel>
         <Border Grid.Row="1" Background="{StaticResource Background.WhiteSmoke}" CornerRadius="0 0 5 5">
             <TextBox 
