@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Windows.Automation;
 using System.Windows.Input;
 
 namespace PowerTools.Core.Models
@@ -48,7 +47,7 @@ namespace PowerTools.Core.Models
         }
 
         public bool DoSupportRefreshAction => Actions?.Any(p => p.Name == "RefreshItems" && p.Command != null) ?? false;
-        public bool DoSupportExportAction => Actions?.Any(p => p.Name == "ExportItems" && p.Command!=null) ?? false;
+        public bool DoSupportExportAction => Actions?.Any(p => p.Name == "ExportItems" && p.Command != null) ?? false;
 
         private void CacheActionProperties()
         {
@@ -132,12 +131,12 @@ namespace PowerTools.Core.Models
 
         public int ItemStart
         {
-            get => FilteredItems.Any() ? PageSize.GetValueOrDefault() * (Page - 1) + 1 : 0;
+            get => FilteredItems.Any() && (Page - 1) >= 0 ? PageSize.GetValueOrDefault() * (Page - 1) + 1 : 0;
         }
 
         public int ItemEnd
         {
-            get => FilteredItems.Any() ? ItemStart + Items.Count - 1 : 0;
+            get => FilteredItems.Any() && (Items.Count - 1) >= 0 ? ItemStart + Items.Count - 1 : 0;
         }
 
         public string PageInformation => $"{ItemStart}-{ItemEnd} of {TotalItems}";
@@ -379,12 +378,24 @@ namespace PowerTools.Core.Models
             RaisePropertyChanged(nameof(IsLastPage));
         }
 
-        public List<T> AddItem(T newItem)
+        public bool ContainItemById(long itemKey)
         {
-            return AddItemRange(new List<T> { newItem });
+            return _itemSource.ContainsKey(itemKey);
+        }
+        public bool RemoveItemById(long itemKey)
+        {
+            if (ContainItemById(itemKey))
+                return _itemSource.Remove(itemKey);
+
+            return false;
         }
 
-        public List<T> AddItemRange(IEnumerable<T> newItems)
+        public List<T> AddItem(T newItem, bool autoRefresh = true)
+        {
+            return AddItemRange(new List<T> { newItem }, autoRefresh);
+        }
+
+        public List<T> AddItemRange(IEnumerable<T> newItems, bool autoRefresh = true)
         {
             if (newItems == null || !newItems.Any())
             {
@@ -411,8 +422,11 @@ namespace PowerTools.Core.Models
 
             _filteredIds.AddRange(filteredPaginationItems.Select(p => p.Id));
 
-            ApplySort();
-            RecalculateItems();
+            if (autoRefresh)
+            {
+                ApplySort();
+                RecalculateItems();
+            }
 
             return filteredPaginationItems.Select(p => p.Value).ToList();
         }

@@ -25,7 +25,14 @@
 
         public PaginationItem(T value)
         {
-            Id = NextId;
+            if (value is IPaginationItemKey itemKey)
+            {
+                Id = itemKey.Id;
+            }
+            else
+            {
+                Id = NextId;
+            }
             Value = value;
         }
     }
